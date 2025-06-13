@@ -1,0 +1,9 @@
+*.exe
+*.obj
+*TrialAndError*
+Log.txt
+*.exp
+*.lib
+*.res
+*.out
+*.o
