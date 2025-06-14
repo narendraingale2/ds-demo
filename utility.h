@@ -1,0 +1,2 @@
+
+float getRandomCoord(float, float);
