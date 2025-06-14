@@ -9,5 +9,5 @@ void drawMoon()
 {
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	gluSphere(quadric, 0.3, 50, 50);
+	gluSphere(quadric, 0.5, 50, 50);
 }

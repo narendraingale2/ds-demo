@@ -10,6 +10,8 @@
 //custome header files
 #include "OGL.h"
 #include "Scene1.h"
+#include "POINTS.h"
+#include "utility.h"
 
 // openGl related libraries
 #pragma comment(lib, "opengl32.lib")
@@ -51,6 +53,9 @@ GLUquadric *quadric = NULL;
 
 // camera related variabls
 GLfloat cameraZ = 5.0f;
+
+// points related variable
+point_t point_vertices[800];
 
 // EntryPoint Function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
@@ -384,7 +389,16 @@ int initialize(void)
 	quadric = gluNewQuadric();
 	// enable texturing
 
-	
+	for(int i = 0; i<800; i++)	
+	{
+		point_vertices[i].x = getRandomCoord(-3.0f, 3.0f);
+		point_vertices[i].y = getRandomCoord(-2.0f, 2.0f);
+		point_vertices[i].z = getRandomCoord(-8.0f, -3.0f);
+		float color = getRandomCoord(05, 0.1);
+		point_vertices[i].c.red = color;
+		point_vertices[i].c.blue = color;
+		point_vertices[i].c.red = color;
+	}
 
 	//warm up resize
 	resize(WIN_WIDTH, WIN_HEIGHT);
