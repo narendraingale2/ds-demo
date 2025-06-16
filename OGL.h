@@ -1,3 +1,4 @@
 
 #define MYICON 101
 #define IDBITMAP_NIGHT_BG 102
+#define IDBITMAP_MOON 103

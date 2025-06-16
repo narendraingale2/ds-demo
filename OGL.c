@@ -375,13 +375,19 @@ int initialize(void)
 
 	// from here onwords opengl code starts
 	// tell opengl to choose the colour to clear the screen
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.02f, 0.02f, 0.08f, 1.0f);
 
 	// LoadTexture
 	if(loadGLTexture(&texture_night_bg, MAKEINTRESOURCE(IDBITMAP_NIGHT_BG)) == FALSE)
 	{
 		fprintf(gpFile, "loadtexture has been failed for lightbg\n");
 		return(-6);
+	}
+
+	if(loadGLTexture(&texture_moon, MAKEINTRESOURCE(IDBITMAP_MOON)) == FALSE)
+	{
+		fprintf(gpFile, "loadtexture has been failed for moon texture\n");
+		return(-7);
 	}
 
 	glEnable(GL_TEXTURE_2D);
@@ -398,6 +404,8 @@ int initialize(void)
 		point_vertices[i].c.red = color;
 		point_vertices[i].c.blue = color;
 		point_vertices[i].c.red = color;
+		float size = getRandomCoord(1.0f, 3.0f);
+		point_vertices[i].size = size;
 	}
 
 	//warm up resize

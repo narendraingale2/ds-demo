@@ -3,3 +3,4 @@
 
 MYICON ICON nsi.ico
 IDBITMAP_NIGHT_BG BITMAP "texture-images\\night_bg.bmp"
+IDBITMAP_MOON BITMAP "texture-images\\moon.bmp"
