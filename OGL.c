@@ -54,6 +54,14 @@ GLUquadric *quadric = NULL;
 // camera related variabls
 GLfloat cameraZ = 5.0f;
 
+// Light related variables 
+GLfloat moonLinghtAmbient[] = {0.1f, 0.1f, 0.2f, 1.0f};
+GLfloat moonLightDifuse[] = {0.6f, 0.6f, 0.8f, 1.0f};
+GLfloat moonLightSpecular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+GLfloat moonLightPoistion[] = {-1.0f, -1.0f, -1.0f, 1.0f};
+
+BOOL bLight = FALSE;
+
 // points related variable
 point_t point_vertices[800];
 
@@ -245,6 +253,19 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					gbFullScreen = FALSE;
 				}
 				break;
+			case 'l':
+			case 'L':
+				if(bLight == FALSE)
+				{
+					bLight = TRUE;
+					glEnable(GL_LIGHTING);	
+				}
+				else
+				{
+					bLight = FALSE;
+					glDisable(GL_LIGHTING);	
+				}
+				break;
 			default:
 				break;
 		}
@@ -390,10 +411,18 @@ int initialize(void)
 		return(-7);
 	}
 
+	// enable texturing
 	glEnable(GL_TEXTURE_2D);
+
 	// Initialize quadric
 	quadric = gluNewQuadric();
-	// enable texturing
+
+	glLightfv(GL_LIGHT0, GL_AMBIENT, moonLinghtAmbient);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, moonLightDifuse);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, moonLightSpecular);
+	glLightfv(GL_LIGHT0, GL_POSITION, moonLightPoistion);
+	glEnable(GL_LIGHT0);
+	
 
 	for(int i = 0; i<800; i++)	
 	{
@@ -508,9 +537,9 @@ void display(void)
 	// set identity metrics
 	glLoadIdentity();
 
-    glTranslatef(0.0f, 0.0f, -3.0f);
 	
 	drawScene1();
+	drawBoy();
 
 	// swap the buffers
 	SwapBuffers(ghdc);

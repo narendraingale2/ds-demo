@@ -8,13 +8,13 @@ void drawPoints(point_t points[], int length) {
 
     for (int i = 0; i < length; ++i) {
         glPointSize(points[i].size);
-        glBegin(GL_POINTS);
-        //glLoadIdentity();
-        //glTranslatef(points[i].x, points[i].y, points[i].z);
+        //glBegin(GL_POINTS);
+        glLoadIdentity();
+        glTranslatef(points[i].x, points[i].y, points[i].z);
         glColor3f(points[i].c.red, points[i].c.red, points[i].c.red);
-        //gluSphere(quadric, 0.005f, 30, 30);
-        glVertex3f(points[i].x, points[i].y, points[i].z);
-        glEnd();
+        gluSphere(quadric, 0.005f, 30, 30);
+        //glVertex3f(points[i].x, points[i].y, points[i].z);
+        //glEnd();
         
     }
 }
