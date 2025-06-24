@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "utility.h": "c",
-        "model.h": "c"
+        "model.h": "c",
+        "shape.h": "c"
     }
 }

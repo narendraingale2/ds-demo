@@ -3,8 +3,9 @@
 
 
 void drawPoints(point_t points[], int length) {
-    glEnable(GL_POINT_SMOOTH);
-    glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+
+    //glEnable(GL_POINT_SMOOTH);
+    //glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
 
     for (int i = 0; i < length; ++i) {
         glPointSize(points[i].size);

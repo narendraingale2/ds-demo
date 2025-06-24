@@ -4,3 +4,8 @@
 MYICON ICON nsi.ico
 IDBITMAP_NIGHT_BG BITMAP "texture-images\\night_bg.bmp"
 IDBITMAP_MOON BITMAP "texture-images\\moon.bmp"
+IDBITMAP_EYE BITMAP "texture-images\\eye.bmp"
+IDBITMAP_HEAD BITMAP "texture-images\\head.bmp"
+IDBITMAP_HAIR BITMAP "texture-images\\hair.bmp"
+IDBITMAP_SHIRT BITMAP "texture-images\\shirt.bmp"
+IDBITMAP_FACE BITMAP "texture-images\\face.bmp"

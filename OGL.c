@@ -40,6 +40,8 @@ BOOL gbActiveWindow = FALSE;
 
 // Exit key press related
 BOOL gbEscapKeyIsPressed = FALSE;
+BOOL gbRotateBoy = FALSE;
+BOOL gbMoonDisplay = FALSE;
 
 // Opengl related global variables
 HDC ghdc = NULL;
@@ -48,6 +50,12 @@ HGLRC ghrc = NULL;
 // Texture related global variables
 GLuint texture_night_bg;
 GLuint texture_moon;
+GLuint texture_eye;
+GLuint texture_mouth;
+GLuint texture_head;
+GLuint texture_hair;
+GLuint texture_shirt;
+GLuint texture_face;
 
 GLUquadric *quadric = NULL;
 
@@ -64,6 +72,9 @@ BOOL bLight = FALSE;
 
 // points related variable
 point_t point_vertices[800];
+
+// Roatate boy model
+GLfloat boyAngle = 0.0f;
 
 // EntryPoint Function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
@@ -266,6 +277,24 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					glDisable(GL_LIGHTING);	
 				}
 				break;
+			case 'm':
+			case 'M':
+				if(gbMoonDisplay == FALSE)
+				{
+					gbMoonDisplay = TRUE;
+				}
+				else
+					gbMoonDisplay = FALSE;
+				break;
+			case 'R':
+			case 'r':
+				if(gbRotateBoy == FALSE)
+				{
+					gbRotateBoy = TRUE;
+				}
+				else
+					gbRotateBoy = FALSE;
+				break;
 			default:
 				break;
 		}
@@ -397,13 +426,9 @@ int initialize(void)
 	// from here onwords opengl code starts
 	// tell opengl to choose the colour to clear the screen
 	glClearColor(0.02f, 0.02f, 0.08f, 1.0f);
+	//glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 	// LoadTexture
-	if(loadGLTexture(&texture_night_bg, MAKEINTRESOURCE(IDBITMAP_NIGHT_BG)) == FALSE)
-	{
-		fprintf(gpFile, "loadtexture has been failed for lightbg\n");
-		return(-6);
-	}
 
 	if(loadGLTexture(&texture_moon, MAKEINTRESOURCE(IDBITMAP_MOON)) == FALSE)
 	{
@@ -411,6 +436,34 @@ int initialize(void)
 		return(-7);
 	}
 
+	if(loadGLTexture(&texture_eye, MAKEINTRESOURCE(IDBITMAP_EYE)) == FALSE)
+	{
+		fprintf(gpFile, "loadtexture has been failed for eye texture\n");
+		return(-7);
+	}
+
+	if(loadGLTexture(&texture_mouth, MAKEINTRESOURCE(IDBITMAP_MOUTH)) == FALSE)
+	{
+		fprintf(gpFile, "loadtexture has been failed for mouth texture\n");
+		return(-7);
+	}
+
+	if(loadGLTexture(&texture_hair, MAKEINTRESOURCE(IDBITMAP_HAIR)) == FALSE)
+	{
+		fprintf(gpFile, "loadtexture has been failed for hair texuter\n");
+		return(-7);
+	}
+
+	if(loadGLTexture(&texture_shirt, MAKEINTRESOURCE(IDBITMAP_SHIRT)) == FALSE)
+	{
+		fprintf(gpFile, "loadtexture has been failed for hair texuter\n");
+		return(-7);
+	}
+	if(loadGLTexture(&texture_face, MAKEINTRESOURCE(IDBITMAP_FACE)) == FALSE)
+	{
+		fprintf(gpFile, "loadtexture has been failed for hair texuter\n");
+		return(-7);
+	}
 	// enable texturing
 	glEnable(GL_TEXTURE_2D);
 
@@ -538,8 +591,24 @@ void display(void)
 	glLoadIdentity();
 
 	
-	drawScene1();
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glTranslatef(0.0f, 0.0f, -8.0f);
+    glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+    glEnable(GL_POLYGON_SMOOTH);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	
+	if(gbMoonDisplay == TRUE)
+	{
+		drawScene1();
+	}
+
+
+	glPushMatrix();
+	if(gbRotateBoy == TRUE)
+		glRotatef(boyAngle, 0.0f, 1.0f, 0.0f);
 	drawBoy();
+	glPopMatrix();
 
 	// swap the buffers
 	SwapBuffers(ghdc);
@@ -553,6 +622,8 @@ void update(void)
 	{
 		cameraZ = cameraZ - 0.01;
 	}
+
+	boyAngle = boyAngle + 0.01;
 }
 
 void uninitialize(void)
