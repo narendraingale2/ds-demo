@@ -10,8 +10,12 @@ extern GLuint texture_head;
 extern GLuint texture_hair;
 extern GLuint texture_shirt;
 extern GLuint texture_face;
+extern GLuint texture_full_boy;
+extern GLuint texture_girl_shirt;
+extern GLuint texture_girl_leg;
+extern GLuint texture_girl_left_hand;
 
-void drawBoy(void)
+void drawBoyModel(void)
 {
     // Torso
 
@@ -107,6 +111,17 @@ void drawBoy(void)
 	    glBindTexture(GL_TEXTURE_2D, 0);
     glPopMatrix();
 
+    // draw forhead
+    glPushMatrix();
+	    gluQuadricTexture(quadric, GL_TRUE); 
+        glTranslatef(0.0f, 2.8f, 0.0f);  // above torso
+        glColor3f(1.0, 1.0, 1.0);
+        glScalef(1.0f, 0.5f,1.0f);
+	    glBindTexture(GL_TEXTURE_2D, texture_face);
+        gluSphere(quadric, 0.4, 30, 30);
+	    glBindTexture(GL_TEXTURE_2D, 0);
+    glPopMatrix();
+
     // hairs
     //glColor3f(0.1f, 0.1f, 0.1f); 
     glPushMatrix();
@@ -119,11 +134,6 @@ void drawBoy(void)
 	    glBindTexture(GL_TEXTURE_2D, 0);
     glPopMatrix();
 
-//    glPushMatrix();
-//
-//        glTranslatef(2.5f, 2.85f, 0.0f); // position on top of head
-//        gluSphere(quadric, 0.35, 20, 20);
-//    glPopMatrix(); 
 
     // Left Eyebrow
     glColor3f(0.1f, 0.1f, 0.1f); // dark color for eyebrow
@@ -154,7 +164,7 @@ void drawBoy(void)
     // pupil1
     glColor3f(0.2f, 0.1f, 0.0f); // brown iris
     glPushMatrix();
-        glTranslatef(-0.15f, 2.58, 0.38f);
+        glTranslatef(-0.16f, 2.59, 0.38f);
         gluSphere(quadric, 0.03, 30, 30);
     glPopMatrix();
     
@@ -169,9 +179,34 @@ void drawBoy(void)
     // pupil1
     glColor3f(0.2f, 0.1f, 0.0f); // brown iris
     glPushMatrix();
-        glTranslatef(0.15f, 2.58f, 0.38f);
+        glTranslatef(0.16f, 2.59f, 0.38f);
         gluSphere(quadric, 0.03, 20, 20);
     glPopMatrix();
+    
+
+	/*glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glPushMatrix();
+	glBindTexture(GL_TEXTURE_2D, texture_eye);
+    glTranslatef(-0.15, 2.6, 0.3);
+	glBegin(GL_QUADS);
+
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(0.5f, 0.5f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(-0.5f, 0.5f, 0.0f);
+		
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(-0.5f, -0.5f, 0.0f);
+		
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(0.5f, -0.5f, 0.0f);
+
+	glEnd();
+	glBindTexture(GL_TEXTURE_2D, 0);
+    glPopMatrix();
+    */
 
     // Nose (cone)
     //glColor3f(1.0f, 0.8f, 0.4f);
@@ -183,14 +218,56 @@ void drawBoy(void)
     glPopMatrix();
 
 
-    // mouth
-    glColor3f(1.0f, 0.0f, 0.0f); // skin tone
+    // left chick
+    /*
     glPushMatrix();
-        glTranslatef(0.0f, 2.38f, 0.3f);
-        glScalef(3.0f, 1.0f, 1.0f);
-        gluSphere(quadric, 0.05, 20, 20);
+        glTranslatef(-0.08f, 2.5f, 0.1f);
+        glScalef(1.2f, 1.0f, 1.2f);
+        glColor3f(1.0f, 1.0f, 1.0f);
+	    gluQuadricTexture(quadric, GL_TRUE); 
+        glBindTexture(GL_TEXTURE_2D, texture_face);
+        gluSphere(quadric, 0.2, 20, 20);
+        glBindTexture(GL_TEXTURE_2D, 0);
     glPopMatrix();
 
+    // right chick
+    glPushMatrix();
+        glTranslatef(0.08f, 2.5f, 0.1f);
+        glScalef(1.2f, 1.0f, 1.2f);
+        glColor3f(1.0f, 1.0f, 1.0f);
+	    gluQuadricTexture(quadric, GL_TRUE); 
+        glBindTexture(GL_TEXTURE_2D, texture_face);
+        gluSphere(quadric, 0.2, 20, 20);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    glPopMatrix();
+    */
+    // right jaw
+    glPushMatrix();
+        glTranslatef(-0.12f, 2.33f, 0.15f);  // position under left cheek
+        glRotatef(-45, 0, 0, 1);            // angle inward
+        glScalef(1.0f, 0.4f, 0.6f);        // squash to match face
+        glColor3f(1.0f, 1.0f, 1.0f);
+	    gluQuadricTexture(quadric, GL_TRUE); 
+        glBindTexture(GL_TEXTURE_2D, texture_face);
+        gluSphere(quadric, 0.25f, 20, 20);
+        glBindTexture(GL_TEXTURE_2D, 0);
+	    gluQuadricTexture(quadric, GL_FALSE); 
+    glPopMatrix();
+
+    // left jaw
+    glPushMatrix();
+        //glColor3f(1.0f, 0.8f, 0.6f); // skin tone
+        glTranslatef(0.12f, 2.33f, 0.15f);  // position under left cheek
+        glRotatef(45, 0, 0, 1);            // angle inward
+        glScalef(1.0f, 0.4f, 0.6f);        // squash to match face
+        glColor3f(1.0f, 1.0f, 1.0f);
+        glBindTexture(GL_TEXTURE_2D, texture_face);
+	    gluQuadricTexture(quadric, GL_TRUE); 
+        gluSphere(quadric, 0.25f, 20, 20);
+        glBindTexture(GL_TEXTURE_2D, 0);
+	    gluQuadricTexture(quadric, GL_FALSE); 
+    glPopMatrix();
+    
     glColor3f(1.0f, 0.8f, 0.6f); // skin tone
     glPushMatrix();
         glTranslatef(-0.45f, 2.70f, 0.0f); // position to the side of the head
@@ -198,7 +275,6 @@ void drawBoy(void)
         glRotatef(-20, 0.0f, 0.0f, 1.0f);  // tilt slightly upward
         gluCylinder(quadric, 0.1, 0.1, 0.3, 10, 10); // cone shape
     glPopMatrix();
-    
     // Right Elf Ear
     glPushMatrix();
         glTranslatef(0.45f, 2.7f, 0.0f);
@@ -208,5 +284,99 @@ void drawBoy(void)
     glPopMatrix();
 
     
+
+}
+
+void drawGirl(void)
+{
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    // face
+    glPushMatrix();
+	glBindTexture(GL_TEXTURE_2D, texture_full_boy);
+    glTranslatef(0.0f, 2.3f, -2.0f);
+	glBegin(GL_QUADS);
+
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(2.0f, 2.0f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(-2.0f, 2.0f, 0.0f);
+		
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(-2.0f, -2.0f, 0.0f);
+		
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(2.0f, -2.0f, 0.0f);
+
+	glEnd();
+	glBindTexture(GL_TEXTURE_2D, 0);
+    glPopMatrix();
+
+
+    // legs
+    glPushMatrix();
+    glTranslatef(0.0f, -2.0f, -2.0f);
+	glBindTexture(GL_TEXTURE_2D, texture_girl_leg);
+    glBegin(GL_QUADS);
+
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(1.5f, 1.5f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(-1.5f, 1.5f, 0.0f);
+		
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(-1.5f, -1.5f, 0.0f);
+		
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(1.5f, -1.5f, 0.0f);
+    glEnd();
+	glBindTexture(GL_TEXTURE_2D, 0);
+    glPopMatrix();
+
+/*    // hand
+    glPushMatrix();
+    glTranslatef(-1.5f, -0.4f, -2.0f);
+	glBindTexture(GL_TEXTURE_2D, texture_girl_left_hand);
+    glBegin(GL_QUADS);
+
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(0.5f, 1.0f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(-0.5f, 1.0f, 0.0f);
+		
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(-0.5f, -1.0f, 0.0f);
+		
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(0.5f, -1.0f, 0.0f);
+    glEnd();
+	glBindTexture(GL_TEXTURE_2D, 0);
+    glPopMatrix();*/
+    // torso
+    glPushMatrix();
+    glTranslatef(0.0f, 0.0f, -2.0f);
+	glBindTexture(GL_TEXTURE_2D, texture_girl_shirt);
+    glBegin(GL_QUADS);
+
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(2.0f, 2.0f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(-2.0f, 2.0f, 0.0f);
+		
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(-2.0f, -2.0f, 0.0f);
+		
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(2.0f, -2.0f, 0.0f);
+    glEnd();
+	glBindTexture(GL_TEXTURE_2D, 0);
+    glPopMatrix();
+
+
 
 }

@@ -13,6 +13,9 @@
 #include "POINTS.h"
 #include "utility.h"
 
+#define STB_IMAGE_IMPLEMENTATION 
+#include "stb_image.h"
+
 // openGl related libraries
 #pragma comment(lib, "opengl32.lib")
 #pragma comment(lib, "glu32.lib")
@@ -56,6 +59,10 @@ GLuint texture_head;
 GLuint texture_hair;
 GLuint texture_shirt;
 GLuint texture_face;
+GLuint texture_full_boy;
+GLuint texture_girl_shirt;
+GLuint texture_girl_leg;
+GLuint texture_girl_left_hand;
 
 GLUquadric *quadric = NULL;
 
@@ -63,8 +70,8 @@ GLUquadric *quadric = NULL;
 GLfloat cameraZ = 5.0f;
 
 // Light related variables 
-GLfloat moonLinghtAmbient[] = {0.1f, 0.1f, 0.2f, 1.0f};
-GLfloat moonLightDifuse[] = {0.6f, 0.6f, 0.8f, 1.0f};
+GLfloat moonLinghtAmbient[] = {1.0f, 1.0f, 1.0f, 1.0f};
+GLfloat moonLightDifuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
 GLfloat moonLightSpecular[] = {1.0f, 1.0f, 1.0f, 1.0f};
 GLfloat moonLightPoistion[] = {-1.0f, -1.0f, -1.0f, 1.0f};
 
@@ -436,11 +443,11 @@ int initialize(void)
 		return(-7);
 	}
 
-	if(loadGLTexture(&texture_eye, MAKEINTRESOURCE(IDBITMAP_EYE)) == FALSE)
+	/*if(loadGLTexture(&texture_eye, MAKEINTRESOURCE(IDBITMAP_EYE)) == FALSE)
 	{
 		fprintf(gpFile, "loadtexture has been failed for eye texture\n");
 		return(-7);
-	}
+	}*/
 
 	if(loadGLTexture(&texture_mouth, MAKEINTRESOURCE(IDBITMAP_MOUTH)) == FALSE)
 	{
@@ -459,10 +466,50 @@ int initialize(void)
 		fprintf(gpFile, "loadtexture has been failed for hair texuter\n");
 		return(-7);
 	}
+
 	if(loadGLTexture(&texture_face, MAKEINTRESOURCE(IDBITMAP_FACE)) == FALSE)
 	{
 		fprintf(gpFile, "loadtexture has been failed for hair texuter\n");
 		return(-7);
+	}
+
+	// Loading Images to create texture
+	stbi_set_flip_vertically_on_load(TRUE);
+
+	if(loadPNGTexture(&texture_full_boy, "texture-images\\girl_face1.png") == FALSE)
+	{
+		fprintf(gpFile, "PNG structure loading fialed for girl face");
+		return(-8);
+
+	}
+
+	if(loadPNGTexture(&texture_girl_shirt, "texture-images\\girl_shirt.png") == FALSE)
+	{
+		fprintf(gpFile, "PNG structure loading fialed for girl face");
+		return(-8);
+
+	}
+
+
+	if(loadPNGTexture(&texture_girl_leg, "texture-images\\legs.png") == FALSE)
+	{
+		fprintf(gpFile, "Legs texture image failed ");
+		return(-8);
+
+	}
+
+	if(loadPNGTexture(&texture_girl_left_hand, "texture-images\\hand_left.png") == FALSE)
+	{
+		fprintf(gpFile, "hand texture image failed ");
+		return(-8);
+
+	}
+	
+	if(loadPNGTexture(&texture_eye, "texture-images\\eye-new.png") == FALSE)
+	{
+		fprintf(gpFile, "eye texture image failed ");
+		return(-8);
+
 	}
 	// enable texturing
 	glEnable(GL_TEXTURE_2D);
@@ -548,6 +595,54 @@ BOOL loadGLTexture(GLuint* texture, TCHAR ImageResourceID[])
 	return bResult;
 }
 
+BOOL loadPNGTexture(GLuint* texture, const char *path) {
+
+	// Local Variable Declarations
+	int width = 0, height = 0, bitDepth = 0;
+
+	// Code
+	unsigned char* texData = stbi_load(path, &width, &height, &bitDepth, STBI_rgb_alpha);
+	if (!texData) {
+
+		fprintf(gpFile, "Failed to load image!\n");
+		return FALSE;
+	}
+	
+	glGenTextures(1, texture);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+
+	glBindTexture(GL_TEXTURE_2D, *texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	if (bitDepth == 3) 
+	{
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, (void*)texData);
+	}
+	else if (bitDepth == 4) 
+	{
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (void*)texData);
+	}
+	else 
+	{
+
+		fprintf(gpFile, "Texture initialize image invalid!\n");
+		return FALSE;
+	}
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	stbi_image_free(texData);
+
+	texData = NULL;
+
+	return TRUE;
+}
+
 void resize(int width, int height)
 {
 	// code
@@ -607,7 +702,9 @@ void display(void)
 	glPushMatrix();
 	if(gbRotateBoy == TRUE)
 		glRotatef(boyAngle, 0.0f, 1.0f, 0.0f);
-	drawBoy();
+	drawBoyModel();
+	//drawGirl();
+
 	glPopMatrix();
 
 	// swap the buffers
