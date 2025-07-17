@@ -358,7 +358,7 @@ void drawGirl(void)
     glPopMatrix();*/
     // torso
     glPushMatrix();
-    glTranslatef(0.0f, 0.0f, -2.0f);
+    glTranslatef(0.0f, 0.0f, -2.001f);
 	glBindTexture(GL_TEXTURE_2D, texture_girl_shirt);
     glBegin(GL_QUADS);
 
@@ -377,6 +377,25 @@ void drawGirl(void)
 	glBindTexture(GL_TEXTURE_2D, 0);
     glPopMatrix();
 
+    glPushMatrix();
+    glTranslatef(0.0f, 0.0f, -1.999f);
+	glBindTexture(GL_TEXTURE_2D, texture_girl_shirt);
+    glBegin(GL_QUADS);
+
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(2.0f, 2.0f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(-2.0f, 2.0f, 0.0f);
+		
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(-2.0f, -2.0f, 0.0f);
+		
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(2.0f, -2.0f, 0.0f);
+    glEnd();
+	glBindTexture(GL_TEXTURE_2D, 0);
+    glPopMatrix();
 
 
 }

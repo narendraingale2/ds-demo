@@ -702,8 +702,8 @@ void display(void)
 	glPushMatrix();
 	if(gbRotateBoy == TRUE)
 		glRotatef(boyAngle, 0.0f, 1.0f, 0.0f);
-	drawBoyModel();
-	//drawGirl();
+	//drawBoyModel();
+	drawGirl();
 
 	glPopMatrix();
 
@@ -720,7 +720,7 @@ void update(void)
 		cameraZ = cameraZ - 0.01;
 	}
 
-	boyAngle = boyAngle + 0.01;
+	boyAngle = boyAngle + 1.0;
 }
 
 void uninitialize(void)

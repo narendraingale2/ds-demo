@@ -19,7 +19,9 @@ void drawScene1()
 
     // Drawing moon
     glPushMatrix();
-        glTranslatef(4.0f, 2.5f, -2.0f);
+        glTranslatef(5.0f, 4.5f, -6.0f);
+        //glRotatef(-110.0f, 0.0f, 1.0f, 0.0f);
+        //glRotatef(-180.0f, 0.0f, 0.0f, 1.0f);
         drawMoon();
     glPopMatrix();
 }
