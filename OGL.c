@@ -45,6 +45,8 @@ BOOL gbActiveWindow = FALSE;
 BOOL gbEscapKeyIsPressed = FALSE;
 BOOL gbRotateBoy = FALSE;
 BOOL gbMoonDisplay = FALSE;
+BOOL gbShowModel = FALSE;
+BOOL gbShowGirl = FALSE;
 
 // Opengl related global variables
 HDC ghdc = NULL;
@@ -269,6 +271,28 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				{
 					toggleFullScreen();
 					gbFullScreen = FALSE;
+				}
+				break;
+			case 'g':
+			case 'G':
+				if(gbShowGirl == FALSE)
+				{
+					gbShowGirl = TRUE;
+				}
+				else
+				{
+					gbShowGirl = FALSE;
+				}
+				break;
+			case 's':
+			case 'S':
+				if(gbShowModel == FALSE)
+				{
+					gbShowModel = TRUE;
+				}
+				else
+				{
+					gbShowModel = FALSE;
 				}
 				break;
 			case 'l':
@@ -700,10 +724,16 @@ void display(void)
 
 
 	glPushMatrix();
-	if(gbRotateBoy == TRUE)
-		glRotatef(boyAngle, 0.0f, 1.0f, 0.0f);
-	//drawBoyModel();
-	drawGirl();
+	if(gbShowModel == TRUE)
+	{
+	 	drawBoyModel();
+		if(gbRotateBoy == TRUE)
+			glRotatef(boyAngle, 0.0f, 1.0f, 0.0f);
+
+	}
+
+	if(gbShowGirl == TRUE)
+		drawGirl();
 
 	glPopMatrix();
 
