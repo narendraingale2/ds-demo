@@ -65,6 +65,7 @@ GLuint texture_full_boy;
 GLuint texture_girl_shirt;
 GLuint texture_girl_leg;
 GLuint texture_girl_left_hand;
+GLuint texture_colured_tree;
 
 GLUquadric *quadric = NULL;
 
@@ -381,7 +382,6 @@ void toggleFullScreen(void)
 
 }
 
-
 int initialize(void)
 {
 	// Function declarations
@@ -535,6 +535,13 @@ int initialize(void)
 		return(-8);
 
 	}
+
+	if(loadPNGTexture(&texture_colured_tree, "texture-images\\colour-tree.png") == FALSE)
+	{
+		fprintf(gpFile, "Colured tree");
+		return(-9);
+	}
+
 	// enable texturing
 	glEnable(GL_TEXTURE_2D);
 
@@ -551,7 +558,7 @@ int initialize(void)
 	for(int i = 0; i<800; i++)	
 	{
 		point_vertices[i].x = getRandomCoord(-3.0f, 3.0f);
-		point_vertices[i].y = getRandomCoord(-2.0f, 2.0f);
+		point_vertices[i].y = getRandomCoord(1.0f, 2.0f);
 		point_vertices[i].z = getRandomCoord(-8.0f, -3.0f);
 		float color = getRandomCoord(05, 0.1);
 		point_vertices[i].c.red = color;
@@ -726,15 +733,19 @@ void display(void)
 	glPushMatrix();
 	if(gbShowModel == TRUE)
 	{
-	 	drawBoyModel();
 		if(gbRotateBoy == TRUE)
 			glRotatef(boyAngle, 0.0f, 1.0f, 0.0f);
+	 	drawBoyModel();
 
 	}
 
 	if(gbShowGirl == TRUE)
+	{
+		glScalef(0.3, 0.3, 0.5);
 		drawGirl();
+	}
 
+	drawColoredTree();
 	glPopMatrix();
 
 	// swap the buffers
@@ -750,7 +761,7 @@ void update(void)
 		cameraZ = cameraZ - 0.01;
 	}
 
-	boyAngle = boyAngle + 1.0;
+	boyAngle = boyAngle + 0.1;
 }
 
 void uninitialize(void)
