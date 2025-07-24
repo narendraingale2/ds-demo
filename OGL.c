@@ -47,6 +47,9 @@ BOOL gbRotateBoy = FALSE;
 BOOL gbMoonDisplay = FALSE;
 BOOL gbShowModel = FALSE;
 BOOL gbShowGirl = FALSE;
+BOOL showCTree = FALSE;
+BOOL showCoTree = FALSE;
+BOOL gbShowWater = FALSE;
 
 // Opengl related global variables
 HDC ghdc = NULL;
@@ -66,6 +69,8 @@ GLuint texture_girl_shirt;
 GLuint texture_girl_leg;
 GLuint texture_girl_left_hand;
 GLuint texture_colured_tree;
+GLuint texture_coco_tree;
+GLuint texture_water;
 
 GLUquadric *quadric = NULL;
 
@@ -78,6 +83,14 @@ GLfloat moonLightDifuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
 GLfloat moonLightSpecular[] = {1.0f, 1.0f, 1.0f, 1.0f};
 GLfloat moonLightPoistion[] = {-1.0f, -1.0f, -1.0f, 1.0f};
 
+GLfloat waterLightAmbient[] = { 0.05f, 0.05f, 0.1f, 1.0f };
+GLfloat waterLightDefuse[] = { 0.2f, 0.2f, 0.3f, 1.0f };
+GLfloat waterLightAmbientSpecular[] = { 0.8f, 0.8f, 1.0f, 1.0f };
+GLfloat watermatSpecular[] = { 0.8f, 0.8f, 1.0f, 1.0f };
+GLfloat waterLightPosition[] = { 0.0f, 10.0f, 10.0f, 1.0f };
+GLfloat matEmission[] = { 0.0f, 0.0f, 0.05f, 1.0f };
+GLfloat watermatShininess[] = { 100.0f };
+
 BOOL bLight = FALSE;
 
 // points related variable
@@ -85,6 +98,13 @@ point_t point_vertices[800];
 
 // Roatate boy model
 GLfloat boyAngle = 0.0f;
+GLfloat points[45][45][3];
+int wiggle_count = 0; 
+GLfloat hold;    
+GLfloat xrot=0.0f;
+GLfloat yrot=0.0f;
+GLfloat zrot=0.0f;
+
 
 // EntryPoint Function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
@@ -327,6 +347,24 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				else
 					gbRotateBoy = FALSE;
 				break;
+			case 't':
+			case 'T':
+				if(showCTree == FALSE)
+				{
+					showCTree = TRUE;
+				}
+				else
+					showCTree = FALSE;
+				break;
+			case 'u':
+			case 'U':
+				if(showCoTree == FALSE)
+				{
+					showCoTree = TRUE;
+				}
+				else
+					showCoTree = FALSE;
+			break;
 			default:
 				break;
 		}
@@ -542,6 +580,17 @@ int initialize(void)
 		return(-9);
 	}
 
+	if(loadPNGTexture(&texture_coco_tree, "texture-images\\coco-tree.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed to lead coco tree");
+		return(-9);
+	}
+
+	if(loadPNGTexture(&texture_water, "texture-images\\water.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed to load water texture");
+		return(-9);
+	}
 	// enable texturing
 	glEnable(GL_TEXTURE_2D);
 
@@ -552,7 +601,17 @@ int initialize(void)
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, moonLightDifuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, moonLightSpecular);
 	glLightfv(GL_LIGHT0, GL_POSITION, moonLightPoistion);
-	glEnable(GL_LIGHT0);
+	//glEnable(GL_LIGHT0);
+	glLightfv(GL_LIGHT1, GL_POSITION, waterLightPosition);
+	glLightfv(GL_LIGHT1, GL_AMBIENT, waterLightAmbient);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, waterLightDefuse);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, watermatSpecular);
+
+	//glMaterialfv(GL_FRONT, GL_SPECULAR, watermatSpecular); 
+	//glMaterialfv(GL_FRONT, GL_SHININESS, watermatShininess);
+	//glMaterialfv(GL_FRONT, GL_EMISSION, matEmission);
+
+	glEnable(GL_LIGHT1);
 	
 
 	for(int i = 0; i<800; i++)	
@@ -566,6 +625,16 @@ int initialize(void)
 		point_vertices[i].c.red = color;
 		float size = getRandomCoord(1.0f, 3.0f);
 		point_vertices[i].size = size;
+	}
+
+	for(int x = 0; x < 45; x++)
+	{
+		for(int y=0; y<45; y++)
+		{
+			points[x][y][0] = (float)((x/5.0)-4.5f);
+			points[x][y][1] = (float)((y/5.0)-4.5f);
+			points[x][y][2] = (float)(sin((((x/5.0f)*40.0f)/360.0f)*3.141592654*2.0f))*0.2;
+		}
 	}
 
 	//warm up resize
@@ -724,10 +793,6 @@ void display(void)
     glEnable(GL_POLYGON_SMOOTH);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	
-	if(gbMoonDisplay == TRUE)
-	{
-		drawScene1();
-	}
 
 
 	glPushMatrix();
@@ -741,11 +806,51 @@ void display(void)
 
 	if(gbShowGirl == TRUE)
 	{
-		glScalef(0.3, 0.3, 0.5);
+		glPushMatrix();
+		glScalef(0.4f, 0.4, 0.4f);
 		drawGirl();
+		glPopMatrix();
 	}
 
-	drawColoredTree();
+	if(showCTree == TRUE)
+	{
+		glPushMatrix();
+		glTranslatef(4.0f, 0.0f, 0.0f);
+		glScalef(5.0, 4.0f, 0.0f);
+		drawColoredTree();
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(-4.0f, 0.0f, 0.0f);
+		glScalef(4.0, 4.0f, 0.0f);
+		drawCocoTree();
+		glPopMatrix();
+	}
+
+	if(showCoTree == TRUE)
+	{
+	}
+
+	glPushMatrix();
+		drawWater();
+	glPopMatrix();
+
+	/*glPushMatrix();
+		glScalef(5.0f, 1.0f, 1.0f);
+		glRotatef(-80.0f,1.0f, 0.0f, 0.0f);
+		glTranslatef(0.0f, -2.0f, 0.0f);
+		drawTerrain();
+	glPopMatrix();*/
+
+	if(gbMoonDisplay == TRUE)
+	{
+		glPushMatrix();
+		drawScene1();
+		glPopMatrix();
+	}
+	glPushMatrix();
+		drawHouse();
+	glPopMatrix();
 	glPopMatrix();
 
 	// swap the buffers
@@ -755,6 +860,7 @@ void display(void)
 
 void update(void)
 {
+	int x, y;
 	// code
 	if(cameraZ >= 0)
 	{
@@ -762,7 +868,29 @@ void update(void)
 	}
 
 	boyAngle = boyAngle + 0.1;
+
+	xrot = xrot + 0.003f;
+	yrot = yrot + 0.002f;
+	zrot = zrot + 0.004f;
+
+	if(wiggle_count == 100)
+	{
+		for(y = 0; y<45; y++)
+		{
+			hold = points[0][y][2];
+			for( x=0; x<44; x++)
+			{
+				points[x][y][2] = points[x+1][y][2];
+
+			}
+			points[44][y][2]=hold;
+
+		}
+		wiggle_count = 0;
+	}
+	wiggle_count++;
 }
+
 
 void uninitialize(void)
 {

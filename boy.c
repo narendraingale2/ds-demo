@@ -336,27 +336,6 @@ void drawGirl(void)
 	glBindTexture(GL_TEXTURE_2D, 0);
     glPopMatrix();
 
-/*    // hand
-    glPushMatrix();
-    glTranslatef(-1.5f, -0.4f, -2.0f);
-	glBindTexture(GL_TEXTURE_2D, texture_girl_left_hand);
-    glBegin(GL_QUADS);
-
-		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(0.5f, 1.0f, 0.0f);
-
-		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(-0.5f, 1.0f, 0.0f);
-		
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(-0.5f, -1.0f, 0.0f);
-		
-		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(0.5f, -1.0f, 0.0f);
-    glEnd();
-	glBindTexture(GL_TEXTURE_2D, 0);
-    glPopMatrix();*/
-    // torso
     glPushMatrix();
     glTranslatef(0.0f, 0.0f, -2.001f);
 	glBindTexture(GL_TEXTURE_2D, texture_girl_shirt);
