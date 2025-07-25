@@ -316,7 +316,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					gbShowModel = FALSE;
 				}
 				break;
-			case 'l':
+			/*case 'l':
 			case 'L':
 				if(bLight == FALSE)
 				{
@@ -329,6 +329,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					glDisable(GL_LIGHTING);	
 				}
 				break;
+				*/
 			case 'm':
 			case 'M':
 				if(gbMoonDisplay == FALSE)
@@ -499,11 +500,11 @@ int initialize(void)
 
 	// LoadTexture
 
-	if(loadGLTexture(&texture_moon, MAKEINTRESOURCE(IDBITMAP_MOON)) == FALSE)
+	/*if(loadGLTexture(&texture_moon, MAKEINTRESOURCE(IDBITMAP_MOON)) == FALSE)
 	{
 		fprintf(gpFile, "loadtexture has been failed for moon texture\n");
 		return(-7);
-	}
+	}*/
 
 	/*if(loadGLTexture(&texture_eye, MAKEINTRESOURCE(IDBITMAP_EYE)) == FALSE)
 	{
@@ -591,27 +592,33 @@ int initialize(void)
 		fprintf(gpFile, "Failed to load water texture");
 		return(-9);
 	}
+
+	if(loadPNGTexture(&texture_moon, "texture-images\\moon-png.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed to load moon texture");
+		return(-10);
+	}
 	// enable texturing
 	glEnable(GL_TEXTURE_2D);
 
 	// Initialize quadric
 	quadric = gluNewQuadric();
 
-	glLightfv(GL_LIGHT0, GL_AMBIENT, moonLinghtAmbient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, moonLightDifuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, moonLightSpecular);
-	glLightfv(GL_LIGHT0, GL_POSITION, moonLightPoistion);
+	// glLightfv(GL_LIGHT0, GL_AMBIENT, moonLinghtAmbient);
+	// glLightfv(GL_LIGHT0, GL_DIFFUSE, moonLightDifuse);
+	// glLightfv(GL_LIGHT0, GL_SPECULAR, moonLightSpecular);
+	// glLightfv(GL_LIGHT0, GL_POSITION, moonLightPoistion);
 	//glEnable(GL_LIGHT0);
-	glLightfv(GL_LIGHT1, GL_POSITION, waterLightPosition);
-	glLightfv(GL_LIGHT1, GL_AMBIENT, waterLightAmbient);
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, waterLightDefuse);
-	glLightfv(GL_LIGHT1, GL_SPECULAR, watermatSpecular);
+	// glLightfv(GL_LIGHT1, GL_POSITION, waterLightPosition);
+	// glLightfv(GL_LIGHT1, GL_AMBIENT, waterLightAmbient);
+	// glLightfv(GL_LIGHT1, GL_DIFFUSE, waterLightDefuse);
+	// glLightfv(GL_LIGHT1, GL_SPECULAR, watermatSpecular);
 
 	//glMaterialfv(GL_FRONT, GL_SPECULAR, watermatSpecular); 
 	//glMaterialfv(GL_FRONT, GL_SHININESS, watermatShininess);
 	//glMaterialfv(GL_FRONT, GL_EMISSION, matEmission);
 
-	glEnable(GL_LIGHT1);
+	//glEnable(GL_LIGHT1);
 	
 
 	for(int i = 0; i<800; i++)	
@@ -627,11 +634,11 @@ int initialize(void)
 		point_vertices[i].size = size;
 	}
 
-	for(int x = 0; x < 45; x++)
+	for(int x = 0; x < 44; x++)
 	{
 		for(int y=0; y<45; y++)
 		{
-			points[x][y][0] = (float)((x/5.0)-4.5f);
+			points[x][y][0] = (float)((x/5.0)-5.0f);
 			points[x][y][1] = (float)((y/5.0)-4.5f);
 			points[x][y][2] = (float)(sin((((x/5.0f)*40.0f)/360.0f)*3.141592654*2.0f))*0.2;
 		}
@@ -785,15 +792,7 @@ void display(void)
 	// set identity metrics
 	glLoadIdentity();
 
-	
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
     glTranslatef(0.0f, 0.0f, -8.0f);
-    glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-    glEnable(GL_POLYGON_SMOOTH);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	
-
 
 	glPushMatrix();
 	if(gbShowModel == TRUE)
@@ -815,16 +814,21 @@ void display(void)
 	if(showCTree == TRUE)
 	{
 		glPushMatrix();
-		glTranslatef(4.0f, 0.0f, 0.0f);
-		glScalef(5.0, 4.0f, 0.0f);
-		drawColoredTree();
+			drawScene1();
 		glPopMatrix();
 
 		glPushMatrix();
-		glTranslatef(-4.0f, 0.0f, 0.0f);
-		glScalef(4.0, 4.0f, 0.0f);
-		drawCocoTree();
+			glTranslatef(4.0f, 0.0f, 0.0f);
+			glScalef(4.0, 4.0f, 0.0f);
+			drawColoredTree();
 		glPopMatrix();
+
+		glPushMatrix();
+			glTranslatef(-5.0f, 0.0f, 0.0f);
+			glScalef(4.0, 4.0f, 0.0f);
+			drawCocoTree();
+		glPopMatrix();
+		
 	}
 
 	if(showCoTree == TRUE)
@@ -835,12 +839,6 @@ void display(void)
 		drawWater();
 	glPopMatrix();
 
-	/*glPushMatrix();
-		glScalef(5.0f, 1.0f, 1.0f);
-		glRotatef(-80.0f,1.0f, 0.0f, 0.0f);
-		glTranslatef(0.0f, -2.0f, 0.0f);
-		drawTerrain();
-	glPopMatrix();*/
 
 	if(gbMoonDisplay == TRUE)
 	{
@@ -848,9 +846,6 @@ void display(void)
 		drawScene1();
 		glPopMatrix();
 	}
-	glPushMatrix();
-		drawHouse();
-	glPopMatrix();
 	glPopMatrix();
 
 	// swap the buffers
@@ -873,7 +868,7 @@ void update(void)
 	yrot = yrot + 0.002f;
 	zrot = zrot + 0.004f;
 
-	if(wiggle_count == 100)
+	if(wiggle_count == 2)
 	{
 		for(y = 0; y<45; y++)
 		{

@@ -16,8 +16,8 @@ void drawMoon()
 {
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glBindTexture(GL_TEXTURE_2D, texture_moon);
 	gluQuadricTexture(quadric, GL_TRUE); 
+	glBindTexture(GL_TEXTURE_2D, texture_moon);
 	gluSphere(quadric, 0.5, 50, 50);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	gluQuadricTexture(quadric, GL_FALSE);
@@ -29,8 +29,10 @@ void drawColoredTree()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // face
-    glPushMatrix();
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glBindTexture(GL_TEXTURE_2D, texture_colured_tree);
+    glPushMatrix();
+	glDepthMask(GL_FALSE); 
 	glBegin(GL_QUADS);
 
 		glTexCoord2f(1.0f, 1.0f);
@@ -46,17 +48,21 @@ void drawColoredTree()
 		glVertex3f(0.5f, -0.5f, 0.0f);
 
 	glEnd();
+	glDepthMask(GL_TRUE); 
+	glPopMatrix();
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 }
 
 void drawCocoTree()
 {
+	glDepthMask(GL_FALSE); 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glPushMatrix();
 	glBindTexture(GL_TEXTURE_2D, texture_coco_tree);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glPushMatrix();
 	glBegin(GL_QUADS);
 
 		glTexCoord2f(1.0f, 1.0f);
@@ -72,31 +78,39 @@ void drawCocoTree()
 		glVertex3f(0.3f, -0.5f, 0.0f);
 
 	glEnd();
+	glPopMatrix();
 	glBindTexture(GL_TEXTURE_2D, 0);
+	glDepthMask(GL_TRUE);
 
 }
 
 void drawWater()
 {
-	glPolygonMode(GL_BACK, GL_FILL );
-	glPolygonMode(GL_FRONT, GL_FILL );
+	//glPolygonMode(GL_BACK, GL_FILL );
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL );
 	glShadeModel(GL_SMOOTH);
 
 	int x, y;
 	float float_x, float_y, float_xb, float_yb;
 
 	glLoadIdentity();
-	glTranslatef(0.0f, 0.0f, -10.0f);
+	glTranslatef(0.0f, 0.0f, -8.0f);
 	glTranslatef(0.0f, -2.0f, 0.0f);
-	glTranslatef(0.0f, 0.0f, 1.0f);
+	glTranslatef(1.0f, 0.0f, 0.0f);
 	glRotatef(-80,1.0f,0.0f,0.0f);             // Rotate On The X Axis
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBindTexture(GL_TEXTURE_2D, texture_water);
+	glDepthMask(GL_FALSE); 
 
 	//glColor3f(0.05f, 0.05f, 0.2f);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glScalef(1.8, 1.0f, 1.0f);
 	glBegin(GL_QUADS);
 
-	for(x = 0; x < 44; x++)
-	{
+	for(x = 0; x < 40; x++)
+	 {
 		for(y = 0; y < 44; y++)
 		{
 			float_x = ((float) x)/44.0f;
@@ -120,6 +134,7 @@ void drawWater()
 	glEnd();
 
 	glBindTexture(GL_TEXTURE_2D, 0);
+	glDepthMask(GL_TRUE); 
 }
 
 void drawTerrain()
