@@ -6,11 +6,14 @@
 extern GLuint texture_colured_tree;
 extern GLuint texture_coco_tree;
 extern GLuint texture_water;
+extern GLuint texture_ground;
 extern GLfloat points[45][45][3];
 extern GLfloat hold;    
 extern GLfloat xrot;
 extern GLfloat yrot;
 extern GLfloat zrot;
+extern GLfloat location[16];
+extern FILE *gpFile;
 
 void drawMoon()
 {
@@ -18,6 +21,9 @@ void drawMoon()
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	gluQuadricTexture(quadric, GL_TRUE); 
 	glBindTexture(GL_TEXTURE_2D, texture_moon);
+	glGetFloatv(GL_MODELVIEW_MATRIX, location);
+	//for(int i = 0; i<16; i++)
+		//fprintf(gpFile,"location[%d] = %f\n",i, location[i]);
 	gluSphere(quadric, 0.5, 50, 50);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	gluQuadricTexture(quadric, GL_FALSE);
@@ -33,6 +39,11 @@ void drawColoredTree()
 	glBindTexture(GL_TEXTURE_2D, texture_colured_tree);
     glPushMatrix();
 	glDepthMask(GL_FALSE); 
+	//fprintf(gpFile, "Printing Model view metrix Before drwing colored Tree");
+	glGetFloatv(GL_MODELVIEW_MATRIX, location);
+	//for(int i = 0; i<16; i++)
+		//fprintf(gpFile,"location[%d] = %f\n",i, location[i]);
+
 	glBegin(GL_QUADS);
 
 		glTexCoord2f(1.0f, 1.0f);
@@ -96,17 +107,16 @@ void drawWater()
 
 	glLoadIdentity();
 	glTranslatef(0.0f, 0.0f, -8.0f);
-	glTranslatef(0.0f, -2.0f, 0.0f);
+	glTranslatef(0.0f, -2.5f, 0.0f);
 	glTranslatef(1.0f, 0.0f, 0.0f);
 	glRotatef(-80,1.0f,0.0f,0.0f);             // Rotate On The X Axis
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBindTexture(GL_TEXTURE_2D, texture_water);
-	glDepthMask(GL_FALSE); 
 
 	//glColor3f(0.05f, 0.05f, 0.2f);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	glScalef(1.8, 1.0f, 1.0f);
+	glScalef(3, 0.4f, 1.0f);
 	glBegin(GL_QUADS);
 
 	for(x = 0; x < 40; x++)
@@ -134,59 +144,61 @@ void drawWater()
 	glEnd();
 
 	glBindTexture(GL_TEXTURE_2D, 0);
-	glDepthMask(GL_TRUE); 
 }
 
-void drawTerrain()
+void drawGround()
 {
-	glColor3f(0.0f, 0.0f, 0.0f);
-	glBegin(GL_QUADS);
-		glVertex3f(1.0f, 1.0f, 0.0f);
-		glVertex3f(-1.0f, 1.0f, 0.0f);
-		glVertex3f(-1.0f, -1.0f, 0.0f);
-		glVertex3f(1.0f, -1.0f, 0.0f);
-	glEnd();
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glBindTexture(GL_TEXTURE_2D, texture_ground);
+    glPushMatrix();
+		glBegin(GL_QUADS);
+			glVertex3f(1.0f, 1.0f, 0.0f);
+			glVertex3f(-1.0f, 1.0f, 0.0f);
+			glVertex3f(-1.0f, -1.0f, 0.0f);
+			glVertex3f(1.0f, -1.0f, 0.0f);
+		glEnd();
+	glPopMatrix();
+	glBindTexture(GL_TEXTURE_2D, 0);
+
 }
 
 void drawHouse()
 {
-	glBegin(GL_QUADS);
+    // House Base - Cube
+	glPushMatrix();
+    glColor3f(0.9f, 0.7f, 0.5f); // Wall color
+	glScalef(2.0f, 1.0f, 1.0f);
+	drawCube();
+	glPopMatrix();
 	
-	// front face
-	glVertex3f(1.0f, 1.0f, 1.0f);
-	glVertex3f(-1.0f, 1.0f, 1.0f);
-	glVertex3f(-1.0f, -1.0f, 1.0f);
-	glVertex3f(1.0f, -1.0f, 1.0f);
+	glPushMatrix();
+    glColor3f(0.6f, 0.1f, 0.1f); // Roof color
+	//glScalef(1.0f, 2.0f, 1.0f);
+	glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+	drawTriangle();
+	glPopMatrix();
 
-	// right face
-	glVertex3f(1.0f, 1.0f, -1.0f);
-	glVertex3f(1.0f, 1.0f, 1.0f);
-	glVertex3f(1.0f, -1.0f, 1.0f);
-	glVertex3f(1.0f, -1.0f, -1.0f);
+    glColor3f(0.4f, 0.2f, 0.1f); // Door color
+    glBegin(GL_QUADS);
+        glVertex3f(-0.5f, 0.0f, 2.001f);
+        glVertex3f( 0.5f, 0.0f, 2.001f);
+        glVertex3f( 0.5f, 1.5f, 2.001f);
+        glVertex3f(-0.5f, 1.5f, 2.001f);
+    glEnd();
 
-	// back face
-	glVertex3f(-1.0f, 1.0f, -1.0f);
-	glVertex3f(1.0f, 1.0f, -1.0f);
-	glVertex3f(1.0f, -1.0f, -1.0f);
-	glVertex3f(-1.0f, -1.0f, -1.0f);
+    // Windows
+    glColor3f(0.3f, 0.5f, 1.0f); // Glass blue
+    glBegin(GL_QUADS);
+        // Left window
+        glVertex3f(-1.5f, 1.2f, 2.001f);
+        glVertex3f(-0.9f, 1.2f, 2.001f);
+        glVertex3f(-0.9f, 2.0f, 2.001f);
+        glVertex3f(-1.5f, 2.0f, 2.001f);
 
-	// left face
-	glVertex3f(-1.0f, 1.0f, 1.0f);
-	glVertex3f(-1.0f, 1.0f, -1.0f);
-	glVertex3f(-1.0f, -1.0f, -1.0f);
-	glVertex3f(-1.0f, -1.0f, 1.0f);
-
-	// top face
-	glVertex3f(1.0f, 1.0f, -1.0f);
-	glVertex3f(-1.0f, 1.0f, -1.0f);
-	glVertex3f(-1.0f, 1.0f, 1.0f);
-	glVertex3f(1.0f, 1.0f, 1.0f);
-
-	// bottom face
-	glVertex3f(1.0f, -1.0f, -1.0f);
-	glVertex3f(-1.0f, -1.0f, -1.0f);
-	glVertex3f(-1.0f, -1.0f, 1.0f);
-	glVertex3f(1.0f, -1.0f, 1.0f);
-	glEnd();
-
+        // Right window
+        glVertex3f(0.9f, 1.2f, 2.001f);
+        glVertex3f(1.5f, 1.2f, 2.001f);
+        glVertex3f(1.5f, 2.0f, 2.001f);
+        glVertex3f(0.9f, 2.0f, 2.001f);
+    glEnd();
 }

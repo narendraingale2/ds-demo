@@ -13,7 +13,6 @@ void drawScene1()
 
     // Drawing stars
     glPushMatrix();
-        glLoadIdentity();
         drawPoints(point_vertices, 800);
     glPopMatrix();
 

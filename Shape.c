@@ -19,3 +19,69 @@ void drawPoints(point_t points[], int length) {
         
     }
 }
+
+void drawCube()
+{
+
+    glBegin(GL_QUADS);
+        // Front
+        glVertex3f(-2.0f, 0.0f, 2.0f);
+        glVertex3f( 2.0f, 0.0f, 2.0f);
+        glVertex3f( 2.0f, 3.0f, 2.0f);
+        glVertex3f(-2.0f, 3.0f, 2.0f);
+
+        // Back
+        glVertex3f(-2.0f, 0.0f, -2.0f);
+        glVertex3f( 2.0f, 0.0f, -2.0f);
+        glVertex3f( 2.0f, 3.0f, -2.0f);
+        glVertex3f(-2.0f, 3.0f, -2.0f);
+
+        // Left
+        glVertex3f(-2.0f, 0.0f, -2.0f);
+        glVertex3f(-2.0f, 0.0f,  2.0f);
+        glVertex3f(-2.0f, 3.0f,  2.0f);
+        glVertex3f(-2.0f, 3.0f, -2.0f);
+
+        // Right
+        glVertex3f(2.0f, 0.0f, -2.0f);
+        glVertex3f(2.0f, 0.0f,  2.0f);
+        glVertex3f(2.0f, 3.0f,  2.0f);
+        glVertex3f(2.0f, 3.0f, -2.0f);
+
+        // Top
+        glVertex3f(-2.0f, 3.0f,  2.0f);
+        glVertex3f( 2.0f, 3.0f,  2.0f);
+        glVertex3f( 2.0f, 3.0f, -2.0f);
+        glVertex3f(-2.0f, 3.0f, -2.0f);
+    glEnd();
+
+}
+
+void drawTriangle()
+{
+    glBegin(GL_TRIANGLES);
+        // Front
+        glVertex3f(-2.0f, 3.0f, 2.0f);
+        glVertex3f( 2.0f, 3.0f, 2.0f);
+        glVertex3f( 0.0f, 5.0f, 2.0f);
+
+        // Back
+        glVertex3f(-2.0f, 3.0f, -2.0f);
+        glVertex3f( 2.0f, 3.0f, -2.0f);
+        glVertex3f( 0.0f, 5.0f, -2.0f);
+    glEnd();
+
+    glBegin(GL_QUADS);
+        // Left roof side
+        glVertex3f(-2.0f, 3.0f, -2.0f);
+        glVertex3f(-2.0f, 3.0f,  2.0f);
+        glVertex3f( 0.0f, 5.0f,  2.0f);
+        glVertex3f( 0.0f, 5.0f, -2.0f);
+
+        // Right roof side
+        glVertex3f(2.0f, 3.0f, -2.0f);
+        glVertex3f(2.0f, 3.0f,  2.0f);
+        glVertex3f(0.0f, 5.0f,  2.0f);
+        glVertex3f(0.0f, 5.0f, -2.0f);
+    glEnd();
+}

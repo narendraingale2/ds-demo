@@ -296,6 +296,7 @@ void drawGirl(void)
     glPushMatrix();
 	glBindTexture(GL_TEXTURE_2D, texture_full_boy);
     glTranslatef(0.0f, 2.3f, -2.0f);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glBegin(GL_QUADS);
 
 		glTexCoord2f(1.0f, 1.0f);
@@ -319,6 +320,7 @@ void drawGirl(void)
     glPushMatrix();
     glTranslatef(0.0f, -2.0f, -2.0f);
 	glBindTexture(GL_TEXTURE_2D, texture_girl_leg);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glBegin(GL_QUADS);
 
 		glTexCoord2f(1.0f, 1.0f);
@@ -339,6 +341,7 @@ void drawGirl(void)
     glPushMatrix();
     glTranslatef(0.0f, 0.0f, -2.001f);
 	glBindTexture(GL_TEXTURE_2D, texture_girl_shirt);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glBegin(GL_QUADS);
 
 		glTexCoord2f(1.0f, 1.0f);
@@ -358,6 +361,7 @@ void drawGirl(void)
 
     glPushMatrix();
     glTranslatef(0.0f, 0.0f, -1.999f);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glBindTexture(GL_TEXTURE_2D, texture_girl_shirt);
     glBegin(GL_QUADS);
 

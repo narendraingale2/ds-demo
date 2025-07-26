@@ -45,11 +45,13 @@ BOOL gbActiveWindow = FALSE;
 BOOL gbEscapKeyIsPressed = FALSE;
 BOOL gbRotateBoy = FALSE;
 BOOL gbMoonDisplay = FALSE;
+BOOL gbShowHouse = TRUE;
 BOOL gbShowModel = FALSE;
-BOOL gbShowGirl = FALSE;
-BOOL showCTree = FALSE;
+BOOL gbShowGirl = TRUE;
+BOOL showCTree = TRUE;
 BOOL showCoTree = FALSE;
 BOOL gbShowWater = FALSE;
+BOOL rendering_scene1 = TRUE;
 
 // Opengl related global variables
 HDC ghdc = NULL;
@@ -71,6 +73,7 @@ GLuint texture_girl_left_hand;
 GLuint texture_colured_tree;
 GLuint texture_coco_tree;
 GLuint texture_water;
+GLuint texture_ground;
 
 GLUquadric *quadric = NULL;
 
@@ -104,6 +107,14 @@ GLfloat hold;
 GLfloat xrot=0.0f;
 GLfloat yrot=0.0f;
 GLfloat zrot=0.0f;
+GLfloat xLook = 5.0f;
+GLfloat yLook = 4.05f;
+GLfloat zLook = -13.4f;
+GLfloat xLookAt = 5.0f;
+GLfloat yLookAt = 4.0f;
+GLfloat zLookAt = -14.0f;
+GLfloat location[16];
+BOOL startMovingLooAt = FALSE;
 
 
 // EntryPoint Function
@@ -274,6 +285,30 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			case VK_ESCAPE: 
 				gbEscapKeyIsPressed = TRUE;
 				break;
+			case VK_UP:
+				yLookAt = yLookAt + 0.01f;
+				fprintf(gpFile, "yLookAt = %f\n", yLookAt);
+				break;
+			case VK_DOWN:
+				yLookAt = yLookAt - 0.01f;
+				fprintf(gpFile, "yLookAt = %f\n", yLookAt);
+				break;
+			case VK_LEFT:
+				xLookAt = xLookAt - 0.01f;
+				fprintf(gpFile, "xLookAt = %f\n", xLookAt);
+				break;
+			case VK_RIGHT:
+				xLookAt = xLookAt + 0.01f;
+				fprintf(gpFile, "xLookAt = %f\n", xLookAt);
+				break;
+			case VK_OEM_PLUS:
+				zLookAt = zLookAt + 0.01f;
+				fprintf(gpFile, "zLookAt = %f\n", zLookAt);
+				break;
+			case VK_OEM_MINUS:
+				zLookAt = zLookAt - 0.01f;
+				fprintf(gpFile, "zLookAt = %f\n", zLookAt);
+				break;
 			default:
 				break;
 		}
@@ -316,20 +351,15 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					gbShowModel = FALSE;
 				}
 				break;
-			/*case 'l':
-			case 'L':
-				if(bLight == FALSE)
+			case 'h':
+			case 'H':
+				if(gbShowHouse == FALSE)
 				{
-					bLight = TRUE;
-					glEnable(GL_LIGHTING);	
+					gbShowHouse = TRUE;
 				}
 				else
-				{
-					bLight = FALSE;
-					glDisable(GL_LIGHTING);	
-				}
+					gbShowHouse = FALSE;
 				break;
-				*/
 			case 'm':
 			case 'M':
 				if(gbMoonDisplay == FALSE)
@@ -365,7 +395,37 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				}
 				else
 					showCoTree = FALSE;
-			break;
+				break;
+			case 'w':
+				if(gbShowWater == FALSE)
+					gbShowWater = TRUE;
+				else
+					gbShowWater = FALSE;
+				break;
+			case 'x':
+					xLook = xLook + 0.01;
+					fprintf(gpFile, "xLook = %f\n", xLook);
+				break;
+			case 'X':
+					xLook = xLook - 0.01;
+					fprintf(gpFile, "xLook = %f\n", xLook);
+				break;
+			case 'y':
+					yLook = yLook + 0.01;
+					fprintf(gpFile, "yLook = %f\n", yLook);
+				break;
+			case 'Y':
+					yLook = yLook - 0.01;
+					fprintf(gpFile, "yLook = %f\n", yLook);
+				break;
+			case 'z':
+					zLook = zLook + 0.01;
+					fprintf(gpFile, "zLook = %f\n", zLook);
+				break;
+			case 'Z':
+					zLook = zLook - 0.01;
+					fprintf(gpFile, "zLook = %f\n", zLook);
+				break;
 			default:
 				break;
 		}
@@ -598,28 +658,17 @@ int initialize(void)
 		fprintf(gpFile, "Failed to load moon texture");
 		return(-10);
 	}
+
+	if(loadPNGTexture(&texture_ground, "texture-images\\ground.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed to ground");
+		return(-10);
+	}
 	// enable texturing
 	glEnable(GL_TEXTURE_2D);
 
 	// Initialize quadric
 	quadric = gluNewQuadric();
-
-	// glLightfv(GL_LIGHT0, GL_AMBIENT, moonLinghtAmbient);
-	// glLightfv(GL_LIGHT0, GL_DIFFUSE, moonLightDifuse);
-	// glLightfv(GL_LIGHT0, GL_SPECULAR, moonLightSpecular);
-	// glLightfv(GL_LIGHT0, GL_POSITION, moonLightPoistion);
-	//glEnable(GL_LIGHT0);
-	// glLightfv(GL_LIGHT1, GL_POSITION, waterLightPosition);
-	// glLightfv(GL_LIGHT1, GL_AMBIENT, waterLightAmbient);
-	// glLightfv(GL_LIGHT1, GL_DIFFUSE, waterLightDefuse);
-	// glLightfv(GL_LIGHT1, GL_SPECULAR, watermatSpecular);
-
-	//glMaterialfv(GL_FRONT, GL_SPECULAR, watermatSpecular); 
-	//glMaterialfv(GL_FRONT, GL_SHININESS, watermatShininess);
-	//glMaterialfv(GL_FRONT, GL_EMISSION, matEmission);
-
-	//glEnable(GL_LIGHT1);
-	
 
 	for(int i = 0; i<800; i++)	
 	{
@@ -791,14 +840,39 @@ void display(void)
 
 	// set identity metrics
 	glLoadIdentity();
-
+		
     glTranslatef(0.0f, 0.0f, -8.0f);
+	/*gluLookAt(xLook, yLook, zLook, 
+		5, 4, -14, 
+		0.0f, 1.0f, 0.0f);
+	*/
+
+	gluLookAt(xLook, yLook, zLook, 
+			xLookAt, yLookAt, zLookAt, 
+			0.0f, 1.0f, 0.0f);
+	/*if(rendering_scene1 == TRUE)
+	{
+		gluLookAt(xLook, yLook, zLook, 
+			xLookAt, yLookAt, zLookAt, 
+			0.0f, 1.0f, 0.0f);
+		for(int i = 0; i<16; i++)
+			fprintf(gpFile,"Moving cameralocation[%d] = %f\n",i, location[i]);
+
+	}
+	else
+	{
+
+		for(int i = 0; i<16; i++)
+			fprintf(gpFile,"Without GLU look AT cameralocation[%d] = %f\n",i, location[i]);
+	}*/
+		
+	
 
 	glPushMatrix();
 	if(gbShowModel == TRUE)
 	{
 		if(gbRotateBoy == TRUE)
-			glRotatef(boyAngle, 0.0f, 1.0f, 0.0f);
+			glRotatef(90, 0.0f, 1.0f, 0.0f);
 	 	drawBoyModel();
 
 	}
@@ -806,7 +880,8 @@ void display(void)
 	if(gbShowGirl == TRUE)
 	{
 		glPushMatrix();
-		glScalef(0.4f, 0.4, 0.4f);
+		glScalef(0.4f, 0.2, 0.4f);
+		glTranslatef(-8.5f, -4.0f, 0.0f);
 		drawGirl();
 		glPopMatrix();
 	}
@@ -818,32 +893,46 @@ void display(void)
 		glPopMatrix();
 
 		glPushMatrix();
-			glTranslatef(4.0f, 0.0f, 0.0f);
-			glScalef(4.0, 4.0f, 0.0f);
+			glTranslatef(4.0f, 0.5f, 0.0f);
+			glScalef(4.0, 6.0f, 0.0f);
 			drawColoredTree();
 		glPopMatrix();
 
 		glPushMatrix();
-			glTranslatef(-5.0f, 0.0f, 0.0f);
-			glScalef(4.0, 4.0f, 0.0f);
+			glTranslatef(-5.0f, 0.5f, 0.0f);
+			glScalef(4.0, 6.0f, 0.0f);
 			drawCocoTree();
 		glPopMatrix();
 		
 	}
 
-	if(showCoTree == TRUE)
+	if(gbShowWater == TRUE)
 	{
+		glPushMatrix();
+			drawWater();
+		glPopMatrix();
 	}
-
-	glPushMatrix();
-		drawWater();
-	glPopMatrix();
-
 
 	if(gbMoonDisplay == TRUE)
 	{
 		glPushMatrix();
 		drawScene1();
+		glPopMatrix();
+	}
+
+	if(gbShowHouse == TRUE)
+	{
+		glPushMatrix();
+			glTranslatef(0.0f, -2.0f, 0.0f);
+			glRotatef(60.0f, 1.0f, 0.0f, 0.0f);
+			glScalef(8.0f, 2.0f, 1.0f);
+			drawGround();
+		glPopMatrix();
+		glPushMatrix();
+			glScalef(0.5f, 0.5f, 1.0f);
+			// glRotatef(-180, 0.0f, 1.0f, 0.0f);
+			glTranslatef(0.0f, -2.4f, 0.0f);
+			drawHouse();
 		glPopMatrix();
 	}
 	glPopMatrix();
@@ -884,8 +973,64 @@ void update(void)
 		wiggle_count = 0;
 	}
 	wiggle_count++;
-}
 
+	if(rendering_scene1 == TRUE)
+	{
+		if(zLook<=-1.0f)
+			zLook = zLook + 0.01;
+		else if (yLook>= 0.5f)
+			yLook = yLook - 0.01;
+		else if ( xLook >=0.0f)
+		{
+			xLook = xLook - 0.01;
+			fprintf(gpFile, "values fo xLook %f\n", xLook);
+		}
+		else 
+		{
+
+			fprintf(gpFile, "camera rolling finished until tree x = %f, y = %f, z= %f\n", xLook, yLook, zLook);
+			rendering_scene1 = FALSE;
+			startMovingLooAt = TRUE;
+		}
+	}
+
+	if(startMovingLooAt == TRUE)
+	{
+			zLook = 0.0f;
+			yLook = 0.0f;
+			xLook = 0.0f;
+
+		BOOL final_reset_require = TRUE; 
+		if(zLookAt<=-1.0f)
+		{
+			final_reset_require = FALSE;
+			zLookAt = zLookAt + 0.01;
+		}
+		
+		if (yLookAt>= 0.0f)
+		{
+
+			yLookAt = yLookAt - 0.01;
+			final_reset_require = FALSE;
+		}
+
+		if ( xLookAt >=0.0f)
+		{
+			xLookAt = xLookAt - 0.01;
+			final_reset_require = FALSE;
+			fprintf(gpFile, "values fo xLook %f\n", xLook);
+		}
+
+		if(final_reset_require == TRUE)
+		{
+			xLookAt = 0.0f;
+			yLookAt = 0.0f;
+			zLookAt = -1.0f;
+			startMovingLooAt = FALSE;
+		}
+	}
+	
+}
 
 void uninitialize(void)
 {
