@@ -289,11 +289,10 @@ void drawBoyModel(void)
 
 void drawGirl(void)
 {
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
     // face
     glPushMatrix();
+    glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBindTexture(GL_TEXTURE_2D, texture_full_boy);
     glTranslatef(0.0f, 2.3f, -2.0f);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);

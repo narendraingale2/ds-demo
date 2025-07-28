@@ -19,10 +19,13 @@
 // openGl related libraries
 #pragma comment(lib, "opengl32.lib")
 #pragma comment(lib, "glu32.lib")
+#pragma comment(lib, "winmm.lib")
 
 // Macros
 #define WIN_WIDTH 800
 #define WIN_HEIGHT 600
+//#define DEV_MODE 
+//#define NO_SOUND
 
 // global function declarations
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -47,11 +50,14 @@ BOOL gbRotateBoy = FALSE;
 BOOL gbMoonDisplay = FALSE;
 BOOL gbShowHouse = TRUE;
 BOOL gbShowModel = FALSE;
-BOOL gbShowGirl = TRUE;
+BOOL gbShowGirl = FALSE;
 BOOL showCTree = TRUE;
 BOOL showCoTree = FALSE;
 BOOL gbShowWater = FALSE;
 BOOL rendering_scene1 = TRUE;
+BOOL complete_scene1 = FALSE;
+BOOL rendering_scene2 = FALSE;
+BOOL moving_cam_completed_scene2 = FALSE;
 
 // Opengl related global variables
 HDC ghdc = NULL;
@@ -74,6 +80,7 @@ GLuint texture_colured_tree;
 GLuint texture_coco_tree;
 GLuint texture_water;
 GLuint texture_ground;
+GLuint texture_inner_wall;
 
 GLUquadric *quadric = NULL;
 
@@ -210,6 +217,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 	SetFocus(hwnd);
 
 	toggleFullScreen();
+	#ifndef NO_SOUND
+		PlaySound(TEXT("audio\\chandoba_audio.wav"), NULL, SND_FILENAME |SND_ASYNC );
+	#endif
 
 	// Game Loop
 	while(bDone == FALSE)
@@ -664,6 +674,11 @@ int initialize(void)
 		fprintf(gpFile, "Failed to ground");
 		return(-10);
 	}
+	if(loadPNGTexture(&texture_inner_wall, "texture-images\\inner-wall.PNG") == FALSE)
+	{
+		fprintf(gpFile, "Failed load inner wall");
+		return(-10);
+	}
 	// enable texturing
 	glEnable(GL_TEXTURE_2D);
 
@@ -842,101 +857,95 @@ void display(void)
 	glLoadIdentity();
 		
     glTranslatef(0.0f, 0.0f, -8.0f);
-	/*gluLookAt(xLook, yLook, zLook, 
-		5, 4, -14, 
-		0.0f, 1.0f, 0.0f);
-	*/
 
+	#ifndef DEV_MODE
 	gluLookAt(xLook, yLook, zLook, 
 			xLookAt, yLookAt, zLookAt, 
 			0.0f, 1.0f, 0.0f);
-	/*if(rendering_scene1 == TRUE)
+	
+	if(moving_cam_completed_scene2 == FALSE)
 	{
-		gluLookAt(xLook, yLook, zLook, 
-			xLookAt, yLookAt, zLookAt, 
-			0.0f, 1.0f, 0.0f);
-		for(int i = 0; i<16; i++)
-			fprintf(gpFile,"Moving cameralocation[%d] = %f\n",i, location[i]);
-
-	}
-	else
-	{
-
-		for(int i = 0; i<16; i++)
-			fprintf(gpFile,"Without GLU look AT cameralocation[%d] = %f\n",i, location[i]);
-	}*/
-		
 	
 
-	glPushMatrix();
-	if(gbShowModel == TRUE)
-	{
-		if(gbRotateBoy == TRUE)
-			glRotatef(90, 0.0f, 1.0f, 0.0f);
-	 	drawBoyModel();
-
-	}
-
-	if(gbShowGirl == TRUE)
-	{
 		glPushMatrix();
-		glScalef(0.4f, 0.2, 0.4f);
-		glTranslatef(-8.5f, -4.0f, 0.0f);
-		drawGirl();
-		glPopMatrix();
-	}
+		if(gbShowModel == TRUE)
+		{
+			if(gbRotateBoy == TRUE)
+				glRotatef(90, 0.0f, 1.0f, 0.0f);
+		 	drawBoyModel();
 
-	if(showCTree == TRUE)
-	{
-		glPushMatrix();
+		}
+
+		if(gbShowGirl == TRUE)
+		{
+			glPushMatrix();
+			glScalef(0.4f, 0.2, 0.4f);
+			glTranslatef(-8.5f, -4.0f, 0.0f);
+			drawGirl();
+			glPopMatrix();
+		}
+
+		if(showCTree == TRUE)
+		{
+			glPushMatrix();
+				drawScene1();
+			glPopMatrix();
+
+			glPushMatrix();
+				glTranslatef(4.0f, 0.5f, 0.0f);
+				glScalef(4.0, 6.0f, 0.0f);
+				drawColoredTree();
+			glPopMatrix();
+
+			glPushMatrix();
+				glTranslatef(-5.0f, 0.5f, 0.0f);
+				glScalef(4.0, 6.0f, 0.0f);
+				drawCocoTree();
+			glPopMatrix();
+
+		}
+
+		if(gbShowWater == TRUE)
+		{
+			glPushMatrix();
+				drawWater();
+			glPopMatrix();
+		}
+
+		if(gbMoonDisplay == TRUE)
+		{
+			glPushMatrix();
 			drawScene1();
-		glPopMatrix();
+			glPopMatrix();
+		}
 
-		glPushMatrix();
-			glTranslatef(4.0f, 0.5f, 0.0f);
-			glScalef(4.0, 6.0f, 0.0f);
-			drawColoredTree();
+		if(gbShowHouse == TRUE)
+		{
+			glPushMatrix();
+				glTranslatef(0.0f, -2.0f, 0.0f);
+				glRotatef(60.0f, 1.0f, 0.0f, 0.0f);
+				glScalef(8.0f, 2.0f, 1.0f);
+				drawGround();
+			glPopMatrix();
+			glPushMatrix();
+				glScalef(0.5f, 0.5f, 1.0f);
+				// glRotatef(-180, 0.0f, 1.0f, 0.0f);
+				glTranslatef(0.0f, -2.4f, 0.0f);
+				drawHouse();
+			glPopMatrix();
+		}
 		glPopMatrix();
-
-		glPushMatrix();
-			glTranslatef(-5.0f, 0.5f, 0.0f);
-			glScalef(4.0, 6.0f, 0.0f);
-			drawCocoTree();
-		glPopMatrix();
-		
 	}
 
-	if(gbShowWater == TRUE)
+	if(moving_cam_completed_scene2)
 	{
-		glPushMatrix();
-			drawWater();
-		glPopMatrix();
+	#endif
+		glLoadIdentity();
+		glEnable(GL_BLEND);
+		drawScene2();
+	#ifndef DEV_MODE
 	}
-
-	if(gbMoonDisplay == TRUE)
-	{
-		glPushMatrix();
-		drawScene1();
-		glPopMatrix();
-	}
-
-	if(gbShowHouse == TRUE)
-	{
-		glPushMatrix();
-			glTranslatef(0.0f, -2.0f, 0.0f);
-			glRotatef(60.0f, 1.0f, 0.0f, 0.0f);
-			glScalef(8.0f, 2.0f, 1.0f);
-			drawGround();
-		glPopMatrix();
-		glPushMatrix();
-			glScalef(0.5f, 0.5f, 1.0f);
-			// glRotatef(-180, 0.0f, 1.0f, 0.0f);
-			glTranslatef(0.0f, -2.4f, 0.0f);
-			drawHouse();
-		glPopMatrix();
-	}
-	glPopMatrix();
-
+	#endif
 	// swap the buffers
 	SwapBuffers(ghdc);
 
@@ -951,7 +960,7 @@ void update(void)
 		cameraZ = cameraZ - 0.01;
 	}
 
-	boyAngle = boyAngle + 0.1;
+	boyAngle = boyAngle + 0.5;
 
 	xrot = xrot + 0.003f;
 	yrot = yrot + 0.002f;
@@ -977,12 +986,12 @@ void update(void)
 	if(rendering_scene1 == TRUE)
 	{
 		if(zLook<=-1.0f)
-			zLook = zLook + 0.01;
+			zLook = zLook + 0.02;
 		else if (yLook>= 0.5f)
-			yLook = yLook - 0.01;
+			yLook = yLook - 0.02;
 		else if ( xLook >=0.0f)
 		{
-			xLook = xLook - 0.01;
+			xLook = xLook - 0.02;
 			fprintf(gpFile, "values fo xLook %f\n", xLook);
 		}
 		else 
@@ -1004,19 +1013,19 @@ void update(void)
 		if(zLookAt<=-1.0f)
 		{
 			final_reset_require = FALSE;
-			zLookAt = zLookAt + 0.01;
+			zLookAt = zLookAt + 0.05;
 		}
 		
 		if (yLookAt>= 0.0f)
 		{
 
-			yLookAt = yLookAt - 0.01;
+			yLookAt = yLookAt - 0.05;
 			final_reset_require = FALSE;
 		}
 
 		if ( xLookAt >=0.0f)
 		{
-			xLookAt = xLookAt - 0.01;
+			xLookAt = xLookAt - 0.05;
 			final_reset_require = FALSE;
 			fprintf(gpFile, "values fo xLook %f\n", xLook);
 		}
@@ -1027,9 +1036,34 @@ void update(void)
 			yLookAt = 0.0f;
 			zLookAt = -1.0f;
 			startMovingLooAt = FALSE;
+			rendering_scene1 = FALSE;
+			complete_scene1 = TRUE;
+			rendering_scene2 = TRUE;
+			fprintf(gpFile, "final reset done... zLook =  %f", zLook);
 		}
 	}
 	
+	if(rendering_scene2 == TRUE && complete_scene1 == TRUE)
+	{
+		// starting camera to move inside house
+		zLookAt = -6.0f;
+		if(zLook >= -5.7f)
+		{
+			zLook = zLook - 0.01;
+			if(zLook <= 1.0f)
+				yLookAt = 0.035;
+
+		}
+		else 
+		{
+			moving_cam_completed_scene2 = TRUE;
+			yLook = 2.5;
+			yLookAt = 2.5;
+
+			fprintf(gpFile, "complted camera movement for scene 2...");
+		}
+
+	}
 }
 
 void uninitialize(void)
