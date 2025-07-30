@@ -14,6 +14,7 @@ extern GLuint texture_full_boy;
 extern GLuint texture_girl_shirt;
 extern GLuint texture_girl_leg;
 extern GLuint texture_girl_left_hand;
+extern GLuint texture_eye_closing;
 
 void drawBoyModel(void)
 {
@@ -287,14 +288,19 @@ void drawBoyModel(void)
 
 }
 
-void drawGirl(void)
+void drawGirl(BOOL isEyOpen)
 {
     // face
     glPushMatrix();
     glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glBindTexture(GL_TEXTURE_2D, texture_full_boy);
-    glTranslatef(0.0f, 2.3f, -2.0f);
+
+    if(isEyOpen == TRUE)
+	    glBindTexture(GL_TEXTURE_2D, texture_full_boy);
+    else
+        glBindTexture(GL_TEXTURE_2D, texture_eye_closing);
+    
+    glTranslatef(0.0f, 1.8f, -2.0f);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glBegin(GL_QUADS);
 
@@ -311,6 +317,54 @@ void drawGirl(void)
 		glVertex3f(2.0f, -2.0f, 0.0f);
 
 	glEnd();
+	glBindTexture(GL_TEXTURE_2D, 0);
+    glPopMatrix();
+
+    // hands
+    glPushMatrix();
+    glTranslatef(-1.2f, 0.0f, -2.00f);
+    glScalef(1.0f, 0.5f, 1.0f);
+    glRotatef(-60, 0.0f, 0.0f, 1.0f);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glBindTexture(GL_TEXTURE_2D, texture_girl_left_hand);
+    glBegin(GL_QUADS);
+
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(2.0f, 2.0f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(-2.0f, 2.0f, 0.0f);
+		
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(-2.0f, -2.0f, 0.0f);
+		
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(2.0f, -2.0f, 0.0f);
+    glEnd();
+	glBindTexture(GL_TEXTURE_2D, 0);
+    glPopMatrix();
+
+    // hands
+    glPushMatrix();
+    glTranslatef(1.3f, 0.2f, -2.00f);
+    glScalef(1.0f, 0.5f, 1.0f);
+    glRotatef(-20, 0.0f, 0.0f, 1.0f);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glBindTexture(GL_TEXTURE_2D, texture_girl_left_hand);
+    glBegin(GL_QUADS);
+
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(2.0f, 2.0f, 0.0f);
+
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(-2.0f, 2.0f, 0.0f);
+		
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(-2.0f, -2.0f, 0.0f);
+		
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(2.0f, -2.0f, 0.0f);
+    glEnd();
 	glBindTexture(GL_TEXTURE_2D, 0);
     glPopMatrix();
 

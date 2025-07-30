@@ -81,6 +81,7 @@ GLuint texture_coco_tree;
 GLuint texture_water;
 GLuint texture_ground;
 GLuint texture_inner_wall;
+GLuint texture_eye_closing;
 
 GLUquadric *quadric = NULL;
 
@@ -110,6 +111,7 @@ point_t point_vertices[800];
 GLfloat boyAngle = 0.0f;
 GLfloat points[45][45][3];
 int wiggle_count = 0; 
+int animateEyeCnt = 0;
 GLfloat hold;    
 GLfloat xrot=0.0f;
 GLfloat yrot=0.0f;
@@ -121,7 +123,14 @@ GLfloat xLookAt = 5.0f;
 GLfloat yLookAt = 4.0f;
 GLfloat zLookAt = -14.0f;
 GLfloat location[16];
+GLfloat girl_walk_z = -3.0f;
+GLfloat girl_walk_y = -1.1f;
 BOOL startMovingLooAt = FALSE;
+BOOL animateEye = TRUE;
+BOOL rotate_left = TRUE;
+int rotate_leg = 0;
+BOOL renderScene3 = FALSE;
+int wait_camera = 0;
 
 
 // EntryPoint Function
@@ -679,6 +688,12 @@ int initialize(void)
 		fprintf(gpFile, "Failed load inner wall");
 		return(-10);
 	}
+	
+	if(loadPNGTexture(&texture_eye_closing, "texture-images\\girl_face_closing.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed load inner wall");
+		return(-10);
+	}
 	// enable texturing
 	glEnable(GL_TEXTURE_2D);
 
@@ -881,7 +896,7 @@ void display(void)
 			glPushMatrix();
 			glScalef(0.4f, 0.2, 0.4f);
 			glTranslatef(-8.5f, -4.0f, 0.0f);
-			drawGirl();
+			drawGirl(TRUE);
 			glPopMatrix();
 		}
 
@@ -937,12 +952,16 @@ void display(void)
 		glPopMatrix();
 	}
 
-	if(moving_cam_completed_scene2)
+	if(moving_cam_completed_scene2 && rendering_scene2 == TRUE)
 	{
-	#endif
 		glLoadIdentity();
 		glEnable(GL_BLEND);
 		drawScene2();
+	}
+	if(renderScene3 == TRUE)
+	{
+	#endif
+ 		drawScene3();
 	#ifndef DEV_MODE
 	}
 	#endif
@@ -966,6 +985,47 @@ void update(void)
 	yrot = yrot + 0.002f;
 	zrot = zrot + 0.004f;
 
+	if(animateEye == TRUE)
+	{
+		animateEyeCnt++;
+		if(animateEyeCnt > 100)
+		{
+			animateEye = FALSE;
+			animateEyeCnt = 0;
+		}
+	}
+	else
+	{
+		animateEyeCnt++;
+		if(animateEyeCnt > 10)
+		{
+			animateEye = TRUE;
+			animateEyeCnt = 0;
+		}
+	}
+
+	if(rotate_left == TRUE)
+	{
+		
+		rotate_leg++;
+		if(rotate_leg > 100)
+		{
+			rotate_left = FALSE;
+			rotate_leg = 0;
+		}
+	}
+	else
+	{
+
+		rotate_leg++;
+		if(rotate_leg > 100)
+		{
+			rotate_left = TRUE;
+			rotate_leg = 0;
+		}
+	}
+
+	
 	if(wiggle_count == 2)
 	{
 		for(y = 0; y<45; y++)
@@ -1037,17 +1097,35 @@ void update(void)
 			zLookAt = -1.0f;
 			startMovingLooAt = FALSE;
 			rendering_scene1 = FALSE;
+			rendering_scene2 = FALSE;
 			complete_scene1 = TRUE;
-			rendering_scene2 = TRUE;
 			fprintf(gpFile, "final reset done... zLook =  %f", zLook);
 		}
 	}
+
+	// Camera still for certain second
+	if(complete_scene1 == TRUE && rendering_scene2 == FALSE)
+	{
+		if(wait_camera <= 1000)
+		{
+			wait_camera++;
+			fprintf(gpFile, "Camera is on wait ...\n");
+		}
+		else
+		{
+			fprintf(gpFile, "Camera started moving ");
+			rendering_scene2 = TRUE;
+		}
+
+	}
+	//else
+	//	rendering_scene2 = TRUE;
 	
 	if(rendering_scene2 == TRUE && complete_scene1 == TRUE)
 	{
 		// starting camera to move inside house
 		zLookAt = -6.0f;
-		if(zLook >= -5.7f)
+		if(zLook >= -5.7f && moving_cam_completed_scene2 == FALSE)
 		{
 			zLook = zLook - 0.01;
 			if(zLook <= 1.0f)
@@ -1057,11 +1135,40 @@ void update(void)
 		else 
 		{
 			moving_cam_completed_scene2 = TRUE;
-			yLook = 2.5;
-			yLookAt = 2.5;
+			xLook = 0.0f;
+			yLook = 0.0f;
+			zLook = 0.0f;
+			xLookAt = 0.0f;
+			yLookAt = 0.0f;
+			zLookAt = -1.0f;
 
-			fprintf(gpFile, "complted camera movement for scene 2...");
+			fprintf(gpFile, "Camera reset completed inside house\n");
+
+
+			fprintf(gpFile, "completed camera movement for scene 2...\n");
+
+			if(girl_walk_z <= 9.0f)
+			{
+
+				girl_walk_z = girl_walk_z + 0.01f;
+				fprintf(gpFile, "Girl walk is in progress\n");
+			}
+			else 
+			{
+				fprintf(gpFile, "Girl walk complted...\n");
+
+				renderScene3 = TRUE;
+				rendering_scene2 = FALSE;
+				xLook = 0.0f;
+				yLook = 0.0f;
+				zLook = 0.0f;
+				xLookAt = 0.0f;
+				yLookAt = 0.0f;
+				zLookAt = -1.0f;
+
+			}
 		}
+
 
 	}
 }

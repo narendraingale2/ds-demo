@@ -164,21 +164,20 @@ void drawGround()
 
 void drawHouse()
 {
-    // House Base - Cube
 	glPushMatrix();
-    glColor3f(0.9f, 0.7f, 0.5f); // Wall color
+    glColor3f(0.9f, 0.7f, 0.5f); 	
 	glScalef(2.0f, 1.0f, 1.0f);
 	drawCube();
 	glPopMatrix();
 	
 	glPushMatrix();
-    glColor3f(0.6f, 0.1f, 0.1f); // Roof color
+    glColor3f(0.6f, 0.1f, 0.1f); 
 	//glScalef(1.0f, 2.0f, 1.0f);
 	glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
 	drawTriangle();
 	glPopMatrix();
 
-    glColor3f(0.4f, 0.2f, 0.1f); // Door color
+    glColor3f(0.4f, 0.2f, 0.1f); 
     glBegin(GL_QUADS);
         glVertex3f(-0.5f, 0.0f, 2.001f);
         glVertex3f( 0.5f, 0.0f, 2.001f);
@@ -187,7 +186,7 @@ void drawHouse()
     glEnd();
 
     // Windows
-    glColor3f(0.3f, 0.5f, 1.0f); // Glass blue
+    glColor3f(0.3f, 0.5f, 1.0f); 
     glBegin(GL_QUADS);
         // Left window
         glVertex3f(-1.5f, 1.2f, 2.001f);
