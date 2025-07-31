@@ -82,6 +82,7 @@ GLuint texture_water;
 GLuint texture_ground;
 GLuint texture_inner_wall;
 GLuint texture_eye_closing;
+GLuint texture_wall_stone;
 
 GLUquadric *quadric = NULL;
 
@@ -131,6 +132,8 @@ BOOL rotate_left = TRUE;
 int rotate_leg = 0;
 BOOL renderScene3 = FALSE;
 int wait_camera = 0;
+GLfloat handAnimation = 0.0f;
+BOOL animateLeft = FALSE;
 
 
 // EntryPoint Function
@@ -690,6 +693,12 @@ int initialize(void)
 	}
 	
 	if(loadPNGTexture(&texture_eye_closing, "texture-images\\girl_face_closing.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed load inner wall");
+		return(-10);
+	}
+
+	if(loadPNGTexture(&texture_wall_stone, "texture-images\\stone-wall.png") == FALSE)
 	{
 		fprintf(gpFile, "Failed load inner wall");
 		return(-10);

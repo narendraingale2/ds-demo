@@ -108,8 +108,8 @@ void drawScene3()
 			glPopMatrix();
 
             glPushMatrix();
+                glTranslatef(0.0f, -1.0f, 0.0f);
                 glScalef(0.4f, 0.2f, 1.0f);
-                glTranslatef(0.0f, -0.5f, 0.0f);
                 if(animateEye == TRUE)
                     drawGirl(TRUE);
                 else 
@@ -124,7 +124,7 @@ void drawScene3()
 			glPopMatrix();
 
 			glPushMatrix();
-				glTranslatef(4.0f, 0.5f, 0.0f);
+				glTranslatef(4.0f, 0.6f, 0.0f);
 				glScalef(4.0, 6.0f, 0.0f);
 				drawColoredTree();
 			glPopMatrix();

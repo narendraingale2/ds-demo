@@ -7,6 +7,7 @@ extern GLuint texture_colured_tree;
 extern GLuint texture_coco_tree;
 extern GLuint texture_water;
 extern GLuint texture_ground;
+extern GLuint texture_wall_stone;
 extern GLfloat points[45][45][3];
 extern GLfloat hold;    
 extern GLfloat xrot;
@@ -165,11 +166,45 @@ void drawGround()
 void drawHouse()
 {
 	glPushMatrix();
-    glColor3f(0.9f, 0.7f, 0.5f); 	
+    //glColor3f(0.9f, 0.7f, 0.5f); 	
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glBindTexture(GL_TEXTURE_2D, texture_wall_stone);
 	glScalef(2.0f, 1.0f, 1.0f);
-	drawCube();
+	//drawCube();
+    glBegin(GL_QUADS);
+        // Front
+        glVertex3f(-2.0f, 0.0f, 2.0f);
+        glVertex3f( 2.0f, 0.0f, 2.0f);
+        glVertex3f( 2.0f, 3.0f, 2.0f);
+        glVertex3f(-2.0f, 3.0f, 2.0f);
+
+        // Back
+        glVertex3f(-2.0f, 0.0f, -2.0f);
+        glVertex3f( 2.0f, 0.0f, -2.0f);
+        glVertex3f( 2.0f, 3.0f, -2.0f);
+        glVertex3f(-2.0f, 3.0f, -2.0f);
+
+        // Left
+        glVertex3f(-2.0f, 0.0f, -2.0f);
+        glVertex3f(-2.0f, 0.0f,  2.0f);
+        glVertex3f(-2.0f, 3.0f,  2.0f);
+        glVertex3f(-2.0f, 3.0f, -2.0f);
+
+        // Right
+        glVertex3f(2.0f, 0.0f, -2.0f);
+        glVertex3f(2.0f, 0.0f,  2.0f);
+        glVertex3f(2.0f, 3.0f,  2.0f);
+        glVertex3f(2.0f, 3.0f, -2.0f);
+
+        // Top
+        glVertex3f(-2.0f, 3.0f,  2.0f);
+        glVertex3f( 2.0f, 3.0f,  2.0f);
+        glVertex3f( 2.0f, 3.0f, -2.0f);
+        glVertex3f(-2.0f, 3.0f, -2.0f);
+    glEnd();
+
 	glPopMatrix();
-	
+	glBindTexture(GL_TEXTURE_2D, 0);	
 	glPushMatrix();
     glColor3f(0.6f, 0.1f, 0.1f); 
 	//glScalef(1.0f, 2.0f, 1.0f);
