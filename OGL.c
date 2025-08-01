@@ -24,8 +24,8 @@
 // Macros
 #define WIN_WIDTH 800
 #define WIN_HEIGHT 600
-//#define DEV_MODE 
-//#define NO_SOUND
+#define DEV_MODE 
+#define NO_SOUND
 
 // global function declarations
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -46,14 +46,6 @@ BOOL gbActiveWindow = FALSE;
 
 // Exit key press related
 BOOL gbEscapKeyIsPressed = FALSE;
-BOOL gbRotateBoy = FALSE;
-BOOL gbMoonDisplay = FALSE;
-BOOL gbShowHouse = TRUE;
-BOOL gbShowModel = FALSE;
-BOOL gbShowGirl = FALSE;
-BOOL showCTree = TRUE;
-BOOL showCoTree = FALSE;
-BOOL gbShowWater = FALSE;
 BOOL rendering_scene1 = TRUE;
 BOOL complete_scene1 = FALSE;
 BOOL rendering_scene2 = FALSE;
@@ -134,6 +126,7 @@ BOOL renderScene3 = FALSE;
 int wait_camera = 0;
 GLfloat handAnimation = 0.0f;
 BOOL animateLeft = FALSE;
+GLfloat angleHouse = 0.0;
 
 
 // EntryPoint Function
@@ -145,6 +138,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 	void update(void);
 	void uninitialize(void);
 	void display(void);
+	#ifdef DEV_MODE
+	void display_dev(void);
+	void update_dev(void);
+	#endif
 	void toggleFullScreen(void);
 
 	// variable declarations
@@ -258,10 +255,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLi
 					bDone = TRUE;
 				}
 				// Render
+				#ifndef DEV_MODE
 				display();
-
 				// Update
 				update();
+				#endif
+
+				#ifdef DEV_MODE
+					display_dev();
+					update_dev();
+				#endif
+
 			}
 		}
 	}
@@ -350,79 +354,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 					toggleFullScreen();
 					gbFullScreen = FALSE;
 				}
-				break;
-			case 'g':
-			case 'G':
-				if(gbShowGirl == FALSE)
-				{
-					gbShowGirl = TRUE;
-				}
-				else
-				{
-					gbShowGirl = FALSE;
-				}
-				break;
-			case 's':
-			case 'S':
-				if(gbShowModel == FALSE)
-				{
-					gbShowModel = TRUE;
-				}
-				else
-				{
-					gbShowModel = FALSE;
-				}
-				break;
-			case 'h':
-			case 'H':
-				if(gbShowHouse == FALSE)
-				{
-					gbShowHouse = TRUE;
-				}
-				else
-					gbShowHouse = FALSE;
-				break;
-			case 'm':
-			case 'M':
-				if(gbMoonDisplay == FALSE)
-				{
-					gbMoonDisplay = TRUE;
-				}
-				else
-					gbMoonDisplay = FALSE;
-				break;
-			case 'R':
-			case 'r':
-				if(gbRotateBoy == FALSE)
-				{
-					gbRotateBoy = TRUE;
-				}
-				else
-					gbRotateBoy = FALSE;
-				break;
-			case 't':
-			case 'T':
-				if(showCTree == FALSE)
-				{
-					showCTree = TRUE;
-				}
-				else
-					showCTree = FALSE;
-				break;
-			case 'u':
-			case 'U':
-				if(showCoTree == FALSE)
-				{
-					showCoTree = TRUE;
-				}
-				else
-					showCoTree = FALSE;
-				break;
-			case 'w':
-				if(gbShowWater == FALSE)
-					gbShowWater = TRUE;
-				else
-					gbShowWater = FALSE;
 				break;
 			case 'x':
 					xLook = xLook + 0.01;
@@ -869,10 +800,8 @@ void resize(int width, int height)
 void display(void)
 {
 	// code
-	
 	// clear open gl buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 
 	// Set metrics to model view mode
 	glMatrixMode(GL_MODELVIEW);
@@ -882,98 +811,34 @@ void display(void)
 		
     glTranslatef(0.0f, 0.0f, -8.0f);
 
-	#ifndef DEV_MODE
 	gluLookAt(xLook, yLook, zLook, 
 			xLookAt, yLookAt, zLookAt, 
 			0.0f, 1.0f, 0.0f);
 	
+	glPushMatrix();
 	if(moving_cam_completed_scene2 == FALSE)
 	{
-	
-
 		glPushMatrix();
-		if(gbShowModel == TRUE)
-		{
-			if(gbRotateBoy == TRUE)
-				glRotatef(90, 0.0f, 1.0f, 0.0f);
-		 	drawBoyModel();
-
-		}
-
-		if(gbShowGirl == TRUE)
-		{
-			glPushMatrix();
-			glScalef(0.4f, 0.2, 0.4f);
-			glTranslatef(-8.5f, -4.0f, 0.0f);
-			drawGirl(TRUE);
-			glPopMatrix();
-		}
-
-		if(showCTree == TRUE)
-		{
-			glPushMatrix();
-				drawScene1();
-			glPopMatrix();
-
-			glPushMatrix();
-				glTranslatef(4.0f, 0.5f, 0.0f);
-				glScalef(4.0, 6.0f, 0.0f);
-				drawColoredTree();
-			glPopMatrix();
-
-			glPushMatrix();
-				glTranslatef(-5.0f, 0.5f, 0.0f);
-				glScalef(4.0, 6.0f, 0.0f);
-				drawCocoTree();
-			glPopMatrix();
-
-		}
-
-		if(gbShowWater == TRUE)
-		{
-			glPushMatrix();
-				drawWater();
-			glPopMatrix();
-		}
-
-		if(gbMoonDisplay == TRUE)
-		{
-			glPushMatrix();
 			drawScene1();
-			glPopMatrix();
-		}
-
-		if(gbShowHouse == TRUE)
-		{
-			glPushMatrix();
-				glTranslatef(0.0f, -2.0f, 0.0f);
-				glRotatef(60.0f, 1.0f, 0.0f, 0.0f);
-				glScalef(8.0f, 2.0f, 1.0f);
-				drawGround();
-			glPopMatrix();
-			glPushMatrix();
-				glScalef(0.5f, 0.5f, 1.0f);
-				// glRotatef(-180, 0.0f, 1.0f, 0.0f);
-				glTranslatef(0.0f, -2.4f, 0.0f);
-				drawHouse();
-			glPopMatrix();
-		}
 		glPopMatrix();
+
 	}
 
 	if(moving_cam_completed_scene2 && rendering_scene2 == TRUE)
 	{
-		glLoadIdentity();
-		glEnable(GL_BLEND);
-		drawScene2();
+		glPushMatrix();
+			drawScene2();
+		glPopMatrix();
 	}
+
 	if(renderScene3 == TRUE)
 	{
-	#endif
- 		drawScene3();
-	#ifndef DEV_MODE
+		glPushMatrix();
+ 			drawScene3();
+		glPopMatrix();
 	}
-	#endif
+	glPopMatrix();
+
 	// swap the buffers
 	SwapBuffers(ghdc);
 
@@ -1235,4 +1100,32 @@ void uninitialize(void)
 void keyboard(unsigned cha)
 {
 
+}
+
+void display_dev(void)
+{
+
+	// clear open gl buffers
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// Set metrics to model view mode
+	glMatrixMode(GL_MODELVIEW);
+
+	// set identity metrics
+	glLoadIdentity();
+		
+    glTranslatef(0.0f, 0.0f, -16.0f);
+
+	glPushMatrix();
+		drawHouse();
+	glPopMatrix();
+
+	// swap the buffers
+	SwapBuffers(ghdc);
+
+}
+
+void update_dev(void)
+{
+	angleHouse = angleHouse + 0.1f;
 }

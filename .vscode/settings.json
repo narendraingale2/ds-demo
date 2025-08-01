@@ -2,6 +2,7 @@
     "files.associations": {
         "utility.h": "c",
         "model.h": "c",
-        "shape.h": "c"
+        "shape.h": "c",
+        "math.h": "c"
     }
 }

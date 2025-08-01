@@ -25,34 +25,56 @@ void drawCube()
 
     glBegin(GL_QUADS);
         // Front
+        glTexCoord2f(1.0, 1.0); // right-right
         glVertex3f(-2.0f, 0.0f, 2.0f);
+	    glTexCoord2f(0.0, 1.0); // right-right
         glVertex3f( 2.0f, 0.0f, 2.0f);
+	    glTexCoord2f(0.0, 0.0); // right-right
         glVertex3f( 2.0f, 3.0f, 2.0f);
+	    glTexCoord2f(1.0, 0.0); // right-right
         glVertex3f(-2.0f, 3.0f, 2.0f);
 
         // Back
+        glTexCoord2f(1.0, 1.0); // right-right
         glVertex3f(-2.0f, 0.0f, -2.0f);
+	    glTexCoord2f(0.0, 1.0); // right-right
         glVertex3f( 2.0f, 0.0f, -2.0f);
+	    glTexCoord2f(0.0, 0.0); // right-right
         glVertex3f( 2.0f, 3.0f, -2.0f);
+	    glTexCoord2f(1.0, 0.0); // right-right
         glVertex3f(-2.0f, 3.0f, -2.0f);
 
         // Left
+        glTexCoord2f(1.0, 1.0); // right-right
         glVertex3f(-2.0f, 0.0f, -2.0f);
+	    glTexCoord2f(0.0, 1.0); // right-right
         glVertex3f(-2.0f, 0.0f,  2.0f);
+	    glTexCoord2f(0.0, 0.0); // right-right
         glVertex3f(-2.0f, 3.0f,  2.0f);
+	    glTexCoord2f(1.0, 0.0); // right-right
         glVertex3f(-2.0f, 3.0f, -2.0f);
 
         // Right
+        glTexCoord2f(1.0, 1.0); // right-right
         glVertex3f(2.0f, 0.0f, -2.0f);
+	    glTexCoord2f(0.0, 1.0); // right-right
         glVertex3f(2.0f, 0.0f,  2.0f);
+	    glTexCoord2f(0.0, 0.0); // right-right
         glVertex3f(2.0f, 3.0f,  2.0f);
+	    glTexCoord2f(1.0, 0.0); // right-right
         glVertex3f(2.0f, 3.0f, -2.0f);
 
         // Top
+        glTexCoord2f(1.0, 1.0); // right-right
         glVertex3f(-2.0f, 3.0f,  2.0f);
+	    glTexCoord2f(0.0, 1.0); // right-right
         glVertex3f( 2.0f, 3.0f,  2.0f);
+	    glTexCoord2f(0.0, 0.0); // right-right
         glVertex3f( 2.0f, 3.0f, -2.0f);
+	    glTexCoord2f(1.0, 0.0); // right-right
         glVertex3f(-2.0f, 3.0f, -2.0f);
+        
+
     glEnd();
 
 }

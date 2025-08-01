@@ -29,6 +29,32 @@ void drawScene1()
         glTranslatef(5.0f, 4.5f, -6.0f);
         drawMoon();
     glPopMatrix();
+	
+    glPushMatrix();
+		glTranslatef(4.0f, 0.5f, 0.0f);
+		glScalef(4.0, 6.0f, 0.0f);
+		drawColoredTree();
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(-5.0f, 0.5f, 0.0f);
+		glScalef(4.0, 6.0f, 0.0f);
+		drawCocoTree();
+	glPopMatrix();
+	
+    glPushMatrix();
+		glTranslatef(0.0f, -2.0f, 0.0f);
+		glRotatef(60.0f, 1.0f, 0.0f, 0.0f);
+		glScalef(8.0f, 2.0f, 1.0f);
+		drawGround();
+	glPopMatrix();
+
+	glPushMatrix();
+		glScalef(0.5f, 0.5f, 1.0f);
+		// glRotatef(-180, 0.0f, 1.0f, 0.0f);
+		glTranslatef(0.0f, -2.4f, 0.0f);
+		drawHouse();
+	glPopMatrix();
 }
 
 void drawScene2()
@@ -74,23 +100,8 @@ void drawScene2()
 
     // draw girl
     glPushMatrix();
-        /*if(animateEye == TRUE)
-            glRotatef(20, 0.0f, 1.0f, 0.0f);
-        else
-            glRotatef(-20, 0.0f, 1.0f, 0.0f);
-        */
 		glTranslatef(2.0f, -2.0f, -6.2f);
         glScalef(0.4f, 0.5f, 1.0f);
-        /*if(animateEye == TRUE)
-            glRotatef(30, 0.0f, 1.0f, 0.0f);
-        else
-            glRotatef(-30, 0.0f, 1.0f, 0.0f);
-       */ 
-        /*if(rotate_left == TRUE)
-            glRotatef(30, 0.0f, 1.0f, 0.0f);
-        else 
-            glRotatef(-10, 0.0f, 1.0f, 0.0f);
-        */
         glTranslatef(0.0f, girl_walk_y, girl_walk_z);
         if(animateEye == TRUE)
             drawGirl(TRUE);

@@ -1,5 +1,8 @@
 
 #include<stdio.h>
+#define _USE_MATH_DEFINES
+#include<math.h>
+
 #include "model.h"
 #include "utility.h"
 #include "shape.h"
@@ -15,6 +18,7 @@ extern GLfloat yrot;
 extern GLfloat zrot;
 extern GLfloat location[16];
 extern FILE *gpFile;
+extern GLfloat angleHouse;
 
 void drawMoon()
 {
@@ -165,54 +169,38 @@ void drawGround()
 
 void drawHouse()
 {
-	glPushMatrix();
-    //glColor3f(0.9f, 0.7f, 0.5f); 	
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	glBindTexture(GL_TEXTURE_2D, texture_wall_stone);
-	glScalef(2.0f, 1.0f, 1.0f);
-	//drawCube();
-    glBegin(GL_QUADS);
-        // Front
-        glVertex3f(-2.0f, 0.0f, 2.0f);
-        glVertex3f( 2.0f, 0.0f, 2.0f);
-        glVertex3f( 2.0f, 3.0f, 2.0f);
-        glVertex3f(-2.0f, 3.0f, 2.0f);
+	void drawRoof();
+	glRotatef(angleHouse, 0.0f, 1.0f, 0.0f);
+	/*glPushMatrix();
+    	//glColor3f(0.9f, 0.7f, 0.5f); 	
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		glBindTexture(GL_TEXTURE_2D, texture_wall_stone);
+		glScalef(2.0f, 1.0f, 1.0f);
+		drawCube();
+		glBindTexture(GL_TEXTURE_2D, 0);	
+	glPopMatrix();	*/
+	drawRoof();
 
-        // Back
-        glVertex3f(-2.0f, 0.0f, -2.0f);
-        glVertex3f( 2.0f, 0.0f, -2.0f);
-        glVertex3f( 2.0f, 3.0f, -2.0f);
-        glVertex3f(-2.0f, 3.0f, -2.0f);
-
-        // Left
-        glVertex3f(-2.0f, 0.0f, -2.0f);
-        glVertex3f(-2.0f, 0.0f,  2.0f);
-        glVertex3f(-2.0f, 3.0f,  2.0f);
-        glVertex3f(-2.0f, 3.0f, -2.0f);
-
-        // Right
-        glVertex3f(2.0f, 0.0f, -2.0f);
-        glVertex3f(2.0f, 0.0f,  2.0f);
-        glVertex3f(2.0f, 3.0f,  2.0f);
-        glVertex3f(2.0f, 3.0f, -2.0f);
-
-        // Top
-        glVertex3f(-2.0f, 3.0f,  2.0f);
-        glVertex3f( 2.0f, 3.0f,  2.0f);
-        glVertex3f( 2.0f, 3.0f, -2.0f);
-        glVertex3f(-2.0f, 3.0f, -2.0f);
-    glEnd();
-
+	/*glPushMatrix();
+    	glColor3f(0.4f, 0.2f, 0.1f); 
+		glScalef(5.0, 1.0f, 1.0f);
+		glRotatef(-30.0f, 1.0f, 0.0f, 0.0f);
+		glTranslatef(0.0f, 2.0f, 3.0f);
+		drawQuad();
+		glRotatef(60.0f, 1.0f, 0.0f, 0.0f);
+		glTranslatef(0.0f, 0.0f, -2.0f);
+		drawQuad();
 	glPopMatrix();
-	glBindTexture(GL_TEXTURE_2D, 0);	
-	glPushMatrix();
-    glColor3f(0.6f, 0.1f, 0.1f); 
-	//glScalef(1.0f, 2.0f, 1.0f);
-	glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
-	drawTriangle();
-	glPopMatrix();
+	*/
 
-    glColor3f(0.4f, 0.2f, 0.1f); 
+	/*glPushMatrix();
+    	glColor3f(0.4f, 0.2f, 0.1f); 
+		glScalef(5.0, 1.0f, 1.0f);
+		glRotatef(240.0f, 1.0f, 0.0f, 0.0f);
+		glTranslatef(0.0f, 2.0f, 3.0f);
+	glPopMatrix();
+	*/
+    /*glColor3f(0.4f, 0.2f, 0.1f); 
     glBegin(GL_QUADS);
         glVertex3f(-0.5f, 0.0f, 2.001f);
         glVertex3f( 0.5f, 0.0f, 2.001f);
@@ -234,5 +222,33 @@ void drawHouse()
         glVertex3f(1.5f, 1.2f, 2.001f);
         glVertex3f(1.5f, 2.0f, 2.001f);
         glVertex3f(0.9f, 2.0f, 2.001f);
-    glEnd();
+    glEnd();*/
+}
+
+void drawRoof()
+{
+	  float angle = 30.0f;
+
+    glPushMatrix();
+        glColor3f(0.4f, 0.2f, 0.1f); // Brown
+
+        glScalef(5.0f, 1.0f, 1.0f); // Make roof wider
+
+        // LEFT slope
+        glPushMatrix();
+            glTranslatef(0.0f, 1.0f, -1.0f); // up and back
+            glRotatef(90.0f, 1.0f, 0.0f, 0.0f); // XY to XZ
+            glRotatef(angle, 1.0f, 0.0f, 0.0f); // tilt
+            drawQuad();
+        glPopMatrix();
+
+        // RIGHT slope
+        glPushMatrix();
+            glTranslatef(0.0f, 1.0f, 1.0f); // up and forward
+            glRotatef(90.0f, 1.0f, 0.0f, 0.0f); // XY to XZ
+            glRotatef(-angle, 1.0f, 0.0f, 0.0f); // tilt other side
+            drawQuad();
+        glPopMatrix();
+
+    glPopMatrix();
 }
