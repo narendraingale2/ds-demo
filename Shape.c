@@ -81,7 +81,7 @@ void drawCube()
 
 void drawTriangle()
 {
-    glBegin(GL_TRIANGLES);
+    /*glBegin(GL_TRIANGLES);
         // Front
         glVertex3f(-2.0f, 3.0f, 2.0f);
         glVertex3f( 2.0f, 3.0f, 2.0f);
@@ -105,7 +105,16 @@ void drawTriangle()
         glVertex3f(2.0f, 3.0f,  2.0f);
         glVertex3f(0.0f, 5.0f,  2.0f);
         glVertex3f(0.0f, 5.0f, -2.0f);
+    glEnd();*/
+    glBegin(GL_TRIANGLES);
+        // Front
+        glBegin(GL_TRIANGLES);
+            glVertex3f(0.0f, 1.0f, 0.0f);
+            glVertex3f(-1.0f, -1.0f, 0.0f);
+            glVertex3f(1.0f, -1.0f, 0.0f);
+        glEnd();
     glEnd();
+
 }
 
 void drawQuad()

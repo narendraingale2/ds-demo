@@ -24,8 +24,8 @@
 // Macros
 #define WIN_WIDTH 800
 #define WIN_HEIGHT 600
-#define DEV_MODE 
-#define NO_SOUND
+//#define DEV_MODE 
+//#define NO_SOUND
 
 // global function declarations
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -75,6 +75,7 @@ GLuint texture_ground;
 GLuint texture_inner_wall;
 GLuint texture_eye_closing;
 GLuint texture_wall_stone;
+GLuint texture_roof;
 
 GLUquadric *quadric = NULL;
 
@@ -634,6 +635,12 @@ int initialize(void)
 		fprintf(gpFile, "Failed load inner wall");
 		return(-10);
 	}
+
+	if(loadPNGTexture(&texture_roof, "texture-images\\roof.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed load inner wall");
+		return(-10);
+	}
 	// enable texturing
 	glEnable(GL_TEXTURE_2D);
 
@@ -811,8 +818,12 @@ void display(void)
 		
     glTranslatef(0.0f, 0.0f, -8.0f);
 
-	gluLookAt(xLook, yLook, zLook, 
+	/*gluLookAt(xLook, yLook, zLook, 
 			xLookAt, yLookAt, zLookAt, 
+			0.0f, 1.0f, 0.0f);
+		*/
+	gluLookAt(xLook, yLook, zLook, 
+			xLook, yLook, zLook - 1.0f, 
 			0.0f, 1.0f, 0.0f);
 	
 	glPushMatrix();
@@ -1127,5 +1138,5 @@ void display_dev(void)
 
 void update_dev(void)
 {
-	angleHouse = angleHouse + 0.1f;
+	angleHouse = angleHouse + 0.01f;
 }

@@ -52,7 +52,7 @@ void drawScene1()
 	glPushMatrix();
 		glScalef(0.5f, 0.5f, 1.0f);
 		// glRotatef(-180, 0.0f, 1.0f, 0.0f);
-		glTranslatef(0.0f, -2.4f, 0.0f);
+		glTranslatef(0.0f, -2.1f, 0.0f);
 		drawHouse();
 	glPopMatrix();
 }

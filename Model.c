@@ -6,11 +6,15 @@
 #include "model.h"
 #include "utility.h"
 #include "shape.h"
+
+//#define DEV_MODE
+
 extern GLuint texture_colured_tree;
 extern GLuint texture_coco_tree;
 extern GLuint texture_water;
 extern GLuint texture_ground;
 extern GLuint texture_wall_stone;
+extern GLuint texture_roof;
 extern GLfloat points[45][45][3];
 extern GLfloat hold;    
 extern GLfloat xrot;
@@ -170,85 +174,61 @@ void drawGround()
 void drawHouse()
 {
 	void drawRoof();
+
+	glTranslatef(0.0f, -2.0f, -8.0f);
+
+	#ifdef DEV_MODE
 	glRotatef(angleHouse, 0.0f, 1.0f, 0.0f);
-	/*glPushMatrix();
-    	//glColor3f(0.9f, 0.7f, 0.5f); 	
-		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	#endif
+	// main house
+	glPushMatrix();
 		glBindTexture(GL_TEXTURE_2D, texture_wall_stone);
-		glScalef(2.0f, 1.0f, 1.0f);
+		glScalef(3.0f, 1.6f, 1.2f);
 		drawCube();
-		glBindTexture(GL_TEXTURE_2D, 0);	
-	glPopMatrix();	*/
-	drawRoof();
-
-	/*glPushMatrix();
-    	glColor3f(0.4f, 0.2f, 0.1f); 
-		glScalef(5.0, 1.0f, 1.0f);
-		glRotatef(-30.0f, 1.0f, 0.0f, 0.0f);
-		glTranslatef(0.0f, 2.0f, 3.0f);
-		drawQuad();
-		glRotatef(60.0f, 1.0f, 0.0f, 0.0f);
-		glTranslatef(0.0f, 0.0f, -2.0f);
-		drawQuad();
+		glBindTexture(GL_TEXTURE_2D, 0);
 	glPopMatrix();
-	*/
 
-	/*glPushMatrix();
-    	glColor3f(0.4f, 0.2f, 0.1f); 
-		glScalef(5.0, 1.0f, 1.0f);
-		glRotatef(240.0f, 1.0f, 0.0f, 0.0f);
-		glTranslatef(0.0f, 2.0f, 3.0f);
+	// drawing roof
+	glPushMatrix();
+		glBindTexture(GL_TEXTURE_2D, texture_roof);
+		glTranslatef(0.0f, 8.0f, 0.0f);
+		glScalef(6.0f, 4.0f, 1.0f);
+		drawRoof();
+		glBindTexture(GL_TEXTURE_2D, 0);
 	glPopMatrix();
-	*/
-    /*glColor3f(0.4f, 0.2f, 0.1f); 
-    glBegin(GL_QUADS);
-        glVertex3f(-0.5f, 0.0f, 2.001f);
-        glVertex3f( 0.5f, 0.0f, 2.001f);
-        glVertex3f( 0.5f, 1.5f, 2.001f);
-        glVertex3f(-0.5f, 1.5f, 2.001f);
-    glEnd();
 
-    // Windows
-    glColor3f(0.3f, 0.5f, 1.0f); 
-    glBegin(GL_QUADS);
-        // Left window
-        glVertex3f(-1.5f, 1.2f, 2.001f);
-        glVertex3f(-0.9f, 1.2f, 2.001f);
-        glVertex3f(-0.9f, 2.0f, 2.001f);
-        glVertex3f(-1.5f, 2.0f, 2.001f);
-
-        // Right window
-        glVertex3f(0.9f, 1.2f, 2.001f);
-        glVertex3f(1.5f, 1.2f, 2.001f);
-        glVertex3f(1.5f, 2.0f, 2.001f);
-        glVertex3f(0.9f, 2.0f, 2.001f);
-    glEnd();*/
 }
 
 void drawRoof()
 {
-	  float angle = 30.0f;
+	glBegin(GL_QUADS);
+	
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		// This is special requirement of drwaing quad
+		// hence drawQuad function was not used
+		// Quad1
+        glTexCoord2f(1.0, 1.0); // right-right
+		glVertex3f(-1.0f, 0.0f, 0.0f);
+	    glTexCoord2f(0.0, 1.0); // right-right
+		glVertex3f(1.0f, 0.0f, 0.0f);
+	    glTexCoord2f(0.0, 0.0); // right-right
+		glVertex3f(1.0f, -1.0f, 3.0f);
+	    glTexCoord2f(1.0, 0.0); // right-right
+		glVertex3f(-1.0f, -1.0f, 3.0f);
 
-    glPushMatrix();
-        glColor3f(0.4f, 0.2f, 0.1f); // Brown
+		// QUAD2
+        glTexCoord2f(1.0, 1.0); // right-right
+		glVertex3f(-1.0f, 0.0f, 0.0f);
+	    glTexCoord2f(0.0, 1.0); // right-right
+		glVertex3f(1.0f, 0.0f, 0.0f);
+	    glTexCoord2f(0.0, 0.0); // right-right
+		glVertex3f(1.0f, -1.0f, -3.0f);
+	    glTexCoord2f(1.0, 0.0); // right-right
+		glVertex3f(-1.0f, -1.0f, -3.0f);
+	glEnd();
+}
 
-        glScalef(5.0f, 1.0f, 1.0f); // Make roof wider
+void drawAnimatedButterfly()
+{
 
-        // LEFT slope
-        glPushMatrix();
-            glTranslatef(0.0f, 1.0f, -1.0f); // up and back
-            glRotatef(90.0f, 1.0f, 0.0f, 0.0f); // XY to XZ
-            glRotatef(angle, 1.0f, 0.0f, 0.0f); // tilt
-            drawQuad();
-        glPopMatrix();
-
-        // RIGHT slope
-        glPushMatrix();
-            glTranslatef(0.0f, 1.0f, 1.0f); // up and forward
-            glRotatef(90.0f, 1.0f, 0.0f, 0.0f); // XY to XZ
-            glRotatef(-angle, 1.0f, 0.0f, 0.0f); // tilt other side
-            drawQuad();
-        glPopMatrix();
-
-    glPopMatrix();
 }
