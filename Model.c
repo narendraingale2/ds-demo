@@ -231,7 +231,7 @@ void drawRoof()
 
 void drawAnimatedButterfly()
 {
-	static GLfloat butterflyAngle = -30.0f;
+	static GLfloat butterflyAngle = -20.0f;
 	static BOOL positiveCounter = TRUE;
 
 	glEnable(GL_BLEND);
@@ -239,8 +239,10 @@ void drawAnimatedButterfly()
 	glColor4f(1.0,1.0f, 1.0f, 1.0f);
 	glBindTexture(GL_TEXTURE_2D, texture_butter_fly);
 
+	glRotatef(-660, 1.0f, 0.0f, 0.0f);
 	glScalef(2.0f, 2.0f, 1.0f);
-	
+
+	glTranslatef(0.1f, 0.0f, 0.0f);
 	glPushMatrix();
 		glTranslatef(-1.0f, 0.0f, 0.0f);
 		glRotatef(-butterflyAngle, 0.0f, 1.0f, 0.0f);
@@ -248,6 +250,7 @@ void drawAnimatedButterfly()
 			drawButterFlyQuad();
 	glPopMatrix();
 
+	glTranslatef(-0.1f, 0.0f, 0.0f);
 	glPushMatrix();
 		glTranslatef(1.0f, 0.0f, 0.0f);
 		glRotatef(butterflyAngle, 0.0f, 1.0f, 0.0f);
@@ -257,6 +260,7 @@ void drawAnimatedButterfly()
 	glPopMatrix();
 	
 	glBindTexture(GL_TEXTURE_2D, 0);
+	
 	
 	if(positiveCounter == TRUE)
 		butterflyAngle = butterflyAngle + 0.01;
@@ -268,7 +272,7 @@ void drawAnimatedButterfly()
 		positiveCounter = FALSE;		
 	}
 
-	if(butterflyAngle <= -30.0f)
+	if(butterflyAngle <= -20.0f)
 	{
 		positiveCounter = TRUE;
 	}
