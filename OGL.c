@@ -24,8 +24,8 @@
 // Macros
 #define WIN_WIDTH 800
 #define WIN_HEIGHT 600
-//#define DEV_MODE 
-//#define NO_SOUND
+#define DEV_MODE 
+#define NO_SOUND
 
 // global function declarations
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -76,6 +76,7 @@ GLuint texture_inner_wall;
 GLuint texture_eye_closing;
 GLuint texture_wall_stone;
 GLuint texture_roof;
+GLuint texture_butter_fly;
 
 GLUquadric *quadric = NULL;
 
@@ -641,6 +642,12 @@ int initialize(void)
 		fprintf(gpFile, "Failed load inner wall");
 		return(-10);
 	}
+
+	if(loadPNGTexture(&texture_butter_fly, "texture-images\\butterfly.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed load inner wall");
+		return(-10);
+	}
 	// enable texturing
 	glEnable(GL_TEXTURE_2D);
 
@@ -1128,8 +1135,9 @@ void display_dev(void)
     glTranslatef(0.0f, 0.0f, -16.0f);
 
 	glPushMatrix();
-		drawHouse();
+		drawAnimatedButterfly();
 	glPopMatrix();
+
 
 	// swap the buffers
 	SwapBuffers(ghdc);

@@ -7,7 +7,7 @@
 #include "utility.h"
 #include "shape.h"
 
-//#define DEV_MODE
+#define DEV_MODE
 
 extern GLuint texture_colured_tree;
 extern GLuint texture_coco_tree;
@@ -15,6 +15,7 @@ extern GLuint texture_water;
 extern GLuint texture_ground;
 extern GLuint texture_wall_stone;
 extern GLuint texture_roof;
+extern GLuint texture_butter_fly;
 extern GLfloat points[45][45][3];
 extern GLfloat hold;    
 extern GLfloat xrot;
@@ -230,5 +231,48 @@ void drawRoof()
 
 void drawAnimatedButterfly()
 {
+	static GLfloat butterflyAngle = -30.0f;
+	static BOOL positiveCounter = TRUE;
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glColor4f(1.0,1.0f, 1.0f, 1.0f);
+	glBindTexture(GL_TEXTURE_2D, texture_butter_fly);
+
+	glScalef(2.0f, 2.0f, 1.0f);
+	
+	glPushMatrix();
+		glTranslatef(-1.0f, 0.0f, 0.0f);
+		glRotatef(-butterflyAngle, 0.0f, 1.0f, 0.0f);
+		glTranslatef(1.0f, 0.0f, 0.0f);
+			drawButterFlyQuad();
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(1.0f, 0.0f, 0.0f);
+		glRotatef(butterflyAngle, 0.0f, 1.0f, 0.0f);
+		glTranslatef(-1.0f, 0.0f, 0.0f);
+		glScalef(-1.0f, 1.0f, 1.0f);
+			drawButterFlyQuad();
+	glPopMatrix();
+	
+	glBindTexture(GL_TEXTURE_2D, 0);
+	
+	if(positiveCounter == TRUE)
+		butterflyAngle = butterflyAngle + 0.01;
+	else
+		butterflyAngle = butterflyAngle - 0.01;
+	
+	if(butterflyAngle >= 30.0f)
+	{
+		positiveCounter = FALSE;		
+	}
+
+	if(butterflyAngle <= -30.0f)
+	{
+		positiveCounter = TRUE;
+	}
+
+
 
 }

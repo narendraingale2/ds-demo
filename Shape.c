@@ -130,3 +130,18 @@ void drawQuad()
 	    glVertex3f(1.0f, -1.0f, 0.0f);
     glEnd();
 }
+
+void drawButterFlyQuad()
+{
+    glBegin(GL_QUADS);
+        glTexCoord2f(1.0, 1.0); // right-right
+	    glVertex3f(1.0f, 1.0f, 0.0f);
+	    glTexCoord2f(0.0, 1.0); // right-right
+	    glVertex3f(0.0f, 1.0f, 0.0f);
+	    glTexCoord2f(0.0, 0.0); // right-right
+	    glVertex3f(0.0f, 0.0f, 0.0f);
+	    glTexCoord2f(1.0, 0.0); // right-right
+	    glVertex3f(1.0f, 0.0f, 0.0f);
+    glEnd();
+    
+}
