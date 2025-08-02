@@ -25,7 +25,7 @@
 #define WIN_WIDTH 800
 #define WIN_HEIGHT 600
 //#define DEV_MODE 
-#define NO_SOUND
+//#define NO_SOUND
 
 // global function declarations
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -133,6 +133,8 @@ int wait_camera = 0;
 GLfloat handAnimation = 0.0f;
 BOOL animateLeft = FALSE;
 GLfloat angleHouse = 0.0;
+point_t* star_points = NULL;
+int numStars = 1500;
 
 
 // EntryPoint Function
@@ -445,6 +447,7 @@ int initialize(void)
 	// Function declarations
 	void printOpenGlInfo();
 	void resize(int, int);
+	int loadAllTextures();
 
 	// varialbe declarations
 	PIXELFORMATDESCRIPTOR pfd;
@@ -470,7 +473,6 @@ int initialize(void)
 		fprintf(gpFile, "Get DC function failed\n");
 		return(-1);
 	}
-
 
 	// Get matching pixel format index using HDS and PFD
 	iPixelFromatIndex = ChoosePixelFormat(ghdc, &pfd);
@@ -516,161 +518,21 @@ int initialize(void)
 	// tell opengl to choose the colour to clear the screen
 	glClearColor(0.02f, 0.02f, 0.08f, 1.0f);
 
-	if(loadGLTexture(&texture_mouth, MAKEINTRESOURCE(IDBITMAP_MOUTH)) == FALSE)
-	{
-		fprintf(gpFile, "loadtexture has been failed for mouth texture\n");
-		return(-7);
-	}
-
-	if(loadGLTexture(&texture_hair, MAKEINTRESOURCE(IDBITMAP_HAIR)) == FALSE)
-	{
-		fprintf(gpFile, "loadtexture has been failed for hair texuter\n");
-		return(-7);
-	}
-
-	if(loadGLTexture(&texture_shirt, MAKEINTRESOURCE(IDBITMAP_SHIRT)) == FALSE)
-	{
-		fprintf(gpFile, "loadtexture has been failed for hair texuter\n");
-		return(-7);
-	}
-
-	if(loadGLTexture(&texture_face, MAKEINTRESOURCE(IDBITMAP_FACE)) == FALSE)
-	{
-		fprintf(gpFile, "loadtexture has been failed for hair texuter\n");
-		return(-7);
-	}
-
 	// Loading Images to create texture
 	stbi_set_flip_vertically_on_load(TRUE);
 
-	if(loadPNGTexture(&texture_full_boy, "texture-images\\girl_face1.png") == FALSE)
+	if(loadAllTextures() != 0)
 	{
-		fprintf(gpFile, "PNG structure loading fialed for girl face");
-		return(-8);
-
+		fprintf(gpFile, "Texture loading failed...\n");
+		return(-1);
 	}
-
-	if(loadPNGTexture(&texture_girl_shirt, "texture-images\\girl_shirt.png") == FALSE)
-	{
-		fprintf(gpFile, "PNG structure loading fialed for girl face");
-		return(-8);
-
-	}
-
-
-	if(loadPNGTexture(&texture_girl_leg, "texture-images\\legs.png") == FALSE)
-	{
-		fprintf(gpFile, "Legs texture image failed ");
-		return(-8);
-
-	}
-
-	if(loadPNGTexture(&texture_girl_left_hand, "texture-images\\hand_left.png") == FALSE)
-	{
-		fprintf(gpFile, "hand texture image failed ");
-		return(-8);
-
-	}
+	MessageBox(NULL, "Textures are initialized", "textures", MB_OK);
 	
-	if(loadPNGTexture(&texture_eye, "texture-images\\eye-new.png") == FALSE)
-	{
-		fprintf(gpFile, "eye texture image failed ");
-		return(-8);
-
-	}
-
-	if(loadPNGTexture(&texture_colured_tree, "texture-images\\colour-tree.png") == FALSE)
-	{
-		fprintf(gpFile, "Colured tree");
-		return(-9);
-	}
-
-	if(loadPNGTexture(&texture_coco_tree, "texture-images\\coco-tree.png") == FALSE)
-	{
-		fprintf(gpFile, "Failed to lead coco tree");
-		return(-9);
-	}
-
-	if(loadPNGTexture(&texture_water, "texture-images\\water.png") == FALSE)
-	{
-		fprintf(gpFile, "Failed to load water texture");
-		return(-9);
-	}
-
-	if(loadPNGTexture(&texture_moon, "texture-images\\moon-png.png") == FALSE)
-	{
-		fprintf(gpFile, "Failed to load moon texture");
-		return(-10);
-	}
-
-	if(loadPNGTexture(&texture_ground, "texture-images\\ground.png") == FALSE)
-	{
-		fprintf(gpFile, "Failed to ground");
-		return(-10);
-	}
-	if(loadPNGTexture(&texture_inner_wall, "texture-images\\inner-wall.PNG") == FALSE)
-	{
-		fprintf(gpFile, "Failed load inner wall");
-		return(-10);
-	}
-	
-	if(loadPNGTexture(&texture_eye_closing, "texture-images\\girl_face_closing.png") == FALSE)
-	{
-		fprintf(gpFile, "Failed load inner wall");
-		return(-10);
-	}
-
-	if(loadPNGTexture(&texture_wall_stone, "texture-images\\stone-wall.png") == FALSE)
-	{
-		fprintf(gpFile, "Failed load inner wall");
-		return(-10);
-	}
-
-	if(loadPNGTexture(&texture_roof, "texture-images\\roof.png") == FALSE)
-	{
-		fprintf(gpFile, "Failed load inner wall");
-		return(-10);
-	}
-
-	if(loadPNGTexture(&texture_butter_fly, "texture-images\\butterfly.png") == FALSE)
-	{
-		fprintf(gpFile, "Failed load inner wall");
-		return(-10);
-	}
-	
-	if(loadPNGTexture(&texture_background_mountain, "texture-images\\background.png") == FALSE)
-	{
-		fprintf(gpFile, "Failed load background wall");
-		return(-10);
-	}
 	// enable texturing
 	glEnable(GL_TEXTURE_2D);
 
 	// Initialize quadric
 	quadric = gluNewQuadric();
-
-	for(int i = 0; i<1000; i++)	
-	{
-		point_vertices[i].x = getRandomCoord(-10.0f, 8.0f);
-		point_vertices[i].y = getRandomCoord(1.0f, 5.0f);
-		point_vertices[i].z = getRandomCoord(-10.0f, -3.0f);
-		float color = getRandomCoord(05, 0.1);
-		point_vertices[i].c.red = color;
-		point_vertices[i].c.blue = color;
-		point_vertices[i].c.red = color;
-		float size = getRandomCoord(1.0f, 3.0f);
-		point_vertices[i].size = size;
-	}
-
-	for(int x = 0; x < 44; x++)
-	{
-		for(int y=0; y<45; y++)
-		{
-			points[x][y][0] = (float)((x/5.0)-5.0f);
-			points[x][y][1] = (float)((y/5.0)-4.5f);
-			points[x][y][2] = (float)(sin((((x/5.0f)*40.0f)/360.0f)*3.141592654*2.0f))*0.2;
-		}
-	}
 
 	//warm up resize
 	resize(WIN_WIDTH, WIN_HEIGHT);
@@ -818,20 +680,16 @@ void display(void)
 	// set identity metrics
 	glLoadIdentity();
 		
-
-	/*gluLookAt(xLook, yLook, zLook, 
-			xLookAt, yLookAt, zLookAt, 
-			0.0f, 1.0f, 0.0f);
-		*/
 	gluLookAt(xLook, yLook, zLook, 
 			xLook, yLook, zLook - 1.0f, 
 			0.0f, 1.0f, 0.0f);
 	
 	glPushMatrix();
-	if(moving_cam_completed_scene2 == FALSE)
+	if(rendering_scene1 == TRUE)
 	{
 		glPushMatrix();
 			drawScene1();
+		fprintf(gpFile, "Draw scene1 completed...\n");
 		glPopMatrix();
 
 	}
@@ -858,190 +716,248 @@ void display(void)
 
 void update(void)
 {
-	int x, y;
+	void updateSceneOne();
+	void updateSceneTwo();
+	void updateSceneThree();
 	// code
-	if(cameraZ >= 0)
-	{
-		cameraZ = cameraZ - 0.01;
-	}
 
-	boyAngle = boyAngle + 0.5;
-
-	xrot = xrot + 0.003f;
-	yrot = yrot + 0.002f;
-	zrot = zrot + 0.004f;
-
-	if(animateEye == TRUE)
-	{
-		animateEyeCnt++;
-		if(animateEyeCnt > 100)
-		{
-			animateEye = FALSE;
-			animateEyeCnt = 0;
-		}
-	}
-	else
-	{
-		animateEyeCnt++;
-		if(animateEyeCnt > 10)
-		{
-			animateEye = TRUE;
-			animateEyeCnt = 0;
-		}
-	}
-
-	if(rotate_left == TRUE)
-	{
-		
-		rotate_leg++;
-		if(rotate_leg > 100)
-		{
-			rotate_left = FALSE;
-			rotate_leg = 0;
-		}
-	}
-	else
-	{
-
-		rotate_leg++;
-		if(rotate_leg > 100)
-		{
-			rotate_left = TRUE;
-			rotate_leg = 0;
-		}
-	}
-
+	//animateEyeUpdate();
 	
-	if(wiggle_count == 2)
-	{
-		for(y = 0; y<45; y++)
-		{
-			hold = points[0][y][2];
-			for( x=0; x<44; x++)
-			{
-				points[x][y][2] = points[x+1][y][2];
-
-			}
-			points[44][y][2]=hold;
-
-		}
-		wiggle_count = 0;
-	}
-	wiggle_count++;
-
 	if(rendering_scene1 == TRUE)
 	{
-	
-		if(zLook <= -1.0)
-		{
-			zLook = zLook - dZLook;
-
-		}
-		
-		if(xLook >= 0.0f)
-		{
-			xLook = xLook - dXLook;
-		}
-
-		if(zLook >= -1.0 & xLook <= 0.0f )
-		{
-			xLook = 0.0f; // complete reset to 0
-			zLook = -1.0f; // coplete reset to 1
-			
-			// Now start moving camera down words
-			if(yLook >= 0.0f)
-			{
-				yLook = yLook - dYLook;
-			}
-			else
-				complete_scene1 = TRUE;
-		}
+		updateSceneOne();	
 		
 	}
 
-	// Camera still for certain second
-	if(complete_scene1 == TRUE && rendering_scene2 == FALSE)
+	
+	if(rendering_scene2 == TRUE )
 	{
-		/*if(wait_camera <= 1000)
-		{
-			wait_camera++;
-		}
+		updateSceneTwo();
+	}
 
-		else
-		{
-			fprintf(gpFile, "Camera started moving ");
-			rendering_scene2 = TRUE;
-		}*/
-		if(yLook >= -7.0f)
-		{
-			yLook = yLook - dYLook;
-		}
-		else
-		{
-			rendering_scene2 = TRUE;
-		}
+
+}
+
+int loadAllTextures()
+{
+	int loadBaseTxtures();
+	int loadHouseTextures();
+	int loadTreeTextures();
+	int loadGirlTextures();
+	int loadButterflyTextures();
+	int loadWaterTextures();
+	int loadModelTextures();
+	
+	int status = 0;
+	status = loadBaseTxtures();
+	
+	if(status !=0 )
+		return status;
+	status = loadHouseTextures();
+	if(status !=0 )
+		return status;
+	
+	status = loadTreeTextures();
+
+	if(status !=0 )
+		return status;
+
+	status = loadGirlTextures();
+	if(status !=0 )
+		return status;
+
+	status = loadButterflyTextures();
+	if(status !=0 )
+		return status;
+
+	status = loadWaterTextures();
+	if(status !=0 )
+		return status;
+
+	status = loadModelTextures();
+	
+	return status;
+}
+
+int loadBaseTxtures()
+{
+
+	
+	if(loadPNGTexture(&texture_moon, "texture-images\\moon-png.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed to load moon texture");
+		return(-10);
+	}
+	
+	if(loadPNGTexture(&texture_ground, "texture-images\\ground.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed to ground");
+		return(-10);
+	}
+
+	if(loadPNGTexture(&texture_background_mountain, "texture-images\\background.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed load background wall");
+		return(-10);
+	}
+
+	return 0;
+
+
+}
+
+int loadHouseTextures()
+{
+
+	if(loadPNGTexture(&texture_wall_stone, "texture-images\\stone-wall.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed load inner wall");
+		return(-10);
+	}
+
+	if(loadPNGTexture(&texture_roof, "texture-images\\roof.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed load inner wall");
+		return(-10);
+	}
+	
+	if(loadPNGTexture(&texture_inner_wall, "texture-images\\inner-wall.PNG") == FALSE)
+	{
+		fprintf(gpFile, "Failed load inner wall");
+		return(-10);
+	}
+	
+	return 0;
+	
+
+}
+
+int loadTreeTextures()
+{
+
+	if(loadPNGTexture(&texture_colured_tree, "texture-images\\colour-tree.png") == FALSE)
+	{
+		fprintf(gpFile, "Colured tree");
+		return(-9);
+	}
+
+	if(loadPNGTexture(&texture_coco_tree, "texture-images\\coco-tree.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed to lead coco tree");
+		return(-9);
+	}
+
+	return 0;
+}
+
+int loadGirlTextures()
+{
+
+
+	if(loadPNGTexture(&texture_full_boy, "texture-images\\girl_face1.png") == FALSE)
+	{
+		fprintf(gpFile, "PNG structure loading fialed for girl face");
+		return(-8);
+
+	}
+
+	if(loadPNGTexture(&texture_girl_shirt, "texture-images\\girl_shirt.png") == FALSE)
+	{
+		fprintf(gpFile, "PNG structure loading fialed for girl face");
+		return(-8);
+
+	}
+
+	if(loadPNGTexture(&texture_girl_leg, "texture-images\\legs.png") == FALSE)
+	{
+		fprintf(gpFile, "Legs texture image failed ");
+		return(-8);
+
+	}
+
+	if(loadPNGTexture(&texture_girl_left_hand, "texture-images\\hand_left.png") == FALSE)
+	{
+		fprintf(gpFile, "hand texture image failed ");
+		return(-8);
 
 	}
 	
-	if(rendering_scene2 == TRUE && complete_scene1 == TRUE)
+	if(loadPNGTexture(&texture_eye_closing, "texture-images\\girl_face_closing.png") == FALSE)
 	{
-		// starting camera to move inside house
-		zLookAt = -40.0f;
-		yLook = -7.0f;
-		fprintf(gpFile, "starting here\n");
-		if(zLook >= -39.0f && moving_cam_completed_scene2 == FALSE)
-		{
-			// to maintain speed of the camera reducing by dYLook
-			zLook = zLook - 0.1f;
-			if(zLook <= 1.0f)
-				yLookAt = 0.035;
+		fprintf(gpFile, "Failed load inner wall");
+		return(-10);
+	}
 
-		}
-		else 
-		{
-			moving_cam_completed_scene2 = TRUE;
-			xLook = 0.0f;
-			yLook = 0.0f;
-			zLook = 0.0f;
-			xLookAt = 0.0f;
-			yLookAt = 0.0f;
-			zLookAt = -1.0f;
+	return 0;
+	
+}
 
-			fprintf(gpFile, "Camera reset completed inside house\n");
+int loadButterflyTextures()
+{
 
+	if(loadPNGTexture(&texture_butter_fly, "texture-images\\butterfly.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed load inner wall");
+		return(-10);
+	}
+	return 0;
+}
 
-			fprintf(gpFile, "completed camera movement for scene 2...\n");
+int loadWaterTextures()
+{
 
-			if(girl_walk_z <= 9.0f)
-			{
+	if(loadPNGTexture(&texture_water, "texture-images\\water.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed to load water texture");
+		return(-9);
+	}
 
-				girl_walk_z = girl_walk_z + 0.01f;
-				fprintf(gpFile, "Girl walk is in progress\n");
-			}
-			else 
-			{
-				fprintf(gpFile, "Girl walk complted...\n");
+	return 0;
+}
 
-				renderScene3 = TRUE;
-				rendering_scene2 = FALSE;
-				xLook = 0.0f;
-				yLook = 0.0f;
-				zLook = 0.0f;
-				xLookAt = 0.0f;
-				yLookAt = 0.0f;
-				zLookAt = -1.0f;
+int loadModelTextures()
+{
 
-			}
-		}
+	if(loadGLTexture(&texture_mouth, MAKEINTRESOURCE(IDBITMAP_MOUTH)) == FALSE)
+	{
+		fprintf(gpFile, "loadtexture has been failed for mouth texture\n");
+		return(-7);
+	}
 
+	if(loadGLTexture(&texture_hair, MAKEINTRESOURCE(IDBITMAP_HAIR)) == FALSE)
+	{
+		fprintf(gpFile, "loadtexture has been failed for hair texuter\n");
+		return(-7);
+	}
+
+	if(loadGLTexture(&texture_shirt, MAKEINTRESOURCE(IDBITMAP_SHIRT)) == FALSE)
+	{
+		fprintf(gpFile, "loadtexture has been failed for hair texuter\n");
+		return(-7);
+	}
+
+	if(loadGLTexture(&texture_face, MAKEINTRESOURCE(IDBITMAP_FACE)) == FALSE)
+	{
+		fprintf(gpFile, "loadtexture has been failed for hair texuter\n");
+		return(-7);
+	}
+
+	if(loadPNGTexture(&texture_eye, "texture-images\\eye-new.png") == FALSE)
+	{
+		fprintf(gpFile, "eye texture image failed ");
+		return(-8);
 
 	}
+	return 0;
 }
 
 void uninitialize(void)
 {
 	// function declarations
 	void toggleFullScreen(void);
+	void uninitializeStars(void);
+
+	uninitializeStars();
 
 	// code
 	// if user is exiting in full screen then restore full screen back to normal
@@ -1108,11 +1024,9 @@ void display_dev(void)
     //glTranslatef(0.0f, 0.0f, -8.0f);
 	glGetFloatv(GL_MODELVIEW_MATRIX, location);
 
-    /*for (int i = 0; i < 800; ++i) {
-        fprintf(gpFile,"printing location of the point point_vertices num = %d, x=%f, y=%f, z=%f\n", i, point_vertices[i].x, point_vertices[i].y, point_vertices[i].z);
-	}*/
-    drawPoints(point_vertices, 800);
-
+	glTranslatef(0.0f, 0.0f, -8.0f);
+	//drawAnimatedButterfly();
+	drawScene3();
 	// swap the buffers
 	SwapBuffers(ghdc);
 
@@ -1121,4 +1035,168 @@ void display_dev(void)
 void update_dev(void)
 {
 	angleHouse = angleHouse + 0.01f;
+	/*if(animateEye == TRUE)
+	{
+		animateEyeCnt++;
+		if(animateEyeCnt > 100)
+		{
+			animateEye = FALSE;
+			animateEyeCnt = 0;
+		}
+	}
+	else
+	{
+		animateEyeCnt++;
+		if(animateEyeCnt > 10)
+		{
+			animateEye = TRUE;
+			animateEyeCnt = 0;
+		}
+	}*/
+
+	//animateEyeUpdate();
+}
+
+void updateSceneOne()
+{
+	if(zLook <= -1.0)
+	{
+		zLook = zLook - dZLook;
+
+	}
+		
+	if(xLook >= 0.0f)
+	{
+		xLook = xLook - dXLook;
+	}
+
+	if(zLook >= -1.0 & xLook <= 0.0f )
+	{
+		xLook = 0.0f; // complete reset to 0
+		zLook = -1.0f; // coplete reset to 1
+		
+		// Now start moving camera down words
+		if(yLook >= 0.0f)
+		{
+			yLook = yLook - dYLook;
+		}
+		else
+			complete_scene1 = TRUE;
+	}
+	
+	// Camera still for certain second
+	if(complete_scene1 == TRUE && rendering_scene2 == FALSE && rendering_scene1 == TRUE)
+	{
+		if(yLook >= -7.0f)
+		{
+			yLook = yLook - dYLook;
+		}
+		else
+		{
+			rendering_scene2 = TRUE;
+		}
+
+	}
+	
+}
+
+void updateSceneTwo()
+{
+
+		// starting camera to move inside house
+		zLookAt = -40.0f;
+		yLook = -7.0f;
+		if(zLook >= -39.0f && moving_cam_completed_scene2 == FALSE)
+		{
+			// to maintain speed of the camera reducing by dYLook
+			zLook = zLook - 0.1f;
+		}
+		else 
+		{
+			moving_cam_completed_scene2 = TRUE;
+			rendering_scene1 = FALSE;
+			xLook = 0.0f;
+			yLook = 0.0f;
+			zLook = 0.0f;
+			xLookAt = 0.0f;
+			yLookAt = 0.0f;
+			zLookAt = -1.0f;
+
+			fprintf(gpFile, "Camera reset completed inside house\n");
+
+
+			fprintf(gpFile, "completed camera movement for scene 2...\n");
+
+			if(girl_walk_z <= 9.0f)
+			{
+
+				girl_walk_z = girl_walk_z + 0.01f;
+				fprintf(gpFile, "Girl walk is in progress\n");
+			}
+			else 
+			{
+				fprintf(gpFile, "Girl walk complted...\n");
+
+				renderScene3 = TRUE;
+				rendering_scene2 = FALSE;
+				xLook = 0.0f;
+				yLook = 0.0f;
+				zLook = 0.0f;
+				xLookAt = 0.0f;
+				yLookAt = 0.0f;
+				zLookAt = -1.0f;
+
+			}
+	}
+}
+
+/*void updateAnimateEye()
+{
+
+	if(animateEye == TRUE)
+	{
+		animateEyeCnt++;
+		if(animateEyeCnt > 100)
+		{
+			animateEye = FALSE;
+			animateEyeCnt = 0;
+		}
+	}
+	else
+	{
+		animateEyeCnt++;
+		if(animateEyeCnt > 10)
+		{
+			animateEye = TRUE;
+			animateEyeCnt = 0;
+		}
+	}
+
+}*/
+
+void waterUpdate()
+{
+
+	int x, y;
+
+	xrot = xrot + 0.003f;
+	yrot = yrot + 0.002f;
+	zrot = zrot + 0.004f;
+	
+	if(wiggle_count == 2)
+	{
+		for(y = 0; y<45; y++)
+		{
+			hold = points[0][y][2];
+			for( x=0; x<44; x++)
+			{
+				points[x][y][2] = points[x+1][y][2];
+
+			}
+			points[44][y][2]=hold;
+
+		}
+		wiggle_count = 0;
+	}
+	wiggle_count++;
 }

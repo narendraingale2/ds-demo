@@ -1,3 +1,4 @@
+#include<windows.h>
 #include<stdio.h>
 
 #include "shape.h"
@@ -5,17 +6,61 @@
 extern FILE *gpFile;
 extern GLfloat location[16];
 GLfloat after_loacation[16];
+extern point_t* star_points;
+extern int numStars;
 
-void drawPoints(point_t points[], int length) {
+void drawPoints(int length) {
+    void initializePoints();
 
-    for (int i = 0; i < length; ++i) {
-        glPointSize(points[i].size);
+    if(star_points == NULL)
+    {
+        initializePoints(star_points, numStars);
+        if(star_points == NULL)
+        {
+            fprintf(gpFile, "Star Initialization failed\n");
+        }
+    }
+
+
+    for (int i = 0; i < numStars; ++i) {
+        glPointSize(star_points[i].size);
         glPushMatrix();
-            glTranslatef(points[i].x, points[i].y, points[i].z);
-        glColor3f(points[i].c.red, points[i].c.red, points[i].c.red);
+            glTranslatef(star_points[i].x, star_points[i].y, star_points[i].z);
+        glColor3f(star_points[i].c.red, star_points[i].c.red, star_points[i].c.red);
         gluSphere(quadric, 0.005f, 30, 30);
         glPopMatrix();
         
+    }
+    
+    fprintf(gpFile, "Stars plotted...\n");
+}
+
+void initializePoints()
+{    
+    star_points = (point_t*)malloc(sizeof(point_t) * numStars);
+
+    for(int i = 0; i<numStars; i++)	
+    {
+    	star_points[i].x = getRandomCoord(-10.0f, 8.0f);
+    	star_points[i].y = getRandomCoord(1.0f, 5.0f);
+    	star_points[i].z = getRandomCoord(-10.0f, -3.0f);
+    	float color = getRandomCoord(05, 0.1);
+    	star_points[i].c.red = color;
+    	star_points[i].c.blue = color;
+    	star_points[i].c.red = color;
+    	float size = getRandomCoord(1.0f, 3.0f);
+    	star_points[i].size = size;
+    }
+
+
+}
+
+void uninitializeStars()
+{
+    if(star_points != NULL)
+    {
+        free(star_points);
+        star_points = NULL;
     }
 }
 

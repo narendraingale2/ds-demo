@@ -21,8 +21,9 @@ void drawScene1()
 
     // Drawing stars
     glPushMatrix();
-        drawPoints(point_vertices, 1000);
+        drawPoints(1000);
     glPopMatrix();
+    
 
     glTranslatef(0.0f, 0.0f, -8.0f);
     // Drawing moon
@@ -121,38 +122,51 @@ void drawScene2()
 
 void drawScene3()
 {
+    // Drawing stars
+    glPushMatrix();
+        drawPoints(point_vertices, 1000);
+    glPopMatrix();
 
-			glPushMatrix();
-				drawScene1();
-			glPopMatrix();
+    glTranslatef(0.0f, 0.0f, -8.0f);
+    // Drawing moon
+    glPushMatrix();
+        glTranslatef(5.0f, 4.5f, -6.0f);
+        drawMoon();
+    glPopMatrix();
 
-            glPushMatrix();
-                glTranslatef(0.0f, -1.0f, 0.0f);
-                glScalef(0.4f, 0.2f, 1.0f);
-                if(animateEye == TRUE)
-                    drawGirl(TRUE);
-                else 
-                    drawGirl(FALSE);
-            glPopMatrix();
+    glPushMatrix();
+        glTranslatef(0.0f, 0.0f, -30.0f);
+        glScalef(40,5, 0.0f);
+        drawBackgroundMountain();
+    glPopMatrix();
 
-			glPushMatrix();
-				glTranslatef(0.0f, -2.0f, 0.0f);
-				glRotatef(60.0f, 1.0f, 0.0f, 0.0f);
-				glScalef(8.0f, 2.0f, 1.0f);
-				drawGround();
-			glPopMatrix();
+    glPushMatrix();
+		glTranslatef(0.0f, -10.0f, -18.0f);
+		glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+		glScalef(50.0f, 50.0f, 1.0f);
+		drawGround();
+	glPopMatrix();
 
-			glPushMatrix();
-				glTranslatef(4.0f, 0.6f, 0.0f);
-				glScalef(4.0, 6.0f, 0.0f);
-				drawColoredTree();
-			glPopMatrix();
+    glPushMatrix();
+	    glTranslatef(16.0f, -6.0f, -28.0f);
+		glScalef(9.0, 9.0f, 0.0f);
+		drawColoredTree();
+	glPopMatrix();
 
-			glPushMatrix();
-				glTranslatef(-5.0f, 0.5f, 0.0f);
-				glScalef(4.0, 6.0f, 0.0f);
-				drawCocoTree();
-			glPopMatrix();
+    glPushMatrix();
+        glTranslatef(0.0f, -7.6f, -15.0f);
+        glScalef(0.8f, 0.8f, 1.0f);
+        if(animateEye == TRUE)
+            drawGirl(TRUE);
+        else 
+            drawGirl(FALSE);
+        glTranslatef(-2.8f, 0.0, 0.0f);
+        drawAnimatedButterfly(); 
+    glPopMatrix();
 
-    
+/*    glPushMatrix();
+        glTranslatef(-1.0f, -7.6f, -15.0f);
+        drawAnimatedButterfly(); 
+    glPopMatrix();
+*/
 }

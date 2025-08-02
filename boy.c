@@ -290,12 +290,34 @@ void drawBoyModel(void)
 
 void drawGirl(BOOL isEyOpen)
 {
+    static BOOL animateEye = TRUE;
+    static int animateEyeCnt = 0;
+
+    if(animateEye == TRUE)
+	{
+		animateEyeCnt++;
+		if(animateEyeCnt > 100)
+		{
+			animateEye = FALSE;
+			animateEyeCnt = 0;
+		}
+	}
+	else
+	{
+		animateEyeCnt++;
+		if(animateEyeCnt > 10)
+		{
+			animateEye = TRUE;
+			animateEyeCnt = 0;
+		}
+	}
     // face
     glPushMatrix();
     glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
 
-    if(isEyOpen == TRUE)
+    if(isEyOpen == animateEye)
 	    glBindTexture(GL_TEXTURE_2D, texture_full_boy);
     else
         glBindTexture(GL_TEXTURE_2D, texture_eye_closing);

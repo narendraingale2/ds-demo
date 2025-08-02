@@ -34,6 +34,7 @@ void drawMoon()
 	gluQuadricTexture(quadric, GL_TRUE); 
 	glBindTexture(GL_TEXTURE_2D, texture_moon);
 	glGetFloatv(GL_MODELVIEW_MATRIX, location);
+	glColor3f(1.0f, 1.0f, 1.0f);
 	for(int i = 0; i<16; i++)
 		fprintf(gpFile,"Moon location[%d] = %f\n",i, location[i]);
 	gluSphere(quadric, 0.5, 50, 50);
@@ -106,6 +107,21 @@ void drawCocoTree()
 void drawWater()
 {
 	//glPolygonMode(GL_BACK, GL_FILL );
+	static BOOL initialized = FALSE;
+	
+	if(initialized == FALSE)
+	{
+		for(int x = 0; x < 44; x++)
+		{
+			for(int y=0; y<45; y++)
+			{
+				points[x][y][0] = (float)((x/5.0)-5.0f);
+				points[x][y][1] = (float)((y/5.0)-4.5f);
+				points[x][y][2] = (float)(sin((((x/5.0f)*40.0f)/360.0f)*3.141592654*2.0f))*0.2;
+			}
+		}
+
+	}
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL );
 	glShadeModel(GL_SMOOTH);
@@ -238,7 +254,7 @@ void drawAnimatedButterfly()
 	glColor4f(1.0,1.0f, 1.0f, 1.0f);
 	glBindTexture(GL_TEXTURE_2D, texture_butter_fly);
 
-	glRotatef(-660, 1.0f, 0.0f, 0.0f);
+	glRotatef(-60, 1.0f, 0.0f, 0.0f);
 	glScalef(2.0f, 2.0f, 1.0f);
 
 	glTranslatef(0.1f, 0.0f, 0.0f);
