@@ -931,24 +931,6 @@ void update(void)
 
 	if(rendering_scene1 == TRUE)
 	{
-		/*if(zLook<=-1.0f)
-			zLook = zLook + 0.02;
-		else if (yLook>= 0.5f)
-			yLook = yLook - 0.02;
-		else if ( xLook >=0.0f)
-		{
-			xLook = xLook - 0.02;
-			fprintf(gpFile, "values fo xLook %f\n", xLook);
-		}
-		else 
-		{
-
-			fprintf(gpFile, "camera rolling finished until tree x = %f, y = %f, z= %f\n", xLook, yLook, zLook);
-			rendering_scene1 = FALSE;
-			startMovingLooAt = TRUE;
-		}
-		*/
-		static BOOL starfield_completed = TRUE;
 	
 		if(zLook <= -1.0)
 		{
@@ -973,8 +955,6 @@ void update(void)
 			}
 			else
 				complete_scene1 = TRUE;
-
-
 		}
 		
 	}
@@ -982,7 +962,7 @@ void update(void)
 	// Camera still for certain second
 	if(complete_scene1 == TRUE && rendering_scene2 == FALSE)
 	{
-		if(wait_camera <= 1000)
+		/*if(wait_camera <= 1000)
 		{
 			wait_camera++;
 		}
@@ -990,6 +970,14 @@ void update(void)
 		else
 		{
 			fprintf(gpFile, "Camera started moving ");
+			rendering_scene2 = TRUE;
+		}*/
+		if(yLook >= -7.0f)
+		{
+			yLook = yLook - dYLook;
+		}
+		else
+		{
 			rendering_scene2 = TRUE;
 		}
 
@@ -999,11 +987,12 @@ void update(void)
 	{
 		// starting camera to move inside house
 		zLookAt = -40.0f;
-		//yLook = -5.0f;
+		yLook = -7.0f;
 		fprintf(gpFile, "starting here\n");
-		if(zLook >= -33.0f && moving_cam_completed_scene2 == FALSE)
+		if(zLook >= -39.0f && moving_cam_completed_scene2 == FALSE)
 		{
-			zLook = zLook - 0.01;
+			// to maintain speed of the camera reducing by dYLook
+			zLook = zLook - 0.1f;
 			if(zLook <= 1.0f)
 				yLookAt = 0.035;
 

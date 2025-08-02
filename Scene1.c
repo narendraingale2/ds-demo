@@ -45,19 +45,19 @@ void drawScene1()
 	glPopMatrix();
 
 	glPushMatrix();
-		//glScalef(3.0f, 1.8f, 1.0f);
+		glScalef(2.0f, 1.0f, 1.0f);
 	    glTranslatef(0.0f, -10.0f, -30.0f);
 		drawHouse();
 	glPopMatrix();
 
     glPushMatrix();
-	    glTranslatef(12.0f, -6.0f, -28.0f);
+	    glTranslatef(16.0f, -6.0f, -28.0f);
 		glScalef(9.0, 9.0f, 0.0f);
 		drawColoredTree();
 	glPopMatrix();
 
 	glPushMatrix();
-		glTranslatef(-12.0f, -6.0f, -28.0f);
+		glTranslatef(-16.0f, -6.0f, -28.0f);
 		glScalef(9.0, 9.0f, 0.0f);
 		drawCocoTree();
 	glPopMatrix();

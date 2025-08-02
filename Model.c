@@ -181,6 +181,13 @@ void drawHouse()
 		glBindTexture(GL_TEXTURE_2D, 0);
 	glPopMatrix();
 
+	glPushMatrix();
+		//glBindTexture(GL_TEXTURE_2D, texture_wall_stone);
+		glColor3f(1.0f, 1.0f, 1.0f);
+		glScalef(2.99f, 1.599f, 1.19f);
+		drawCube();
+	glPopMatrix();
+
 	// drawing roof
 	glPushMatrix();
 		glBindTexture(GL_TEXTURE_2D, texture_roof);
