@@ -7,7 +7,7 @@
 #include "utility.h"
 #include "shape.h"
 
-#define DEV_MODE
+//#define DEV_MODE
 
 extern GLuint texture_colured_tree;
 extern GLuint texture_coco_tree;
@@ -16,6 +16,8 @@ extern GLuint texture_ground;
 extern GLuint texture_wall_stone;
 extern GLuint texture_roof;
 extern GLuint texture_butter_fly;
+extern GLuint texture_background_mountain;
+
 extern GLfloat points[45][45][3];
 extern GLfloat hold;    
 extern GLfloat xrot;
@@ -32,8 +34,8 @@ void drawMoon()
 	gluQuadricTexture(quadric, GL_TRUE); 
 	glBindTexture(GL_TEXTURE_2D, texture_moon);
 	glGetFloatv(GL_MODELVIEW_MATRIX, location);
-	//for(int i = 0; i<16; i++)
-		//fprintf(gpFile,"location[%d] = %f\n",i, location[i]);
+	for(int i = 0; i<16; i++)
+		fprintf(gpFile,"Moon location[%d] = %f\n",i, location[i]);
 	gluSphere(quadric, 0.5, 50, 50);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	gluQuadricTexture(quadric, GL_FALSE);
@@ -48,7 +50,6 @@ void drawColoredTree()
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glBindTexture(GL_TEXTURE_2D, texture_colured_tree);
     glPushMatrix();
-	glDepthMask(GL_FALSE); 
 	//fprintf(gpFile, "Printing Model view metrix Before drwing colored Tree");
 	glGetFloatv(GL_MODELVIEW_MATRIX, location);
 	//for(int i = 0; i<16; i++)
@@ -69,7 +70,6 @@ void drawColoredTree()
 		glVertex3f(0.5f, -0.5f, 0.0f);
 
 	glEnd();
-	glDepthMask(GL_TRUE); 
 	glPopMatrix();
 	glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -77,7 +77,6 @@ void drawColoredTree()
 
 void drawCocoTree()
 {
-	glDepthMask(GL_FALSE); 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -101,7 +100,6 @@ void drawCocoTree()
 	glEnd();
 	glPopMatrix();
 	glBindTexture(GL_TEXTURE_2D, 0);
-	glDepthMask(GL_TRUE);
 
 }
 
@@ -161,12 +159,7 @@ void drawGround()
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glBindTexture(GL_TEXTURE_2D, texture_ground);
     glPushMatrix();
-		glBegin(GL_QUADS);
-			glVertex3f(1.0f, 1.0f, 0.0f);
-			glVertex3f(-1.0f, 1.0f, 0.0f);
-			glVertex3f(-1.0f, -1.0f, 0.0f);
-			glVertex3f(1.0f, -1.0f, 0.0f);
-		glEnd();
+		drawQuad();
 	glPopMatrix();
 	glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -176,7 +169,6 @@ void drawHouse()
 {
 	void drawRoof();
 
-	glTranslatef(0.0f, -2.0f, -8.0f);
 
 	#ifdef DEV_MODE
 	glRotatef(angleHouse, 0.0f, 1.0f, 0.0f);
@@ -263,9 +255,9 @@ void drawAnimatedButterfly()
 	
 	
 	if(positiveCounter == TRUE)
-		butterflyAngle = butterflyAngle + 0.01;
+		butterflyAngle = butterflyAngle + 1;
 	else
-		butterflyAngle = butterflyAngle - 0.01;
+		butterflyAngle = butterflyAngle - 1;
 	
 	if(butterflyAngle >= 30.0f)
 	{
@@ -279,4 +271,15 @@ void drawAnimatedButterfly()
 
 
 
+}
+
+void drawBackgroundMountain()
+{
+
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glBindTexture(GL_TEXTURE_2D, texture_background_mountain);
+    glPushMatrix();
+		drawQuad();
+	glPopMatrix();
+	glBindTexture(GL_TEXTURE_2D, 0);
 }

@@ -3,6 +3,8 @@
         "utility.h": "c",
         "model.h": "c",
         "shape.h": "c",
-        "math.h": "c"
+        "math.h": "c",
+        "gl.h": "c",
+        "glu.h": "c"
     }
 }

@@ -24,7 +24,7 @@
 // Macros
 #define WIN_WIDTH 800
 #define WIN_HEIGHT 600
-#define DEV_MODE 
+//#define DEV_MODE 
 #define NO_SOUND
 
 // global function declarations
@@ -77,6 +77,7 @@ GLuint texture_eye_closing;
 GLuint texture_wall_stone;
 GLuint texture_roof;
 GLuint texture_butter_fly;
+GLuint texture_background_mountain;
 
 GLUquadric *quadric = NULL;
 
@@ -100,7 +101,7 @@ GLfloat watermatShininess[] = { 100.0f };
 BOOL bLight = FALSE;
 
 // points related variable
-point_t point_vertices[800];
+point_t point_vertices[1000];
 
 // Roatate boy model
 GLfloat boyAngle = 0.0f;
@@ -117,6 +118,9 @@ GLfloat zLook = -13.4f;
 GLfloat xLookAt = 5.0f;
 GLfloat yLookAt = 4.0f;
 GLfloat zLookAt = -14.0f;
+GLfloat dZLook = -13.4/1000;
+GLfloat dXLook = 5.0f/1000;
+GLfloat dYLook = 4.05/1000;
 GLfloat location[16];
 GLfloat girl_walk_z = -3.0f;
 GLfloat girl_walk_y = -1.1f;
@@ -511,21 +515,6 @@ int initialize(void)
 	// from here onwords opengl code starts
 	// tell opengl to choose the colour to clear the screen
 	glClearColor(0.02f, 0.02f, 0.08f, 1.0f);
-	//glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-
-	// LoadTexture
-
-	/*if(loadGLTexture(&texture_moon, MAKEINTRESOURCE(IDBITMAP_MOON)) == FALSE)
-	{
-		fprintf(gpFile, "loadtexture has been failed for moon texture\n");
-		return(-7);
-	}*/
-
-	/*if(loadGLTexture(&texture_eye, MAKEINTRESOURCE(IDBITMAP_EYE)) == FALSE)
-	{
-		fprintf(gpFile, "loadtexture has been failed for eye texture\n");
-		return(-7);
-	}*/
 
 	if(loadGLTexture(&texture_mouth, MAKEINTRESOURCE(IDBITMAP_MOUTH)) == FALSE)
 	{
@@ -648,17 +637,23 @@ int initialize(void)
 		fprintf(gpFile, "Failed load inner wall");
 		return(-10);
 	}
+	
+	if(loadPNGTexture(&texture_background_mountain, "texture-images\\background.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed load background wall");
+		return(-10);
+	}
 	// enable texturing
 	glEnable(GL_TEXTURE_2D);
 
 	// Initialize quadric
 	quadric = gluNewQuadric();
 
-	for(int i = 0; i<800; i++)	
+	for(int i = 0; i<1000; i++)	
 	{
-		point_vertices[i].x = getRandomCoord(-3.0f, 3.0f);
-		point_vertices[i].y = getRandomCoord(1.0f, 2.0f);
-		point_vertices[i].z = getRandomCoord(-8.0f, -3.0f);
+		point_vertices[i].x = getRandomCoord(-10.0f, 8.0f);
+		point_vertices[i].y = getRandomCoord(1.0f, 5.0f);
+		point_vertices[i].z = getRandomCoord(-10.0f, -3.0f);
 		float color = getRandomCoord(05, 0.1);
 		point_vertices[i].c.red = color;
 		point_vertices[i].c.blue = color;
@@ -823,7 +818,6 @@ void display(void)
 	// set identity metrics
 	glLoadIdentity();
 		
-    glTranslatef(0.0f, 0.0f, -8.0f);
 
 	/*gluLookAt(xLook, yLook, zLook, 
 			xLookAt, yLookAt, zLookAt, 
@@ -937,7 +931,7 @@ void update(void)
 
 	if(rendering_scene1 == TRUE)
 	{
-		if(zLook<=-1.0f)
+		/*if(zLook<=-1.0f)
 			zLook = zLook + 0.02;
 		else if (yLook>= 0.5f)
 			yLook = yLook - 0.02;
@@ -953,46 +947,36 @@ void update(void)
 			rendering_scene1 = FALSE;
 			startMovingLooAt = TRUE;
 		}
-	}
-
-	if(startMovingLooAt == TRUE)
-	{
-			zLook = 0.0f;
-			yLook = 0.0f;
-			xLook = 0.0f;
-
-		BOOL final_reset_require = TRUE; 
-		if(zLookAt<=-1.0f)
+		*/
+		static BOOL starfield_completed = TRUE;
+	
+		if(zLook <= -1.0)
 		{
-			final_reset_require = FALSE;
-			zLookAt = zLookAt + 0.05;
+			zLook = zLook - dZLook;
+
 		}
 		
-		if (yLookAt>= 0.0f)
+		if(xLook >= 0.0f)
 		{
-
-			yLookAt = yLookAt - 0.05;
-			final_reset_require = FALSE;
+			xLook = xLook - dXLook;
 		}
 
-		if ( xLookAt >=0.0f)
+		if(zLook >= -1.0 & xLook <= 0.0f )
 		{
-			xLookAt = xLookAt - 0.05;
-			final_reset_require = FALSE;
-			fprintf(gpFile, "values fo xLook %f\n", xLook);
-		}
+			xLook = 0.0f; // complete reset to 0
+			zLook = -1.0f; // coplete reset to 1
+			
+			// Now start moving camera down words
+			if(yLook >= 0.0f)
+			{
+				yLook = yLook - dYLook;
+			}
+			else
+				complete_scene1 = TRUE;
 
-		if(final_reset_require == TRUE)
-		{
-			xLookAt = 0.0f;
-			yLookAt = 0.0f;
-			zLookAt = -1.0f;
-			startMovingLooAt = FALSE;
-			rendering_scene1 = FALSE;
-			rendering_scene2 = FALSE;
-			complete_scene1 = TRUE;
-			fprintf(gpFile, "final reset done... zLook =  %f", zLook);
+
 		}
+		
 	}
 
 	// Camera still for certain second
@@ -1001,8 +985,8 @@ void update(void)
 		if(wait_camera <= 1000)
 		{
 			wait_camera++;
-			fprintf(gpFile, "Camera is on wait ...\n");
 		}
+
 		else
 		{
 			fprintf(gpFile, "Camera started moving ");
@@ -1010,14 +994,14 @@ void update(void)
 		}
 
 	}
-	//else
-	//	rendering_scene2 = TRUE;
 	
 	if(rendering_scene2 == TRUE && complete_scene1 == TRUE)
 	{
 		// starting camera to move inside house
-		zLookAt = -6.0f;
-		if(zLook >= -5.7f && moving_cam_completed_scene2 == FALSE)
+		zLookAt = -40.0f;
+		//yLook = -5.0f;
+		fprintf(gpFile, "starting here\n");
+		if(zLook >= -33.0f && moving_cam_completed_scene2 == FALSE)
 		{
 			zLook = zLook - 0.01;
 			if(zLook <= 1.0f)
@@ -1132,12 +1116,13 @@ void display_dev(void)
 	// set identity metrics
 	glLoadIdentity();
 		
-    glTranslatef(0.0f, 0.0f, -16.0f);
+    //glTranslatef(0.0f, 0.0f, -8.0f);
+	glGetFloatv(GL_MODELVIEW_MATRIX, location);
 
-	glPushMatrix();
-		drawAnimatedButterfly();
-	glPopMatrix();
-
+    /*for (int i = 0; i < 800; ++i) {
+        fprintf(gpFile,"printing location of the point point_vertices num = %d, x=%f, y=%f, z=%f\n", i, point_vertices[i].x, point_vertices[i].y, point_vertices[i].z);
+	}*/
+    drawPoints(point_vertices, 800);
 
 	// swap the buffers
 	SwapBuffers(ghdc);

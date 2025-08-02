@@ -1,21 +1,20 @@
+#include<stdio.h>
+
 #include "shape.h"
 #include "POINTS.h"
-
+extern FILE *gpFile;
+extern GLfloat location[16];
+GLfloat after_loacation[16];
 
 void drawPoints(point_t points[], int length) {
 
-    //glEnable(GL_POINT_SMOOTH);
-    //glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
-
     for (int i = 0; i < length; ++i) {
         glPointSize(points[i].size);
-        //glBegin(GL_POINTS);
-        glLoadIdentity();
-        glTranslatef(points[i].x, points[i].y, points[i].z);
+        glPushMatrix();
+            glTranslatef(points[i].x, points[i].y, points[i].z);
         glColor3f(points[i].c.red, points[i].c.red, points[i].c.red);
         gluSphere(quadric, 0.005f, 30, 30);
-        //glVertex3f(points[i].x, points[i].y, points[i].z);
-        //glEnd();
+        glPopMatrix();
         
     }
 }
@@ -81,31 +80,6 @@ void drawCube()
 
 void drawTriangle()
 {
-    /*glBegin(GL_TRIANGLES);
-        // Front
-        glVertex3f(-2.0f, 3.0f, 2.0f);
-        glVertex3f( 2.0f, 3.0f, 2.0f);
-        glVertex3f( 0.0f, 5.0f, 2.0f);
-
-        // Back
-        glVertex3f(-2.0f, 3.0f, -2.0f);
-        glVertex3f( 2.0f, 3.0f, -2.0f);
-        glVertex3f( 0.0f, 5.0f, -2.0f);
-    glEnd();
-
-    glBegin(GL_QUADS);
-        // Left roof side
-        glVertex3f(-2.0f, 3.0f, -2.0f);
-        glVertex3f(-2.0f, 3.0f,  2.0f);
-        glVertex3f( 0.0f, 5.0f,  2.0f);
-        glVertex3f( 0.0f, 5.0f, -2.0f);
-
-        // Right roof side
-        glVertex3f(2.0f, 3.0f, -2.0f);
-        glVertex3f(2.0f, 3.0f,  2.0f);
-        glVertex3f(0.0f, 5.0f,  2.0f);
-        glVertex3f(0.0f, 5.0f, -2.0f);
-    glEnd();*/
     glBegin(GL_TRIANGLES);
         // Front
         glBegin(GL_TRIANGLES);

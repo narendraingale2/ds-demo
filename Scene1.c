@@ -21,40 +21,48 @@ void drawScene1()
 
     // Drawing stars
     glPushMatrix();
-        drawPoints(point_vertices, 800);
+        drawPoints(point_vertices, 1000);
     glPopMatrix();
 
+    glTranslatef(0.0f, 0.0f, -8.0f);
     // Drawing moon
     glPushMatrix();
         glTranslatef(5.0f, 4.5f, -6.0f);
         drawMoon();
     glPopMatrix();
-	
-    glPushMatrix();
-		glTranslatef(4.0f, 0.5f, 0.0f);
-		glScalef(4.0, 6.0f, 0.0f);
-		drawColoredTree();
-	glPopMatrix();
 
-	glPushMatrix();
-		glTranslatef(-5.0f, 0.5f, 0.0f);
-		glScalef(4.0, 6.0f, 0.0f);
-		drawCocoTree();
-	glPopMatrix();
-	
     glPushMatrix();
-		glTranslatef(0.0f, -2.0f, 0.0f);
-		glRotatef(60.0f, 1.0f, 0.0f, 0.0f);
-		glScalef(8.0f, 2.0f, 1.0f);
+        glTranslatef(0.0f, 0.0f, -30.0f);
+        glScalef(40,5, 0.0f);
+        drawBackgroundMountain();
+    glPopMatrix();
+
+    glPushMatrix();
+		glTranslatef(0.0f, -10.0f, -18.0f);
+		glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+		glScalef(50.0f, 50.0f, 1.0f);
 		drawGround();
 	glPopMatrix();
 
 	glPushMatrix();
-		glScalef(0.5f, 0.5f, 1.0f);
-		// glRotatef(-180, 0.0f, 1.0f, 0.0f);
-		glTranslatef(0.0f, -2.1f, 0.0f);
+		//glScalef(3.0f, 1.8f, 1.0f);
+	    glTranslatef(0.0f, -10.0f, -30.0f);
 		drawHouse();
 	glPopMatrix();
+
+    glPushMatrix();
+	    glTranslatef(12.0f, -6.0f, -28.0f);
+		glScalef(9.0, 9.0f, 0.0f);
+		drawColoredTree();
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(-12.0f, -6.0f, -28.0f);
+		glScalef(9.0, 9.0f, 0.0f);
+		drawCocoTree();
+	glPopMatrix();
+	
+
 }
 
 void drawScene2()
