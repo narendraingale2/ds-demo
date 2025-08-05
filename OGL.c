@@ -24,8 +24,8 @@
 // Macros
 #define WIN_WIDTH 800
 #define WIN_HEIGHT 600
-//#define DEV_MODE 
-//#define NO_SOUND
+#define DEV_MODE 
+#define NO_SOUND
 
 // global function declarations
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -134,7 +134,7 @@ GLfloat handAnimation = 0.0f;
 BOOL animateLeft = FALSE;
 GLfloat angleHouse = 0.0;
 point_t* star_points = NULL;
-int numStars = 1500;
+int numStars = 500;
 
 
 // EntryPoint Function
@@ -514,9 +514,12 @@ int initialize(void)
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	// from here onwords opengl code starts
 	// tell opengl to choose the colour to clear the screen
-	glClearColor(0.02f, 0.02f, 0.08f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	// Loading Images to create texture
 	stbi_set_flip_vertically_on_load(TRUE);
@@ -526,7 +529,6 @@ int initialize(void)
 		fprintf(gpFile, "Texture loading failed...\n");
 		return(-1);
 	}
-	MessageBox(NULL, "Textures are initialized", "textures", MB_OK);
 	
 	// enable texturing
 	glEnable(GL_TEXTURE_2D);
@@ -1021,12 +1023,7 @@ void display_dev(void)
 	// set identity metrics
 	glLoadIdentity();
 		
-    //glTranslatef(0.0f, 0.0f, -8.0f);
-	glGetFloatv(GL_MODELVIEW_MATRIX, location);
-
-	glTranslatef(0.0f, 0.0f, -8.0f);
-	//drawAnimatedButterfly();
-	drawScene3();
+	drawScene1();
 	// swap the buffers
 	SwapBuffers(ghdc);
 

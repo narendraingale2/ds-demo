@@ -19,32 +19,29 @@ extern GLfloat girl_walk_y;
 void drawScene1()
 {
 
+    static GLfloat camX=5.0f, camY=4.5f, camZ=-8.0f;
+
+    gluLookAt(camX, camY, camZ, 
+            camX, camY, camZ-1, 
+            0.0f, 1.0f, 0.0f);
     // Drawing stars
-    glPushMatrix();
-        drawPoints(1000);
-    glPopMatrix();
-    
+    // x = 12 - -12
+    // y = 2.5 - 7
+    // z = -15 - -22
+    drawPoints(1000);
 
-    glTranslatef(0.0f, 0.0f, -8.0f);
     // Drawing moon
-    glPushMatrix();
-        glTranslatef(5.0f, 4.5f, -6.0f);
-        drawMoon();
-    glPopMatrix();
+    // x=5 y=4.5 z=-13
+    drawMoon();
 
-    glPushMatrix();
-        glTranslatef(0.0f, 0.0f, -30.0f);
-        glScalef(40,5, 0.0f);
-        drawBackgroundMountain();
-    glPopMatrix();
-
-    glPushMatrix();
-		glTranslatef(0.0f, -10.0f, -18.0f);
-		glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
-		glScalef(50.0f, 50.0f, 1.0f);
-		drawGround();
-	glPopMatrix();
-
+    // Draw background of mountainsl
+    // x=0 y=0 z=-10
+    drawBackgroundMountain();
+	
+    // Draw ground 
+    // x = -8, 8 y = -1.2 z= -10, 0
+    drawGround();
+/*
 	glPushMatrix();
 		glScalef(2.0f, 1.0f, 1.0f);
 	    glTranslatef(0.0f, -10.0f, -30.0f);
@@ -62,7 +59,16 @@ void drawScene1()
 		glScalef(9.0, 9.0f, 0.0f);
 		drawCocoTree();
 	glPopMatrix();
-	
+	*/
+    
+    /* update camera location*/
+    if(camZ < 0.0f)
+    {
+        camX -= 5.0f * 0.0007f;
+        camY -= 4.5f * 0.0007f;
+        camZ += 8.0f * 0.0007f;
+
+    }
 
 }
 

@@ -12,27 +12,30 @@ extern int numStars;
 void drawPoints(int length) {
     void initializePoints();
 
-    if(star_points == NULL)
-    {
-        initializePoints(star_points, numStars);
         if(star_points == NULL)
         {
-            fprintf(gpFile, "Star Initialization failed\n");
+            initializePoints(star_points, numStars);
+            if(star_points == NULL)
+            {
+                fprintf(gpFile, "Star Initialization failed\n");
+            }
         }
-    }
 
 
-    for (int i = 0; i < numStars; ++i) {
-        glPointSize(star_points[i].size);
-        glPushMatrix();
-            glTranslatef(star_points[i].x, star_points[i].y, star_points[i].z);
-        glColor3f(star_points[i].c.red, star_points[i].c.red, star_points[i].c.red);
-        gluSphere(quadric, 0.005f, 30, 30);
-        glPopMatrix();
-        
-    }
-    
-    fprintf(gpFile, "Stars plotted...\n");
+    glPushMatrix();
+        for (int i = 0; i < numStars; ++i) {
+            //glPushMatrix();
+            //    glTranslatef(star_points[i].x, star_points[i].y, star_points[i].z);
+            glColor3f(star_points[i].c.red, star_points[i].c.red, star_points[i].c.red);
+            //gluSphere(quadric, 0.005f, 30, 30);
+            glPointSize(star_points[i].size);
+            glBegin(GL_POINTS);
+                glVertex3f(star_points[i].x, star_points[i].y, star_points[i].z);
+            glEnd();
+            //glPopMatrix();
+            
+        }
+    glPopMatrix(); 
 }
 
 void initializePoints()
@@ -41,14 +44,14 @@ void initializePoints()
 
     for(int i = 0; i<numStars; i++)	
     {
-    	star_points[i].x = getRandomCoord(-10.0f, 8.0f);
-    	star_points[i].y = getRandomCoord(1.0f, 5.0f);
-    	star_points[i].z = getRandomCoord(-10.0f, -3.0f);
+    	star_points[i].x = getRandomCoord(-12.0f, 12.0f);
+    	star_points[i].y = getRandomCoord(-1.5f, 7.0f);
+    	star_points[i].z = getRandomCoord(-15.0f, -22.0f);
     	float color = getRandomCoord(05, 0.1);
     	star_points[i].c.red = color;
     	star_points[i].c.blue = color;
     	star_points[i].c.red = color;
-    	float size = getRandomCoord(1.0f, 3.0f);
+    	float size = getRandomCoord(1.0f, 2.0f);
     	star_points[i].size = size;
     }
 

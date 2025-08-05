@@ -30,16 +30,16 @@ extern GLfloat angleHouse;
 void drawMoon()
 {
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	gluQuadricTexture(quadric, GL_TRUE); 
 	glBindTexture(GL_TEXTURE_2D, texture_moon);
-	glGetFloatv(GL_MODELVIEW_MATRIX, location);
-	glColor3f(1.0f, 1.0f, 1.0f);
-	for(int i = 0; i<16; i++)
-		fprintf(gpFile,"Moon location[%d] = %f\n",i, location[i]);
-	gluSphere(quadric, 0.5, 50, 50);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	glPushMatrix();
+    	glTranslatef(5.0f, 4.5f, -13.0f);
+		glColor4f(1.0f, 1.0f, 1.0f,1.0f);
+		gluSphere(quadric, 0.5, 50, 50);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	gluQuadricTexture(quadric, GL_FALSE);
+	glPopMatrix();
 }
 
 void drawColoredTree()
@@ -172,12 +172,21 @@ void drawWater()
 
 void drawGround()
 {
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	glBindTexture(GL_TEXTURE_2D, texture_ground);
     glPushMatrix();
-		drawQuad();
+		glColor4f(0.4f, 0.4f, 0.4f, 1.0f);
+		glBindTexture(GL_TEXTURE_2D, texture_ground);
+    	glBegin(GL_QUADS);
+			glTexCoord2f(1.0, 1.0); // right-right
+	   		glVertex3f(8.0f, -1.2f, -10.0f);
+	   		glTexCoord2f(0.0, 1.0); // right-right
+	   		glVertex3f(-8.0f, -1.2f, -10.0f);
+	   		glTexCoord2f(0.0, 0.0); // right-right
+	   		glVertex3f(-8.0f, -1.2f, 0.0f);
+	   		glTexCoord2f(1.0, 0.0); // right-right
+	   		glVertex3f(8.0f, -1.2f, 0.0f);
+    	glEnd();
+		glBindTexture(GL_TEXTURE_2D, 0);
 	glPopMatrix();
-	glBindTexture(GL_TEXTURE_2D, 0);
 
 }
 
@@ -298,11 +307,13 @@ void drawAnimatedButterfly()
 
 void drawBackgroundMountain()
 {
-
+    glPushMatrix();
+    
+	glTranslatef(0.0f, 0.0f, -10.0f);
+    glScalef(8, 1.2, 1.0f);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glBindTexture(GL_TEXTURE_2D, texture_background_mountain);
-    glPushMatrix();
-		drawQuad();
-	glPopMatrix();
+	drawQuad();
 	glBindTexture(GL_TEXTURE_2D, 0);
+	glPopMatrix();
 }
