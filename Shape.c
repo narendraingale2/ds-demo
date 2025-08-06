@@ -11,7 +11,10 @@ extern int numStars;
 
 void drawPoints(int length) {
     void initializePoints();
-
+    static GLfloat points_alpha = 1.0f;
+    static BOOL is_increment = TRUE;
+    static int set_count = 0;
+    
         if(star_points == NULL)
         {
             initializePoints(star_points, numStars);
@@ -20,22 +23,42 @@ void drawPoints(int length) {
                 fprintf(gpFile, "Star Initialization failed\n");
             }
         }
-
+    
 
     glPushMatrix();
         for (int i = 0; i < numStars; ++i) {
-            //glPushMatrix();
-            //    glTranslatef(star_points[i].x, star_points[i].y, star_points[i].z);
-            glColor3f(star_points[i].c.red, star_points[i].c.red, star_points[i].c.red);
-            //gluSphere(quadric, 0.005f, 30, 30);
+            if((i+1)%10 == set_count)
+                glColor4f(star_points[i].c.red, star_points[i].c.red, star_points[i].c.red, points_alpha);
+            else
+                glColor4f(star_points[i].c.red, star_points[i].c.red, star_points[i].c.red, 1.0);
             glPointSize(star_points[i].size);
             glBegin(GL_POINTS);
                 glVertex3f(star_points[i].x, star_points[i].y, star_points[i].z);
             glEnd();
-            //glPopMatrix();
-            
         }
     glPopMatrix(); 
+
+    if(is_increment == TRUE)
+    {
+        points_alpha = points_alpha + 0.005f;
+        if(points_alpha >= 1.0f)
+        {
+            is_increment = FALSE;
+            set_count++;
+            if(set_count > 10)
+                set_count = 0;
+
+        }
+    }
+    else
+    {
+        points_alpha = points_alpha - 0.005f;
+        if(points_alpha <= 0.0f)
+        {
+            is_increment = TRUE;
+
+        }
+    }
 }
 
 void initializePoints()

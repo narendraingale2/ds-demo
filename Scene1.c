@@ -64,9 +64,9 @@ void drawScene1()
     /* update camera location*/
     if(camZ < 0.0f)
     {
-        camX -= 5.0f * 0.0007f;
-        camY -= 4.5f * 0.0007f;
-        camZ += 8.0f * 0.0007f;
+        camX -= 5.0f * 0.00008f;
+        camY -= 4.5f * 0.00008f;
+        camZ += 8.0f * 0.00008f;
 
     }
 
@@ -130,7 +130,7 @@ void drawScene3()
 {
     // Drawing stars
     glPushMatrix();
-        drawPoints(point_vertices, 1000);
+        drawPoints(1000);
     glPopMatrix();
 
     glTranslatef(0.0f, 0.0f, -8.0f);

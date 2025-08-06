@@ -8,3 +8,4 @@
 #include"POINTS.h"
 
 extern GLUquadric *quadric;
+void drawPoints(int);

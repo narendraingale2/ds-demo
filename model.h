@@ -8,3 +8,14 @@ extern GLuint texture_moon;
 
 void drawMoon();
 void drawBoy(void);
+void drawMoon();
+void drawColoredTree();
+void drawCocoTree();
+void drawWater();
+void drawGround();
+void drawRoof();
+void drawHouse();
+void drawAnimatedButterfly();
+void drawBackgroundMountain();
+void drawGirl(BOOL);
+void drawBoyModel();
