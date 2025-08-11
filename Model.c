@@ -194,13 +194,13 @@ void drawGround()
 		glColor4f(0.4f, 0.4f, 0.4f, 1.0f);
 		glBindTexture(GL_TEXTURE_2D, texture_ground);
     	glBegin(GL_QUADS);
-			glTexCoord2f(1.0, 1.0); // right-right
-	   		glVertex3f(8.0f, -1.2f, -10.0f);
-	   		glTexCoord2f(0.0, 1.0); // right-right
+			glTexCoord2f(1.0, 1.0); 	   		
+			glVertex3f(8.0f, -1.2f, -10.0f);
+	   		glTexCoord2f(0.0, 1.0); 
 	   		glVertex3f(-8.0f, -1.2f, -10.0f);
-	   		glTexCoord2f(0.0, 0.0); // right-right
+	   		glTexCoord2f(0.0, 0.0); 
 	   		glVertex3f(-8.0f, -1.2f, 0.0f);
-	   		glTexCoord2f(1.0, 0.0); // right-right
+	   		glTexCoord2f(1.0, 0.0);
 	   		glVertex3f(8.0f, -1.2f, 0.0f);
     	glEnd();
 		glBindTexture(GL_TEXTURE_2D, 0);
@@ -309,22 +309,22 @@ void drawHouseMain()
 			glBindTexture(GL_TEXTURE_2D, texture_roof);
 			glTranslatef(0.0f, 1.82f, 0.0f);
 			glBegin(GL_QUADS);
-	 	       	glTexCoord2f(1.0, 1.0); // right-right
+	 	       	glTexCoord2f(0.25f, 1.0); // right-right
 	 	       	glVertex3f(-0.5f, 1.0f, 0.0f);
-			    glTexCoord2f(0.0, 1.0); // right-right
+			    glTexCoord2f(1.0f, 1.0); // right-right
 	 	       	glVertex3f( 0.5f, 1.0f, 0.0f);
-			    glTexCoord2f(0.0, 0.0); // right-right
-	 	       	glVertex3f( 1.1f, -1.0f, -1.1f);
 			    glTexCoord2f(1.0, 0.0); // right-right
+	 	       	glVertex3f( 1.1f, -1.0f, -1.1f);
+			    glTexCoord2f(0.0, 0.0); // right-right
 	 	       	glVertex3f(-1.1f, -1.0f, -1.1f);
 
-	 	       	glTexCoord2f(1.0, 1.0); // right-right
+	 	       	glTexCoord2f(0.25, 1.0); // right-right
 	 	       	glVertex3f(-0.5f, 1.0f, 0.0f);
-			    glTexCoord2f(0.0, 1.0); // right-right
+			    glTexCoord2f(0.75, 1.0); // right-right
 	 	       	glVertex3f( 0.5f, 1.0f, 0.0f);
-			    glTexCoord2f(0.0, 0.0); // right-right
-	 	       	glVertex3f( 1.1f, -1.0f, 1.1f);
 			    glTexCoord2f(1.0, 0.0); // right-right
+	 	       	glVertex3f( 1.1f, -1.0f, 1.1f);
+			    glTexCoord2f(0.0, 0.0); // right-right
 	 	       	glVertex3f(-1.1f, -1.0f, 1.1f);
 			glEnd();
 	
@@ -352,7 +352,6 @@ void drawHouseMain()
 
 	angle = angle + 1.0f;
 }
-
 
 void drawHouseUpper()
 {
@@ -433,22 +432,23 @@ void drawHouseUpper()
 			glBindTexture(GL_TEXTURE_2D, texture_roof);
 			glTranslatef(0.0f, 1.82f, 0.0f);
 			glBegin(GL_QUADS);
-	 	       	glTexCoord2f(1.0, 1.0); // right-right
+	 	       	glTexCoord2f(0.25f, 1.0); // right-right
 	 	       	glVertex3f(-0.5f, 1.0f, 0.0f);
-			    glTexCoord2f(0.0, 1.0); // right-right
+			    glTexCoord2f(0.75f, 1.0); // right-right
 	 	       	glVertex3f( 0.5f, 1.0f, 0.0f);
-			    glTexCoord2f(0.0, 0.0); // right-right
-	 	       	glVertex3f( 1.1f, -1.0f, -1.1f);
 			    glTexCoord2f(1.0, 0.0); // right-right
+	 	       	glVertex3f( 1.1f, -1.0f, -1.1f);
+			    glTexCoord2f(1.0, 1.0); // right-right
 	 	       	glVertex3f(-1.1f, -1.0f, -1.1f);
 
-	 	       	glTexCoord2f(1.0, 1.0); // right-right
+	 	       	//glTexCoord2f(1.0, 1.0); // right-right
+	 	       	glTexCoord2f(0.25f, 1.0); // right-right
 	 	       	glVertex3f(-0.5f, 1.0f, 0.0f);
-			    glTexCoord2f(0.0, 1.0); // right-right
+			    glTexCoord2f(0.75f, 1.0); // right-right
 	 	       	glVertex3f( 0.5f, 1.0f, 0.0f);
-			    glTexCoord2f(0.0, 0.0); // right-right
-	 	       	glVertex3f( 1.1f, -1.0f, 1.1f);
 			    glTexCoord2f(1.0, 0.0); // right-right
+	 	       	glVertex3f( 1.1f, -1.0f, 1.1f);
+			    glTexCoord2f(0.0, 0.0); // right-right
 	 	       	glVertex3f(-1.1f, -1.0f, 1.1f);
 			glEnd();
 	
