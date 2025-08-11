@@ -16,14 +16,30 @@ extern BOOL rotate_left;
 extern GLfloat girl_walk_z;
 extern GLfloat girl_walk_y;
 
+extern GLfloat xLook;
+extern GLfloat yLook;
+extern GLfloat zLook;
+
+extern GLuint texture_colured_tree;
+extern point_t* tree_cordinates;
+extern int numTrees;
+
+
 void drawScene1()
 {
+    void initializeTreePoints(); 
 
     static GLfloat camX=5.0f, camY=4.5f, camZ=-8.0f;
+    
+    if(tree_cordinates == NULL)
+    {
+       initializeTreePoints(); 
+    }
 
-    gluLookAt(camX, camY, camZ, 
-            camX, camY, camZ-1, 
+    gluLookAt(camX + xLook, camY + yLook, camZ + zLook, 
+            camX + xLook, camY + yLook, camZ-1 + zLook, 
             0.0f, 1.0f, 0.0f);
+
     // Drawing stars
     // x = 12 - -12
     // y = 2.5 - 7
@@ -41,13 +57,15 @@ void drawScene1()
     // Draw ground 
     // x = -8, 8 y = -1.2 z= -10, 0
     drawGround();
-/*
-	glPushMatrix();
-		glScalef(2.0f, 1.0f, 1.0f);
-	    glTranslatef(0.0f, -10.0f, -30.0f);
-		drawHouse();
-	glPopMatrix();
 
+    
+    //for(int i=0; i<numTrees; i++)
+	//    drawColoredTree(tree_cordinates[i].x, -0.77f, tree_cordinates[i].z, texture_colured_tree);
+
+	drawHouse();
+
+	drawColoredTree(2.0f, -0.77f, -7.0f, texture_colured_tree);
+/*
     glPushMatrix();
 	    glTranslatef(16.0f, -6.0f, -28.0f);
 		glScalef(9.0, 9.0f, 0.0f);
@@ -62,16 +80,31 @@ void drawScene1()
 	*/
     
     /* update camera location*/
+    
     if(camZ < 0.0f)
     {
-        camX -= 5.0f * 0.00008f;
-        camY -= 4.5f * 0.00008f;
-        camZ += 8.0f * 0.00008f;
+        camX -= 5.0f * 0.001f;
+        camY -= 4.5f * 0.001f;
+        camZ += 8.0f * 0.001f;
 
     }
 
 }
 
+
+void initializeTreePoints()
+{    
+    tree_cordinates = (point_t*)malloc(sizeof(point_t) * numTrees);
+
+    for(int i = 0; i<numTrees; i++)	
+    {
+    	tree_cordinates[i].x = getRandomCoord(-5.0f, 5.0f);
+    	tree_cordinates[i].y = -0.77f; 
+    	tree_cordinates[i].z = getRandomCoord(-5.0f, -10.0f);
+    }
+
+
+}
 void drawScene2()
 {
     // back wall
@@ -156,7 +189,7 @@ void drawScene3()
     glPushMatrix();
 	    glTranslatef(16.0f, -6.0f, -28.0f);
 		glScalef(9.0, 9.0f, 0.0f);
-		drawColoredTree();
+		//drawColoredTree();
 	glPopMatrix();
 
     glPushMatrix();

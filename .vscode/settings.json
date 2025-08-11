@@ -5,6 +5,7 @@
         "shape.h": "c",
         "math.h": "c",
         "gl.h": "c",
-        "glu.h": "c"
+        "glu.h": "c",
+        "points.h": "c"
     }
 }

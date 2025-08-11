@@ -26,6 +26,7 @@
 #define WIN_HEIGHT 600
 #define DEV_MODE 
 #define NO_SOUND
+#define ZOOM_SCALE 0.1f
 
 // global function declarations
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -78,6 +79,8 @@ GLuint texture_wall_stone;
 GLuint texture_roof;
 GLuint texture_butter_fly;
 GLuint texture_background_mountain;
+GLuint texture_house_door;
+GLuint texture_wooden_grill;
 
 GLUquadric *quadric = NULL;
 
@@ -112,12 +115,12 @@ GLfloat hold;
 GLfloat xrot=0.0f;
 GLfloat yrot=0.0f;
 GLfloat zrot=0.0f;
-GLfloat xLook = 5.0f;
-GLfloat yLook = 4.05f;
-GLfloat zLook = -13.4f;
-GLfloat xLookAt = 5.0f;
-GLfloat yLookAt = 4.0f;
-GLfloat zLookAt = -14.0f;
+GLfloat xLook = 0.0f;
+GLfloat yLook = 0.0f;
+GLfloat zLook = 0.0f;
+GLfloat xLookAt = 0.0f;
+GLfloat yLookAt = 0.0f;
+GLfloat zLookAt = 0.0f;
 GLfloat dZLook = -13.4/1000;
 GLfloat dXLook = 5.0f/1000;
 GLfloat dYLook = 4.05/1000;
@@ -134,7 +137,9 @@ GLfloat handAnimation = 0.0f;
 BOOL animateLeft = FALSE;
 GLfloat angleHouse = 0.0;
 point_t* star_points = NULL;
+point_t* tree_cordinates = NULL;
 int numStars = 500;
+int numTrees = 5;
 
 
 // EntryPoint Function
@@ -320,27 +325,27 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				gbEscapKeyIsPressed = TRUE;
 				break;
 			case VK_UP:
-				yLookAt = yLookAt + 0.01f;
+				yLookAt = yLookAt + ZOOM_SCALE;
 				fprintf(gpFile, "yLookAt = %f\n", yLookAt);
 				break;
 			case VK_DOWN:
-				yLookAt = yLookAt - 0.01f;
+				yLookAt = yLookAt - ZOOM_SCALE;
 				fprintf(gpFile, "yLookAt = %f\n", yLookAt);
 				break;
 			case VK_LEFT:
-				xLookAt = xLookAt - 0.01f;
+				xLookAt = xLookAt - ZOOM_SCALE;
 				fprintf(gpFile, "xLookAt = %f\n", xLookAt);
 				break;
 			case VK_RIGHT:
-				xLookAt = xLookAt + 0.01f;
+				xLookAt = xLookAt + ZOOM_SCALE;
 				fprintf(gpFile, "xLookAt = %f\n", xLookAt);
 				break;
 			case VK_OEM_PLUS:
-				zLookAt = zLookAt + 0.01f;
+				zLookAt = zLookAt + ZOOM_SCALE;
 				fprintf(gpFile, "zLookAt = %f\n", zLookAt);
 				break;
 			case VK_OEM_MINUS:
-				zLookAt = zLookAt - 0.01f;
+				zLookAt = zLookAt - ZOOM_SCALE;
 				fprintf(gpFile, "zLookAt = %f\n", zLookAt);
 				break;
 			default:
@@ -772,11 +777,12 @@ int loadAllTextures()
 	if(status !=0 )
 		return status;
 
-	status = loadWaterTextures();
+	/*status = loadWaterTextures();
 	if(status !=0 )
 		return status;
+	*/
 
-	status = loadModelTextures();
+	//status = loadModelTextures();
 	
 	return status;
 }
@@ -828,7 +834,18 @@ int loadHouseTextures()
 		fprintf(gpFile, "Failed load inner wall");
 		return(-10);
 	}
+
+	if(loadPNGTexture(&texture_house_door, "texture-images\\DoorTexture.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed load inner wall");
+		return(-10);
+	}
 	
+	if(loadPNGTexture(&texture_wooden_grill, "texture-images\\GrillTexture.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed load grill texture");
+		return(-10);
+	}
 	return 0;
 	
 
@@ -1024,6 +1041,7 @@ void display_dev(void)
 	glLoadIdentity();
 		
 	drawScene1();
+	//drawHouse();
 	// swap the buffers
 	SwapBuffers(ghdc);
 

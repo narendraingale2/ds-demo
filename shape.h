@@ -9,3 +9,4 @@
 
 extern GLUquadric *quadric;
 void drawPoints(int);
+void drawQuad();

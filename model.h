@@ -9,7 +9,7 @@ extern GLuint texture_moon;
 void drawMoon();
 void drawBoy(void);
 void drawMoon();
-void drawColoredTree();
+void drawColoredTree(GLfloat, GLfloat, GLfloat, GLuint);
 void drawCocoTree();
 void drawWater();
 void drawGround();

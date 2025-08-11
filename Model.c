@@ -7,9 +7,8 @@
 #include "utility.h"
 #include "shape.h"
 
-//#define DEV_MODE
+#define DEV_MODE
 
-extern GLuint texture_colured_tree;
 extern GLuint texture_coco_tree;
 extern GLuint texture_water;
 extern GLuint texture_ground;
@@ -17,6 +16,8 @@ extern GLuint texture_wall_stone;
 extern GLuint texture_roof;
 extern GLuint texture_butter_fly;
 extern GLuint texture_background_mountain;
+extern GLuint texture_house_door;
+extern GLuint texture_wooden_grill;
 
 extern GLfloat points[45][45][3];
 extern GLfloat hold;    
@@ -26,6 +27,9 @@ extern GLfloat zrot;
 extern GLfloat location[16];
 extern FILE *gpFile;
 extern GLfloat angleHouse;
+extern GLfloat xLookAt;
+extern GLfloat yLookAt;
+extern GLfloat zLookAt;
 
 void drawMoon()
 {
@@ -42,35 +46,49 @@ void drawMoon()
 	glPopMatrix();
 }
 
-void drawColoredTree()
+void drawColoredTree(GLfloat x, GLfloat y, GLfloat z, GLuint texture)
 {
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+	    
     // face
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	glBindTexture(GL_TEXTURE_2D, texture_colured_tree);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
     glPushMatrix();
-	//fprintf(gpFile, "Printing Model view metrix Before drwing colored Tree");
-	glGetFloatv(GL_MODELVIEW_MATRIX, location);
-	//for(int i = 0; i<16; i++)
-		//fprintf(gpFile,"location[%d] = %f\n",i, location[i]);
+		glTranslatef(x, y, z);
+		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		glBegin(GL_QUADS);
 
-	glBegin(GL_QUADS);
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex3f(0.5f, 0.5f, 0.0f);
 
-		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(0.5f, 0.5f, 0.0f);
+			glTexCoord2f(0.0f, 1.0f);
+			glVertex3f(-0.5f, 0.5f, 0.0f);
 
-		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(-0.5f, 0.5f, 0.0f);
-		
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(-0.5f, -0.5f, 0.0f);
-		
-		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(0.5f, -0.5f, 0.0f);
+			glTexCoord2f(0.0f, 0.0f);
+			glVertex3f(-0.5f, -0.5f, 0.0f);
 
-	glEnd();
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex3f(0.5f, -0.5f, 0.0f);
+
+		glEnd();
+
+		glRotatef(90, 0.0f, 1.0f, 0.0f);
+		glBegin(GL_QUADS);
+
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex3f(0.5f, 0.5f, 0.0f);
+
+			glTexCoord2f(0.0f, 1.0f);
+			glVertex3f(-0.5f, 0.5f, 0.0f);
+
+			glTexCoord2f(0.0f, 0.0f);
+			glVertex3f(-0.5f, -0.5f, 0.0f);
+
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex3f(0.5f, -0.5f, 0.0f);
+
+		glEnd();
+
+
 	glPopMatrix();
 	glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -192,38 +210,276 @@ void drawGround()
 
 void drawHouse()
 {
-	void drawRoof();
 
-
-	#ifdef DEV_MODE
-	glRotatef(angleHouse, 0.0f, 1.0f, 0.0f);
-	#endif
-	// main house
-	glPushMatrix();
-		glBindTexture(GL_TEXTURE_2D, texture_wall_stone);
-		glScalef(3.0f, 1.6f, 1.2f);
-		drawCube();
-		glBindTexture(GL_TEXTURE_2D, 0);
-	glPopMatrix();
+	void drawHouseMain();
+	void drawHouseUpper();
+	static GLfloat angle=0.0f;
 
 	glPushMatrix();
-		//glBindTexture(GL_TEXTURE_2D, texture_wall_stone);
-		glColor3f(1.0f, 1.0f, 1.0f);
-		glScalef(2.99f, 1.599f, 1.19f);
-		drawCube();
-	glPopMatrix();
+		glTranslatef(0.0f, -1.0f, -8.0f);
+		glScalef(0.3f, 0.2f, 0.3f);
 
-	// drawing roof
-	glPushMatrix();
-		glBindTexture(GL_TEXTURE_2D, texture_roof);
-		glTranslatef(0.0f, 8.0f, 0.0f);
-		glScalef(6.0f, 4.0f, 1.0f);
-		drawRoof();
-		glBindTexture(GL_TEXTURE_2D, 0);
-	glPopMatrix();
+		glPushMatrix();
+			glScalef(5.0f, 1.0f, 3.0f);
+			drawHouseMain();
+		glPopMatrix();
 
+		glPushMatrix();
+			glScalef(4.0f, 1.0f, 1.5f);
+			glTranslatef(0.0f, 2.8f, 0.0f);
+			drawHouseUpper();
+		glPopMatrix();
+	glPopMatrix();
+	angle = angle + 1.0f;
 }
 
+void drawHouseMain()
+{
+	void drawRoof();
+	static GLfloat angle = 0.0f;
+	
+	glPushMatrix();
+		glPushMatrix();
+			glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
+			glBindTexture(GL_TEXTURE_2D, texture_wall_stone);
+			glBegin(GL_QUADS);
+				// Front
+	 	       	glTexCoord2f(1.0, 1.0); // right-right
+	 	       	glVertex3f(-1.0f, 1.0f, 1.0f);
+			    glTexCoord2f(0.0, 1.0); // right-right
+	 	       	glVertex3f( 1.0f, 1.0f, 1.0f);
+			    glTexCoord2f(0.0, 0.0); // right-right
+	 	       	glVertex3f( 1.0f, -1.0f, 1.0f);
+			    glTexCoord2f(1.0, 0.0); // right-right
+	 	       	glVertex3f(-1.0f, -1.0f, 1.0f);
+
+	 	       	// Back
+	 	       	glTexCoord2f(1.0, 1.0); // right-right
+	 	       	glVertex3f(-1.0f, 1.0f, -1.0f);
+			    glTexCoord2f(0.0, 1.0); // right-right
+	 	       	glVertex3f( 1.0f, 1.0f, -1.0f);
+			    glTexCoord2f(0.0, 0.0); // right-right
+	 	       	glVertex3f( 1.0f, -1.0f, -1.0f);
+			    glTexCoord2f(1.0, 0.0); // right-right
+	 	       	glVertex3f(-1.0f, -1.0f, -1.0f);
+
+
+	 	       // Left
+	 	       	glTexCoord2f(1.0, 1.0); // right-right
+	 	       	glVertex3f(-1.0f, 1.0f, -1.0f);
+			    glTexCoord2f(0.0, 1.0); // right-right
+	 	       	glVertex3f(-1.0f, -1.0f, -1.0f);
+			    glTexCoord2f(0.0, 0.0); // right-right
+	 	       	glVertex3f(-1.0f, -1.0f, 1.0f);
+			    glTexCoord2f(1.0, 0.0); // right-right
+	 	       	glVertex3f(-1.0f, 1.0f,  1.0f);
+
+	 	       // Right
+	 	       	glTexCoord2f(1.0, 1.0); // right-right
+	 	       	glVertex3f(1.0f, 1.0f, -1.0f);
+			    glTexCoord2f(0.0, 1.0); // right-right
+	 	       	glVertex3f(1.0f, -1.0f, -1.0f);
+			    glTexCoord2f(0.0, 0.0); // right-right
+	 	       	glVertex3f(1.0f, -1.0f, 1.0f);
+			    glTexCoord2f(1.0, 0.0); // right-right
+	 	       	glVertex3f(1.0f, 1.0f,  1.0f);
+
+	 	   	glEnd();
+			glBindTexture(GL_TEXTURE_2D, 0);
+			
+			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+			glBindTexture(GL_TEXTURE_2D, texture_house_door);
+			glBegin(GL_QUADS);
+				// Front
+	 	       	glTexCoord2f(1.0, 1.0); // right-right
+	 	       	glVertex3f(-0.8f, 1.0f, 1.0f);
+			    glTexCoord2f(0.0, 1.0); // right-right
+	 	       	glVertex3f( 0.8f, 1.0f, 1.0f);
+			    glTexCoord2f(0.0, 0.0); // right-right
+	 	       	glVertex3f( 0.8f, -1.0f, 1.0f);
+			    glTexCoord2f(1.0, 0.0); // right-right
+	 	       	glVertex3f(-0.8f, -1.0f, 1.0f);
+			glEnd();
+			glBindTexture(GL_TEXTURE_2D, 0);
+		glPopMatrix();
+
+		// Draw roof
+		glPushMatrix();
+			glColor3f(0.7f, 0.7f, 0.7f);
+			glBindTexture(GL_TEXTURE_2D, texture_roof);
+			glTranslatef(0.0f, 1.82f, 0.0f);
+			glBegin(GL_QUADS);
+	 	       	glTexCoord2f(1.0, 1.0); // right-right
+	 	       	glVertex3f(-0.5f, 1.0f, 0.0f);
+			    glTexCoord2f(0.0, 1.0); // right-right
+	 	       	glVertex3f( 0.5f, 1.0f, 0.0f);
+			    glTexCoord2f(0.0, 0.0); // right-right
+	 	       	glVertex3f( 1.1f, -1.0f, -1.1f);
+			    glTexCoord2f(1.0, 0.0); // right-right
+	 	       	glVertex3f(-1.1f, -1.0f, -1.1f);
+
+	 	       	glTexCoord2f(1.0, 1.0); // right-right
+	 	       	glVertex3f(-0.5f, 1.0f, 0.0f);
+			    glTexCoord2f(0.0, 1.0); // right-right
+	 	       	glVertex3f( 0.5f, 1.0f, 0.0f);
+			    glTexCoord2f(0.0, 0.0); // right-right
+	 	       	glVertex3f( 1.1f, -1.0f, 1.1f);
+			    glTexCoord2f(1.0, 0.0); // right-right
+	 	       	glVertex3f(-1.1f, -1.0f, 1.1f);
+			glEnd();
+	
+			glBegin(GL_TRIANGLES);
+	 	       	glTexCoord2f(0.5, 0.5); // right-right
+				glVertex3f(-0.5f, 1.0f, 0.0f);
+	 	       	glTexCoord2f(0.0, 0.0); // right-right
+				glVertex3f(-1.1f, -1.0f, -1.1f);
+	 	       	glTexCoord2f(1.0, 0.0); // right-right
+				glVertex3f(-1.1f, -1.0f, 1.1f);
+			glEnd();
+
+			glBegin(GL_TRIANGLES);
+	 	       	glTexCoord2f(0.5, 0.5); // right-right
+				glVertex3f(0.5f, 1.0f, 0.0f);
+	 	       	glTexCoord2f(0.0, 0.0); // right-right
+				glVertex3f(1.1f, -1.0f, -1.1f);
+	 	       	glTexCoord2f(1.0, 0.0); // right-right
+				glVertex3f(1.1f, -1.0f, 1.1f);
+			glEnd();
+
+			glBindTexture(GL_TEXTURE_2D, 0);
+		glPopMatrix();	
+	glPopMatrix();
+
+	angle = angle + 1.0f;
+}
+
+
+void drawHouseUpper()
+{
+	void drawRoof();
+	static GLfloat angle = 0.0f;
+	
+	glPushMatrix();
+		glPushMatrix();
+			
+			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+			glBindTexture(GL_TEXTURE_2D, texture_wooden_grill);
+			glBegin(GL_QUADS);
+				// Front
+	 	       	glTexCoord2f(1.0, 1.0); // right-right
+	 	       	glVertex3f(-1.0f, 1.0f, 1.001f);
+			    glTexCoord2f(0.0, 1.0); // right-right
+	 	       	glVertex3f( 1.0f, 1.0f, 1.001f);
+			    glTexCoord2f(0.0, 0.0); // right-right
+	 	       	glVertex3f( 1.0f, -1.0f, 1.001f);
+			    glTexCoord2f(1.0, 0.0); // right-right
+	 	       	glVertex3f(-1.0f, -1.0f, 1.001f);
+			glEnd();
+			//glBindTexture(GL_TEXTURE_2D, texture_wooden_grill);
+			glBindTexture(GL_TEXTURE_2D, texture_wall_stone);
+			glBegin(GL_QUADS);
+			
+				// Front
+	 	       	glTexCoord2f(1.0, 1.0); // right-right
+	 	       	glVertex3f(-1.0f, 1.0f, 1.0f);
+			    glTexCoord2f(0.0, 1.0); // right-right
+	 	       	glVertex3f( 1.0f, 1.0f, 1.0f);
+			    glTexCoord2f(0.0, 0.0); // right-right
+	 	       	glVertex3f( 1.0f, -1.0f, 1.0f);
+			    glTexCoord2f(1.0, 0.0); // right-right
+	 	       	glVertex3f(-1.0f, -1.0f, 1.0f);
+			glEnd();
+				//glBindTexture(GL_TEXTURE_2D, 0);
+
+			glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
+			glBegin(GL_QUADS);
+	 	       	// Back
+	 	       	glTexCoord2f(1.0, 1.0); // right-right
+	 	       	glVertex3f(-1.0f, 1.0f, -1.0f);
+			    glTexCoord2f(0.0, 1.0); // right-right
+	 	       	glVertex3f( 1.0f, 1.0f, -1.0f);
+			    glTexCoord2f(0.0, 0.0); // right-right
+	 	       	glVertex3f( 1.0f, -1.0f, -1.0f);
+			    glTexCoord2f(1.0, 0.0); // right-right
+	 	       	glVertex3f(-1.0f, -1.0f, -1.0f);
+
+
+	 	       // Left
+	 	       	glTexCoord2f(1.0, 1.0); // right-right
+	 	       	glVertex3f(-1.0f, 1.0f, -1.0f);
+			    glTexCoord2f(0.0, 1.0); // right-right
+	 	       	glVertex3f(-1.0f, -1.0f, -1.0f);
+			    glTexCoord2f(0.0, 0.0); // right-right
+	 	       	glVertex3f(-1.0f, -1.0f, 1.0f);
+			    glTexCoord2f(1.0, 0.0); // right-right
+	 	       	glVertex3f(-1.0f, 1.0f,  1.0f);
+
+	 	       // Right
+	 	       	glTexCoord2f(1.0, 1.0); // right-right
+	 	       	glVertex3f(1.0f, 1.0f, -1.0f);
+			    glTexCoord2f(0.0, 1.0); // right-right
+	 	       	glVertex3f(1.0f, -1.0f, -1.0f);
+			    glTexCoord2f(0.0, 0.0); // right-right
+	 	       	glVertex3f(1.0f, -1.0f, 1.0f);
+			    glTexCoord2f(1.0, 0.0); // right-right
+	 	       	glVertex3f(1.0f, 1.0f,  1.0f);
+
+	 	   	glEnd();
+		glPopMatrix();
+
+		// Draw roof
+		glPushMatrix();
+			glColor3f(0.7f, 0.7f, 0.7f);
+			glBindTexture(GL_TEXTURE_2D, texture_roof);
+			glTranslatef(0.0f, 1.82f, 0.0f);
+			glBegin(GL_QUADS);
+	 	       	glTexCoord2f(1.0, 1.0); // right-right
+	 	       	glVertex3f(-0.5f, 1.0f, 0.0f);
+			    glTexCoord2f(0.0, 1.0); // right-right
+	 	       	glVertex3f( 0.5f, 1.0f, 0.0f);
+			    glTexCoord2f(0.0, 0.0); // right-right
+	 	       	glVertex3f( 1.1f, -1.0f, -1.1f);
+			    glTexCoord2f(1.0, 0.0); // right-right
+	 	       	glVertex3f(-1.1f, -1.0f, -1.1f);
+
+	 	       	glTexCoord2f(1.0, 1.0); // right-right
+	 	       	glVertex3f(-0.5f, 1.0f, 0.0f);
+			    glTexCoord2f(0.0, 1.0); // right-right
+	 	       	glVertex3f( 0.5f, 1.0f, 0.0f);
+			    glTexCoord2f(0.0, 0.0); // right-right
+	 	       	glVertex3f( 1.1f, -1.0f, 1.1f);
+			    glTexCoord2f(1.0, 0.0); // right-right
+	 	       	glVertex3f(-1.1f, -1.0f, 1.1f);
+			glEnd();
+	
+			glBegin(GL_TRIANGLES);
+	 	       	glTexCoord2f(0.5, 0.5); // right-right
+				glVertex3f(-0.5f, 1.0f, 0.0f);
+	 	       	glTexCoord2f(0.0, 0.0); // right-right
+				glVertex3f(-1.1f, -1.0f, -1.1f);
+	 	       	glTexCoord2f(1.0, 0.0); // right-right
+				glVertex3f(-1.1f, -1.0f, 1.1f);
+			glEnd();
+
+			glBegin(GL_TRIANGLES);
+	 	       	glTexCoord2f(0.5, 0.5); // right-right
+				glVertex3f(0.5f, 1.0f, 0.0f);
+	 	       	glTexCoord2f(0.0, 0.0); // right-right
+				glVertex3f(1.1f, -1.0f, -1.1f);
+	 	       	glTexCoord2f(1.0, 0.0); // right-right
+				glVertex3f(1.1f, -1.0f, 1.1f);
+			glEnd();
+
+			glBindTexture(GL_TEXTURE_2D, 0);
+		glPopMatrix();	
+	glPopMatrix();
+
+	angle = angle + 1.0f;
+}
+void drwaPyramidRoof()
+{
+
+}
 void drawRoof()
 {
 	glBegin(GL_QUADS);
@@ -233,9 +489,9 @@ void drawRoof()
 		// hence drawQuad function was not used
 		// Quad1
         glTexCoord2f(1.0, 1.0); // right-right
-		glVertex3f(-1.0f, 0.0f, 0.0f);
+		glVertex3f(-0.5f, 0.0f, 0.0f);
 	    glTexCoord2f(0.0, 1.0); // right-right
-		glVertex3f(1.0f, 0.0f, 0.0f);
+		glVertex3f(0.5f, 0.0f, 0.0f);
 	    glTexCoord2f(0.0, 0.0); // right-right
 		glVertex3f(1.0f, -1.0f, 3.0f);
 	    glTexCoord2f(1.0, 0.0); // right-right
@@ -243,13 +499,21 @@ void drawRoof()
 
 		// QUAD2
         glTexCoord2f(1.0, 1.0); // right-right
-		glVertex3f(-1.0f, 0.0f, 0.0f);
+		glVertex3f(-0.5f, 0.0f, 0.0f);
 	    glTexCoord2f(0.0, 1.0); // right-right
-		glVertex3f(1.0f, 0.0f, 0.0f);
+		glVertex3f(0.5f, 0.0f, 0.0f);
 	    glTexCoord2f(0.0, 0.0); // right-right
 		glVertex3f(1.0f, -1.0f, -3.0f);
 	    glTexCoord2f(1.0, 0.0); // right-right
 		glVertex3f(-1.0f, -1.0f, -3.0f);
+
+	glEnd();
+
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glBegin(GL_TRIANGLES);
+		glVertex3f(-0.5f, 0.0f, 0.0);
+		glVertex3f(-1.0f, -1.0f, -3.0);
+		glVertex3f(-1.0f, -1.0f, 3.0);
 	glEnd();
 }
 
@@ -310,7 +574,7 @@ void drawBackgroundMountain()
     glPushMatrix();
     
 	glTranslatef(0.0f, 0.0f, -10.0f);
-    glScalef(8, 1.2, 1.0f);
+    glScalef(8.0f, 2.0f, 1.0f);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glBindTexture(GL_TEXTURE_2D, texture_background_mountain);
 	drawQuad();

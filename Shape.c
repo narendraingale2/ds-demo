@@ -40,7 +40,7 @@ void drawPoints(int length) {
 
     if(is_increment == TRUE)
     {
-        points_alpha = points_alpha + 0.005f;
+        points_alpha = points_alpha + 0.05f;
         if(points_alpha >= 1.0f)
         {
             is_increment = FALSE;
@@ -52,7 +52,7 @@ void drawPoints(int length) {
     }
     else
     {
-        points_alpha = points_alpha - 0.005f;
+        points_alpha = points_alpha - 0.05f;
         if(points_alpha <= 0.0f)
         {
             is_increment = TRUE;
