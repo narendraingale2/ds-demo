@@ -19,3 +19,4 @@ void drawAnimatedButterfly();
 void drawBackgroundMountain();
 void drawGirl(BOOL);
 void drawBoyModel();
+void drawBigGrass();

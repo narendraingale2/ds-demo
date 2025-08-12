@@ -21,6 +21,8 @@ extern GLfloat yLook;
 extern GLfloat zLook;
 
 extern GLuint texture_colured_tree;
+extern GLuint texture_coco_tree;
+extern GLuint texture_big_tree;
 extern point_t* tree_cordinates;
 extern int numTrees;
 
@@ -62,9 +64,62 @@ void drawScene1()
     //for(int i=0; i<numTrees; i++)
 	//    drawColoredTree(tree_cordinates[i].x, -0.77f, tree_cordinates[i].z, texture_colured_tree);
 
-	drawHouse();
+	drawHouse(FALSE);
+    
+    glPushMatrix();
+    glTranslatef(4.0f, -1.0f, -9.0f);
+    glScalef(1.0f, 0.2f, 0.5f);
+    drawHouseMain(FALSE);
+    glPopMatrix();
 
-	drawColoredTree(2.0f, -0.77f, -7.0f, texture_colured_tree);
+    glPushMatrix();
+    glTranslatef(-5.0f, -1.0f, -9.0f);
+    glScalef(1.0f, 0.2f, 0.5f);
+    drawHouseMain(FALSE);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(-5.0f, -1.0f, -5.0f);
+    glScalef(1.0f, 0.2f, 0.5f);
+    drawHouseMain(FALSE);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(-5.0f, -1.0f, -5.0f);
+    glScalef(1.0f, 0.2f, 0.5f);
+    drawHouseMain(FALSE);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(-2.0f, -1.0f, -9.5f);
+    glScalef(1.0f, 0.2f, 0.5f);
+    drawHouseMain(FALSE);
+    glPopMatrix();
+    
+    drawGrass();
+
+    drawBigGrass();
+
+	drawColoredTree(2.0f, -0.7f, -7.0f, texture_colured_tree);
+
+	drawColoredTree(-5.0f, -0.62f, -8.0f, texture_coco_tree);
+	
+    drawColoredTree(-4.0f, -0.62f, -7.0f, texture_coco_tree);
+    
+    drawColoredTree(-3.0f, -0.62f, -8.0f, texture_coco_tree);
+	
+
+	drawColoredTree(5.5f, -0.62f, -8.0f, texture_coco_tree);
+	
+    drawColoredTree(5.0f, -0.62f, -7.0f, texture_coco_tree);
+    
+   
+    // Big tree
+    drawColoredTree(4.0f, -0.62f, -8.0f, texture_big_tree);
+
+    //drawCocoTree();
+    
+
 /*
     glPushMatrix();
 	    glTranslatef(16.0f, -6.0f, -28.0f);
@@ -87,6 +142,9 @@ void drawScene1()
         camY -= 4.5f * 0.001f;
         camZ += 8.0f * 0.001f;
 
+        //camX -= 5.0f * 0.1f;
+        //camY -= 4.5f * 0.1f;
+        //camZ += 8.0f * 0.1f;
     }
 
 }
@@ -105,6 +163,7 @@ void initializeTreePoints()
 
 
 }
+
 void drawScene2()
 {
     // back wall

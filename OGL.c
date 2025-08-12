@@ -26,7 +26,7 @@
 #define WIN_HEIGHT 600
 #define DEV_MODE 
 #define NO_SOUND
-#define ZOOM_SCALE 0.1f
+#define ZOOM_SCALE 1.0f
 
 // global function declarations
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -81,6 +81,9 @@ GLuint texture_butter_fly;
 GLuint texture_background_mountain;
 GLuint texture_house_door;
 GLuint texture_wooden_grill;
+GLuint texture_grass;
+GLuint texture_big_grass;
+GLuint texture_big_tree;
 
 GLUquadric *quadric = NULL;
 
@@ -865,6 +868,24 @@ int loadTreeTextures()
 		fprintf(gpFile, "Failed to lead coco tree");
 		return(-9);
 	}
+	
+	if(loadPNGTexture(&texture_big_tree, "texture-images\\BigTree.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed to lead coco tree");
+		return(-9);
+	}
+
+	if(loadPNGTexture(&texture_grass, "texture-images\\grass.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed to lead grass");
+		return(-9);
+	}
+
+	if(loadPNGTexture(&texture_big_grass, "texture-images\\bigGrass.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed to load big grass");
+		return(-9);
+	}
 
 	return 0;
 }
@@ -1041,7 +1062,6 @@ void display_dev(void)
 	glLoadIdentity();
 		
 	drawScene1();
-	//drawHouse();
 	// swap the buffers
 	SwapBuffers(ghdc);
 
