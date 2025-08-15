@@ -38,6 +38,10 @@ point_t* bigGrass_cordinates;
 int numGrass = 500;
 int numBigGrass = 500;
 
+extern GLfloat camX;
+extern GLfloat camY;
+extern GLfloat camZ;
+
 
 void drawMoon()
 {
@@ -385,12 +389,31 @@ void drawHouseUpper()
 {
 	void drawRoof();
 	static GLfloat angle = 0.0f;
+
 	
 	glPushMatrix();
+		//glRotatef(angle, 0.0f, 1.0f, 0.0f);
+			glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
+			glBegin(GL_QUADS);
+				// Front
+	 	       	glTexCoord2f(1.0, 1.0); // right-right
+	 	       	glVertex3f(-1.0f, 1.0f, 1.0f);
+			    glTexCoord2f(0.0, 1.0); // right-right
+	 	       	glVertex3f( 1.0f, 1.0f, 1.0f);
+			    glTexCoord2f(0.0, 0.0); // right-right
+	 	       	glVertex3f( 1.0f, -1.0f, 1.0f);
+			    glTexCoord2f(1.0, 0.0); // right-right
+	 	       	glVertex3f(-1.0f, -1.0f, 1.0f);
+			glEnd();
 		glPushMatrix();
-			
-			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-			glBindTexture(GL_TEXTURE_2D, texture_wooden_grill);
+				glTranslatef(0.0f + xLookAt, -0.45000f+ yLookAt, 3.03f + zLookAt);
+				fprintf(gpFile, "xLookAt = %f, yLookAt = %f, zLookAt = %f", xLookAt, yLookAt, zLookAt);
+				glScalef(0.03f,0.14f, 1.0f);
+				drawGirl(TRUE);
+		glPopMatrix();
+
+		glPushMatrix();
+			glColor4f(0.0f, 0.0f, 0.0f, 1.0f);
 			glBegin(GL_QUADS);
 				// Front
 	 	       	glTexCoord2f(1.0, 1.0); // right-right
@@ -401,6 +424,20 @@ void drawHouseUpper()
 	 	       	glVertex3f( 1.0f, -1.0f, 1.001f);
 			    glTexCoord2f(1.0, 0.0); // right-right
 	 	       	glVertex3f(-1.0f, -1.0f, 1.001f);
+			glEnd();
+		
+			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+			glBindTexture(GL_TEXTURE_2D, texture_wooden_grill);
+			glBegin(GL_QUADS);
+				// Front
+	 	       	glTexCoord2f(1.0, 1.0); // right-right
+	 	       	glVertex3f(-1.0f, 1.0f, 1.1f);
+			    glTexCoord2f(0.0, 1.0); // right-right
+	 	       	glVertex3f( 1.0f, 1.0f, 1.1f);
+			    glTexCoord2f(0.0, 0.0); // right-right
+	 	       	glVertex3f( 1.0f, -1.0f, 1.1f);
+			    glTexCoord2f(1.0, 0.0); // right-right
+	 	       	glVertex3f(-1.0f, -1.0f, 1.1f);
 			glEnd();
 			//glBindTexture(GL_TEXTURE_2D, texture_wooden_grill);
 			glBindTexture(GL_TEXTURE_2D, texture_wall_stone);
@@ -744,5 +781,24 @@ void initializeGrassPoints()
 		grass_cordinates[i].size = getRandomCoord(0.01f, 0.035f);
     }
 
+
+}
+
+void fadeInOut(int scene_number)
+{
+	static GLfloat fadeOut = 0;
+
+	glColor4f(0.0f, 0.0f, 0.0f, fadeOut);
+	glBegin(GL_QUADS);
+		glVertex3f(camX + 1.0f, camY + 1.0f, camZ -0.5f);
+		glVertex3f(camX -1.0f,  camY + 1.0f, camZ -0.5f);
+		glVertex3f(camX -1.0f, 	camY  - 1.0f, camZ -0.5f);
+		glVertex3f(camX + 1.0f, camY - 1.0f, camZ -0.5f);
+	glEnd();
+
+	if(fadeOut < 1.0f)
+		fadeOut = fadeOut + 0.003f;
+	
+	fprintf(gpFile, "Starting fadeinout ...\n");
 
 }

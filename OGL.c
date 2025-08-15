@@ -26,7 +26,7 @@
 #define WIN_HEIGHT 600
 #define DEV_MODE 
 #define NO_SOUND
-#define ZOOM_SCALE 0.3f
+#define ZOOM_SCALE 0.01f
 
 // global function declarations
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -1069,6 +1069,7 @@ void display_dev(void)
 	glLoadIdentity();
 		
 	drawScene1();
+	//drawHouse();
 	// swap the buffers
 	SwapBuffers(ghdc);
 

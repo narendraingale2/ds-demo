@@ -25,13 +25,15 @@ extern GLuint texture_coco_tree;
 extern GLuint texture_big_tree;
 extern point_t* tree_cordinates;
 extern int numTrees;
+GLfloat camX=5.0f, camY=4.5f, camZ=-8.0f;
 
 
 void drawScene1()
 {
     void initializeTreePoints(); 
 
-    static GLfloat camX=5.0f, camY=4.5f, camZ=-8.0f;
+    static BOOL startMovingInside = FALSE;
+    static int waitCounter = 0;
     
     if(tree_cordinates == NULL)
     {
@@ -63,33 +65,33 @@ void drawScene1()
 	drawHouse(FALSE);
     
     glPushMatrix();
-    glTranslatef(4.0f, -1.0f, -9.0f);
-    glScalef(1.0f, 0.2f, 0.5f);
-    drawHouseMain(FALSE);
+        glTranslatef(4.0f, -1.0f, -9.0f);
+        glScalef(1.0f, 0.2f, 0.5f);
+        drawHouseMain(FALSE);
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef(-5.0f, -1.0f, -9.0f);
-    glScalef(1.0f, 0.2f, 0.5f);
-    drawHouseMain(FALSE);
+        glTranslatef(-5.0f, -1.0f, -9.0f);
+        glScalef(1.0f, 0.2f, 0.5f);
+        drawHouseMain(FALSE);
     glPopMatrix();
     
     glPushMatrix();
-    glTranslatef(-5.0f, -1.0f, -5.0f);
-    glScalef(1.0f, 0.2f, 0.5f);
-    drawHouseMain(FALSE);
+        glTranslatef(-5.0f, -1.0f, -5.0f);
+        glScalef(1.0f, 0.2f, 0.5f);
+        drawHouseMain(FALSE);
     glPopMatrix();
     
     glPushMatrix();
-    glTranslatef(-5.0f, -1.0f, -5.0f);
-    glScalef(1.0f, 0.2f, 0.5f);
-    drawHouseMain(FALSE);
+        glTranslatef(-5.0f, -1.0f, -5.0f);
+        glScalef(1.0f, 0.2f, 0.5f);
+        drawHouseMain(FALSE);
     glPopMatrix();
     
     glPushMatrix();
-    glTranslatef(-2.0f, -1.0f, -9.5f);
-    glScalef(1.0f, 0.2f, 0.5f);
-    drawHouseMain(FALSE);
+        glTranslatef(-2.0f, -1.0f, -9.5f);
+        glScalef(1.0f, 0.2f, 0.5f);
+        drawHouseMain(FALSE);
     glPopMatrix();
     
     drawGrass();
@@ -116,16 +118,27 @@ void drawScene1()
     //drawCocoTree();
     
     
-    if(camZ < 0.0f)
+    if(camZ < 0.0f && startMovingInside == FALSE)
     {
-        //camX -= 5.0f * 0.001f;
-        //camY -= 4.5f * 0.001f;
-        //camZ += 8.0f * 0.001f;
-
-        camX -= 5.0f * 0.1f;
-        camY -= 4.5f * 0.1f;
-        camZ += 8.0f * 0.1f;
+        camX -= 5.0f * 0.001f;
+        camY -= 4.5f * 0.001f;
+        camZ += 8.0f * 0.001f;
     }
+    else if(camZ > 0.0f && startMovingInside == FALSE)
+    {
+        if(waitCounter <= 500)
+            waitCounter = waitCounter + 1.0f;
+        else
+            startMovingInside = TRUE;
+        
+    }
+    else if(startMovingInside == TRUE && camZ > -5.7f)
+    {
+        camZ -= 8.0f * 0.001f;
+        camY -= 0.5f * 0.001f;
+    }
+    //else
+    //    fadeInOut(2);
 
 }
 

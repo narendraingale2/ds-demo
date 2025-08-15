@@ -67,8 +67,8 @@ void initializePoints()
 
     for(int i = 0; i<numStars; i++)	
     {
-    	star_points[i].x = getRandomCoord(-12.0f, 12.0f);
-    	star_points[i].y = getRandomCoord(-1.5f, 7.0f);
+    	star_points[i].x = getRandomCoord(-12.0f, 15.0f);
+    	star_points[i].y = getRandomCoord(-1.5f, 9.0f);
     	star_points[i].z = getRandomCoord(-15.0f, -22.0f);
     	float color = getRandomCoord(05, 0.1);
     	star_points[i].c.red = color;
