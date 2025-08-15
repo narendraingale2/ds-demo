@@ -26,7 +26,7 @@
 #define WIN_HEIGHT 600
 #define DEV_MODE 
 #define NO_SOUND
-#define ZOOM_SCALE 1.0f
+#define ZOOM_SCALE 0.3f
 
 // global function declarations
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -84,6 +84,7 @@ GLuint texture_wooden_grill;
 GLuint texture_grass;
 GLuint texture_big_grass;
 GLuint texture_big_tree;
+GLuint texture_single_house;
 
 GLUquadric *quadric = NULL;
 
@@ -372,27 +373,27 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				}
 				break;
 			case 'x':
-					xLook = xLook + 0.01;
+					xLook = xLook + ZOOM_SCALE;
 					fprintf(gpFile, "xLook = %f\n", xLook);
 				break;
 			case 'X':
-					xLook = xLook - 0.01;
+					xLook = xLook - ZOOM_SCALE;
 					fprintf(gpFile, "xLook = %f\n", xLook);
 				break;
 			case 'y':
-					yLook = yLook + 0.01;
+					yLook = yLook + ZOOM_SCALE;
 					fprintf(gpFile, "yLook = %f\n", yLook);
 				break;
 			case 'Y':
-					yLook = yLook - 0.01;
+					yLook = yLook - ZOOM_SCALE;
 					fprintf(gpFile, "yLook = %f\n", yLook);
 				break;
 			case 'z':
-					zLook = zLook + 0.01;
+					zLook = zLook + ZOOM_SCALE;
 					fprintf(gpFile, "zLook = %f\n", zLook);
 				break;
 			case 'Z':
-					zLook = zLook - 0.01;
+					zLook = zLook - ZOOM_SCALE;
 					fprintf(gpFile, "zLook = %f\n", zLook);
 				break;
 			default:
@@ -849,6 +850,12 @@ int loadHouseTextures()
 		fprintf(gpFile, "Failed load grill texture");
 		return(-10);
 	}
+
+	if(loadPNGTexture(&texture_single_house, "texture-images\\single_door.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed load grill texture");
+		return(-10);
+	}
 	return 0;
 	
 
@@ -1184,30 +1191,6 @@ void updateSceneTwo()
 			}
 	}
 }
-
-/*void updateAnimateEye()
-{
-
-	if(animateEye == TRUE)
-	{
-		animateEyeCnt++;
-		if(animateEyeCnt > 100)
-		{
-			animateEye = FALSE;
-			animateEyeCnt = 0;
-		}
-	}
-	else
-	{
-		animateEyeCnt++;
-		if(animateEyeCnt > 10)
-		{
-			animateEye = TRUE;
-			animateEyeCnt = 0;
-		}
-	}
-
-}*/
 
 void waterUpdate()
 {

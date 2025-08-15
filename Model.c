@@ -20,6 +20,7 @@ extern GLuint texture_house_door;
 extern GLuint texture_wooden_grill;
 extern GLuint texture_grass;
 extern GLuint texture_big_grass;
+extern GLuint texture_single_house;
 
 extern GLfloat points[45][45][3];
 extern GLfloat hold;    
@@ -293,6 +294,7 @@ void drawHouseMain(BOOL isMain)
 			glBindTexture(GL_TEXTURE_2D, 0);
 			
 			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
 			if(isMain == TRUE)
 			{
 				glBindTexture(GL_TEXTURE_2D, texture_house_door);
@@ -306,6 +308,23 @@ void drawHouseMain(BOOL isMain)
 					glVertex3f( 0.8f, -1.0f, 1.0f);
 					glTexCoord2f(1.0, 0.0); // right-right
 					glVertex3f(-0.8f, -1.0f, 1.0f);
+					glEnd();
+				glBindTexture(GL_TEXTURE_2D, 0);
+
+			}
+			else
+			{
+				glBindTexture(GL_TEXTURE_2D, texture_single_house);
+				glBegin(GL_QUADS);
+					// Front
+					glTexCoord2f(1.0, 1.0); // right-right
+					glVertex3f(-0.3f, 1.0f, 1.0f);
+					glTexCoord2f(0.0, 1.0); // right-right
+	 	 	 		glVertex3f( 0.3f, 1.0f, 1.0f);
+					glTexCoord2f(0.0, 0.0); // right-right
+					glVertex3f( 0.3f, -1.0f, 1.0f);
+					glTexCoord2f(1.0, 0.0); // right-right
+					glVertex3f(-0.3f, -1.0f, 1.0f);
 					glEnd();
 				glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -608,7 +627,6 @@ void drawBackgroundMountain()
 	glPopMatrix();
 }
 
-
 void drawBigGrass()
 {
 
@@ -623,53 +641,36 @@ void drawBigGrass()
 	{
     	glPushMatrix();
     
-		glTranslatef(bigGrass_cordinates[i].x, bigGrass_cordinates[i].y, bigGrass_cordinates[i].z);
-    	glScalef(0.025f, 0.5f, 0.025f);
 		glBindTexture(GL_TEXTURE_2D, texture_big_grass);
 
     	glBegin(GL_QUADS);
         	glTexCoord2f(1.0, 1.0); // right-right
-	    	glVertex3f(1.0f, 0.2f, 0.0f);
+	    	glVertex3f(bigGrass_cordinates[i].x + bigGrass_cordinates[i].size, bigGrass_cordinates[i].y, bigGrass_cordinates[i].z);
 	    	glTexCoord2f(0.0, 1.0); // right-right
-	    	glVertex3f(-1.0f, 0.2f, 0.0f);
+	    	glVertex3f(bigGrass_cordinates[i].x - bigGrass_cordinates[i].size, bigGrass_cordinates[i].y, bigGrass_cordinates[i].z );
 	    	glTexCoord2f(0.0, 0.0); // right-right
-	    	glVertex3f(-1.0f, -0.2f, 0.0f);
+	    	glVertex3f(bigGrass_cordinates[i].x - bigGrass_cordinates[i].size, -1.19f, bigGrass_cordinates[i].z);
 	    	glTexCoord2f(1.0, 0.0); // right-right
-	    	glVertex3f(1.0f, -0.2f, 0.0f);
+	    	glVertex3f(bigGrass_cordinates[i].x + bigGrass_cordinates[i].size, -1.19f, bigGrass_cordinates[i].z);
     	glEnd();
 
 		glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
     	glBegin(GL_QUADS);
         	glTexCoord2f(1.0, 1.0); // right-right
-	    	glVertex3f(1.0f, 0.2f, 0.0f);
+	    	glVertex3f(bigGrass_cordinates[i].x + bigGrass_cordinates[i].size, bigGrass_cordinates[i].y, bigGrass_cordinates[i].z);
 	    	glTexCoord2f(0.0, 1.0); // right-right
-	    	glVertex3f(-1.0f, 0.2f, 0.0f);
+	    	glVertex3f(bigGrass_cordinates[i].x - bigGrass_cordinates[i].size, bigGrass_cordinates[i].y, bigGrass_cordinates[i].z );
 	    	glTexCoord2f(0.0, 0.0); // right-right
-	    	glVertex3f(-1.0f, -0.2f, 0.0f);
+	    	glVertex3f(bigGrass_cordinates[i].x - bigGrass_cordinates[i].size, -1.19f, bigGrass_cordinates[i].z);
 	    	glTexCoord2f(1.0, 0.0); // right-right
-	    	glVertex3f(1.0f, -0.2f, 0.0f);
+	    	glVertex3f(bigGrass_cordinates[i].x + bigGrass_cordinates[i].size, -1.19f, bigGrass_cordinates[i].z);
     	glEnd();
-		
-
-	/*glRotatef(-90.0f, 0.0f, 1.0f, 0.0f);
-    glBegin(GL_QUADS);
-        glTexCoord2f(1.0, 1.0); // right-right
-	    glVertex3f(1.0f, 1.0f, 0.0f);
-	    glTexCoord2f(0.0, 1.0); // right-right
-	    glVertex3f(-1.0f, 1.0f, 0.0f);
-	    glTexCoord2f(0.0, 0.0); // right-right
-	    glVertex3f(-1.0f, -1.0f, 0.0f);
-	    glTexCoord2f(1.0, 0.0); // right-right
-	    glVertex3f(1.0f, -1.0f, 0.0f);
-    glEnd();
-	*/
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glPopMatrix();
 
 	}
 }
-
 
 void initializeBigGrassPoints()
 {
@@ -679,8 +680,9 @@ void initializeBigGrassPoints()
     for(int i = 0; i<numBigGrass; i++)	
     {
     	bigGrass_cordinates[i].x = getRandomCoord(-5.5f, 5.5f);
-    	bigGrass_cordinates[i].y = -1.15f; 
-    	bigGrass_cordinates[i].z = getRandomCoord(-3.0f, -10.0f);
+    	bigGrass_cordinates[i].y = getRandomCoord(-1.15f, -1.0f); 
+    	bigGrass_cordinates[i].z = getRandomCoord(-9.0f, -2.0f);
+		bigGrass_cordinates[i].size = getRandomCoord(0.01f, 0.035f);
     }
 }
 
@@ -698,35 +700,32 @@ void drawGrass()
 	{
     	glPushMatrix();
     
-		glTranslatef(grass_cordinates[i].x, grass_cordinates[i].y, grass_cordinates[i].z);
-    	glScalef(0.025f, 0.035f, 0.025f);
 		glColor4f(0.6f, 0.6f, 0.6f, 1.0f);
 		glBindTexture(GL_TEXTURE_2D, texture_grass);
 
     	glBegin(GL_QUADS);
         	glTexCoord2f(1.0, 1.0); // right-right
-	    	glVertex3f(1.0f, 1.0f, 0.0f);
+	    	glVertex3f(grass_cordinates[i].x + grass_cordinates[i].size, grass_cordinates[i].y, grass_cordinates[i].z);
 	    	glTexCoord2f(0.0, 1.0); // right-right
-	    	glVertex3f(-1.0f, 1.0f, 0.0f);
+	    	glVertex3f(grass_cordinates[i].x - grass_cordinates[i].size, grass_cordinates[i].y, grass_cordinates[i].z);
 	    	glTexCoord2f(0.0, 0.0); // right-right
-	    	glVertex3f(-1.0f, -1.0f, 0.0f);
+	    	glVertex3f(grass_cordinates[i].x - grass_cordinates[i].size, -1.19f, grass_cordinates[i].z);
 	    	glTexCoord2f(1.0, 0.0); // right-right
-	    	glVertex3f(1.0f, -1.0f, 0.0f);
+	    	glVertex3f(grass_cordinates[i].x + grass_cordinates[i].size, -1.19f, grass_cordinates[i].z);
     	glEnd();
-
-	glRotatef(-90.0f, 0.0f, 1.0f, 0.0f);
-    glBegin(GL_QUADS);
-        glTexCoord2f(1.0, 1.0); // right-right
-	    glVertex3f(1.0f, 1.0f, 0.0f);
-	    glTexCoord2f(0.0, 1.0); // right-right
-	    glVertex3f(-1.0f, 1.0f, 0.0f);
-	    glTexCoord2f(0.0, 0.0); // right-right
-	    glVertex3f(-1.0f, -1.0f, 0.0f);
-	    glTexCoord2f(1.0, 0.0); // right-right
-	    glVertex3f(1.0f, -1.0f, 0.0f);
-    glEnd();
-	
-
+		
+		glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+    	glBegin(GL_QUADS);
+        	glTexCoord2f(1.0, 1.0); // right-right
+	    	glVertex3f(grass_cordinates[i].x + grass_cordinates[i].size, grass_cordinates[i].y, grass_cordinates[i].z);
+	    	glTexCoord2f(0.0, 1.0); // right-right
+	    	glVertex3f(grass_cordinates[i].x - grass_cordinates[i].size, grass_cordinates[i].y, grass_cordinates[i].z);
+	    	glTexCoord2f(0.0, 0.0); // right-right
+	    	glVertex3f(grass_cordinates[i].x - grass_cordinates[i].size, -1.19f, grass_cordinates[i].z);
+	    	glTexCoord2f(1.0, 0.0); // right-right
+	    	glVertex3f(grass_cordinates[i].x + grass_cordinates[i].size, -1.19f, grass_cordinates[i].z);
+    	glEnd();
+		
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glPopMatrix();
 
@@ -740,8 +739,9 @@ void initializeGrassPoints()
     for(int i = 0; i<numGrass; i++)	
     {
     	grass_cordinates[i].x = getRandomCoord(-5.5f, 5.5f);
-    	grass_cordinates[i].y = -1.18f; 
-    	grass_cordinates[i].z = getRandomCoord(-3.0f, -10.0f);
+    	grass_cordinates[i].y = getRandomCoord(-1.15f, -1.0f); 
+    	grass_cordinates[i].z = getRandomCoord(-9.0f, -2.0f);
+		grass_cordinates[i].size = getRandomCoord(0.01f, 0.035f);
     }
 
 

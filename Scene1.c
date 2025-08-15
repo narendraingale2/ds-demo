@@ -60,10 +60,6 @@ void drawScene1()
     // x = -8, 8 y = -1.2 z= -10, 0
     drawGround();
 
-    
-    //for(int i=0; i<numTrees; i++)
-	//    drawColoredTree(tree_cordinates[i].x, -0.77f, tree_cordinates[i].z, texture_colured_tree);
-
 	drawHouse(FALSE);
     
     glPushMatrix();
@@ -119,36 +115,19 @@ void drawScene1()
 
     //drawCocoTree();
     
-
-/*
-    glPushMatrix();
-	    glTranslatef(16.0f, -6.0f, -28.0f);
-		glScalef(9.0, 9.0f, 0.0f);
-		drawColoredTree();
-	glPopMatrix();
-
-	glPushMatrix();
-		glTranslatef(-16.0f, -6.0f, -28.0f);
-		glScalef(9.0, 9.0f, 0.0f);
-		drawCocoTree();
-	glPopMatrix();
-	*/
-    
-    /* update camera location*/
     
     if(camZ < 0.0f)
     {
-        camX -= 5.0f * 0.001f;
-        camY -= 4.5f * 0.001f;
-        camZ += 8.0f * 0.001f;
+        //camX -= 5.0f * 0.001f;
+        //camY -= 4.5f * 0.001f;
+        //camZ += 8.0f * 0.001f;
 
-        //camX -= 5.0f * 0.1f;
-        //camY -= 4.5f * 0.1f;
-        //camZ += 8.0f * 0.1f;
+        camX -= 5.0f * 0.1f;
+        camY -= 4.5f * 0.1f;
+        camZ += 8.0f * 0.1f;
     }
 
 }
-
 
 void initializeTreePoints()
 {    
