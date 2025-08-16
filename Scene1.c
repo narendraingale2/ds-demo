@@ -33,6 +33,8 @@ void drawScene1()
     void initializeTreePoints(); 
 
     static BOOL startMovingInside = FALSE;
+    static BOOL sceneCompleted = FALSE;
+
     static int waitCounter = 0;
     
     if(tree_cordinates == NULL)
@@ -117,7 +119,7 @@ void drawScene1()
 
     //drawCocoTree();
     
-    
+   // Camera movements  
     if(camZ < 0.0f && startMovingInside == FALSE)
     {
         camX -= 5.0f * 0.001f;
@@ -129,7 +131,11 @@ void drawScene1()
         if(waitCounter <= 500)
             waitCounter = waitCounter + 1.0f;
         else
+        {
+
             startMovingInside = TRUE;
+            waitCounter = 0;
+        }
         
     }
     else if(startMovingInside == TRUE && camZ > -5.7f)
@@ -137,8 +143,20 @@ void drawScene1()
         camZ -= 8.0f * 0.001f;
         camY -= 0.5f * 0.001f;
     }
-    //else
-    //    fadeInOut(2);
+    else if(sceneCompleted == FALSE && camZ< -5.7f)
+    {
+        if(waitCounter <= 500)
+            waitCounter = waitCounter + 1.0f;
+        else
+        {
+            sceneCompleted = TRUE;
+            waitCounter = 0;
+        }
+    }
+    else if(sceneCompleted == TRUE)
+    {
+        fadeInOut(2);
+    }
 
 }
 
