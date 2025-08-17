@@ -594,7 +594,7 @@ void drawAnimatedButterfly()
 	glColor4f(1.0,1.0f, 1.0f, 1.0f);
 	glBindTexture(GL_TEXTURE_2D, texture_butter_fly);
 
-	glRotatef(-60, 1.0f, 0.0f, 0.0f);
+	//glRotatef(-60, 1.0f, 0.0f, 0.0f);
 	glScalef(2.0f, 2.0f, 1.0f);
 
 	glTranslatef(0.1f, 0.0f, 0.0f);
@@ -781,24 +781,5 @@ void initializeGrassPoints()
 		grass_cordinates[i].size = getRandomCoord(0.01f, 0.035f);
     }
 
-
-}
-
-void fadeInOut(int scene_number)
-{
-	static GLfloat fadeOut = 0;
-
-	glColor4f(0.0f, 0.0f, 0.0f, fadeOut);
-	glBegin(GL_QUADS);
-		glVertex3f(camX + 1.0f, camY + 1.0f, camZ -0.5f);
-		glVertex3f(camX -1.0f,  camY + 1.0f, camZ -0.5f);
-		glVertex3f(camX -1.0f, 	camY  - 1.0f, camZ -0.5f);
-		glVertex3f(camX + 1.0f, camY - 1.0f, camZ -0.5f);
-	glEnd();
-
-	if(fadeOut < 1.0f)
-		fadeOut = fadeOut + 0.003f;
-	
-	fprintf(gpFile, "Starting fadeinout ...\n");
 
 }

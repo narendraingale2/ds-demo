@@ -145,6 +145,13 @@ point_t* tree_cordinates = NULL;
 int numStars = 500;
 int numTrees = 5;
 
+extern GLfloat fadeOutScene1 ;
+extern GLfloat fadeInScene2; 
+extern GLfloat fadeOutScene2;
+
+extern GLfloat fadeInScene3; 
+extern GLfloat fadeOutScene3;
+
 
 // EntryPoint Function
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmdLine, int iCmdShow)
@@ -1067,8 +1074,15 @@ void display_dev(void)
 
 	// set identity metrics
 	glLoadIdentity();
-		
-	drawScene1();
+	
+	if(fadeOutScene1 <= 1.0f)
+		drawScene1();
+	else if(fadeOutScene2 <= 1.0f)
+		drawScene2();
+	else if(fadeOutScene3 <= 1.0f)
+		drawScene3();
+	
+	
 	//drawHouse();
 	// swap the buffers
 	SwapBuffers(ghdc);
