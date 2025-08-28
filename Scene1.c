@@ -24,9 +24,15 @@ extern GLfloat zLookAt;
 extern GLuint texture_colured_tree;
 extern GLuint texture_coco_tree;
 extern GLuint texture_big_tree;
+extern GLuint texture_astro_titile;
+extern GLuint texture_demo_title;
+extern GLuint texture_outro_specialThanks;
+extern GLuint texture_inner_window; 
 extern point_t* tree_cordinates;
 extern int numTrees;
 GLfloat camX=5.0f, camY=4.5f, camZ=-8.0f;
+//GLfloat camX=0.0, camY=0.0f, camZ=0.0f;
+
 
 GLfloat fadeOutScene1 = 0.0f;
 GLfloat fadeInScene2  = 1.0f; 
@@ -34,6 +40,7 @@ GLfloat fadeOutScene2 = 0.0f;
 GLfloat fadeInScene3 = 1.0f; 
 GLfloat fadeOutScene3 = 0.0f;
 
+extern BOOL isDrawIntro;
 void drawScene1()
 {
     void initializeTreePoints(); 
@@ -189,9 +196,32 @@ void drawScene2()
     void fadeInScene(GLfloat*);
     static GLfloat girl_walk_z = -3.0f;
     static GLfloat girl_walk_y = -1.1f;
+    
+    /*gluLookAt(camX + xLook, camY + yLook, camZ + zLook, 
+            camX + xLook, camY + yLook, camZ-1 + zLook, 
+            0.0f, 1.0f, 0.0f);
+    */
+   // Inner window
+    /*glPushMatrix();
+        glBindTexture(GL_TEXTURE_2D, texture_inner_window);
+    	glBegin(GL_QUADS);
+			glTexCoord2f(1.0, 1.0); 	   		
+			glVertex3f(1.0f, 1.0f, -7.999f);
+	   		glTexCoord2f(0.0, 1.0); 
+	   		glVertex3f(-1.0f, 1.0f, -7.999f);
+	   		glTexCoord2f(0.0, 0.0); 
+	   		glVertex3f(-1.0f, -1.0f, -7.999f);
+	   		glTexCoord2f(1.0, 0.0);
+	   		glVertex3f(1.0, -1.0f, -7.999f);
+    	glEnd();
+        glBindTexture(GL_TEXTURE_2D, 0);
+    glPopMatrix();
+    */
+    
     // back wall
     glPushMatrix();
     glTranslatef(0.0f, 0.0f, -8.0f);
+    
     glPushMatrix();
 		glTranslatef(0.0f, 0.0f, -16.0f);
         glScalef(20.0f, 10.0f, 1.0f);
@@ -201,43 +231,131 @@ void drawScene2()
         drawQuad();
         glBindTexture(GL_TEXTURE_2D, 0);
     glPopMatrix();
-
-    // side wall
+    
     glPushMatrix();
-		glTranslatef(-10.0f, 0.0f, -6.0f);
-        glScalef(8.0f, 8.0f, 1.0f);
-        glRotatef(75.0f, 0.0f, 1.0f, 0.0f);
-        glColor4f(166.0f/255.0f, 194.0f/255.0f, 170.0f/255.0f, 1.0f);
-        drawQuad();
+        glTranslatef(-6.0f, 0.0f, 0.0f);
+        glColor3f(0.0f, 0.0f, 0.0f);
+    	glBegin(GL_QUADS);
+			glTexCoord2f(1.0, 1.0); 	   		
+			glVertex3f(1.0f, 1.0f, -16.0f);
+	   		glTexCoord2f(0.0, 1.0); 
+	   		glVertex3f(-1.0f, 1.0f, -16.0f);
+	   		glTexCoord2f(0.0, 0.0); 
+	   		glVertex3f(-1.0f, -1.0f, -16.0f);
+	   		glTexCoord2f(1.0, 0.0);
+	   		glVertex3f(1.0, -1.0f, -16.0f);
+    	glEnd();
+        glColor3f(1.0f, 1.0f, 1.0f);
+        glBindTexture(GL_TEXTURE_2D, texture_inner_window);
+    	glBegin(GL_QUADS);
+			glTexCoord2f(1.0, 1.0); 	   		
+			glVertex3f(1.0f, 1.0f, -15.999f);
+	   		glTexCoord2f(0.0, 1.0); 
+	   		glVertex3f(-1.0f, 1.0f, -15.999f);
+	   		glTexCoord2f(0.0, 0.0); 
+	   		glVertex3f(-1.0f, -1.0f, -15.999f);
+	   		glTexCoord2f(1.0, 0.0);
+	   		glVertex3f(1.0, -1.0f, -15.999f);
+    	glEnd();
+        glBindTexture(GL_TEXTURE_2D, 0);
+    glPopMatrix();
+    
+    glPushMatrix();
+        glTranslatef(6.0f, 0.0f, 0.0f);
+        glColor3f(0.0f, 0.0f, 0.0f);
+    	glBegin(GL_QUADS);
+			glTexCoord2f(1.0, 1.0); 	   		
+			glVertex3f(1.0f, 1.0f, -16.0f);
+	   		glTexCoord2f(0.0, 1.0); 
+	   		glVertex3f(-1.0f, 1.0f, -16.0f);
+	   		glTexCoord2f(0.0, 0.0); 
+	   		glVertex3f(-1.0f, -1.0f, -16.0f);
+	   		glTexCoord2f(1.0, 0.0);
+	   		glVertex3f(1.0, -1.0f, -16.0f);
+    	glEnd();
+        glColor3f(1.0f, 1.0f, 1.0f);
+        glBindTexture(GL_TEXTURE_2D, texture_inner_window);
+    	glBegin(GL_QUADS);
+			glTexCoord2f(1.0, 1.0); 	   		
+			glVertex3f(1.0f, 1.0f, -15.999f);
+	   		glTexCoord2f(0.0, 1.0); 
+	   		glVertex3f(-1.0f, 1.0f, -15.999f);
+	   		glTexCoord2f(0.0, 0.0); 
+	   		glVertex3f(-1.0f, -1.0f, -15.999f);
+	   		glTexCoord2f(1.0, 0.0);
+	   		glVertex3f(1.0, -1.0f, -15.999f);
+    	glEnd();
+        glBindTexture(GL_TEXTURE_2D, 0);
     glPopMatrix();
 
     // side wall
     glPushMatrix();
-		glTranslatef(10.0f, 0.0f, -6.0f);
-        glScalef(8.0f, 8.0f, 1.0f);
-        glRotatef(-75.0f, 0.0f, 1.0f, 0.0f);
         glColor4f(166.0f/255.0f, 194.0f/255.0f, 170.0f/255.0f, 1.0f);
-        drawQuad();
+    	glBegin(GL_QUADS);
+			glTexCoord2f(1.0, 1.0); 	   		
+			glVertex3f(-9.0f, 15.0f, -15.0f);
+	   		glTexCoord2f(0.0, 1.0); 
+	   		glVertex3f(-9.0f, -15.0f, -15.0f);
+	   		glTexCoord2f(0.0, 0.0); 
+	   		glVertex3f(-9.1f, -15.0f, 0.0f);
+	   		glTexCoord2f(1.0, 0.0);
+	   		glVertex3f(-9.1f, 15.0f, 0.0f);
+    	glEnd();
     glPopMatrix();
+    
+    glPushMatrix();
+        glColor4f(166.0f/255.0f, 194.0f/255.0f, 170.0f/255.0f, 1.0f);
+    	glBegin(GL_QUADS);
+			glTexCoord2f(1.0, 1.0); 	   		
+			glVertex3f(9.0f, 15.0f, -15.0f);
+	   		glTexCoord2f(0.0, 1.0); 
+	   		glVertex3f(9.0f, -15.0f, -15.0f);
+	   		glTexCoord2f(0.0, 0.0); 
+	   		glVertex3f(9.1f, -15.0f, 0.0f);
+	   		glTexCoord2f(1.0, 0.0);
+	   		glVertex3f(9.1f, 15.0f, 0.0f);
+    	glEnd();
+    glPopMatrix();
+
 
     // floor
     glPushMatrix();
-		glTranslatef(0.0f, -5.0f, -8.0f);
-        glScalef(20.0f, 40.0f, 1.0f);
-        glRotatef(-88.0f, 1.0f, 0.0f, 0.0f);
         glColor4f(150.0f/255.0f, 75.0f/255.0f, 0.0f, 1.0f);
-        drawQuad();
+    	glBegin(GL_QUADS);
+			glTexCoord2f(1.0, 1.0); 	   		
+			glVertex3f(15.0f, -4.2f, -15.0f);
+	   		glTexCoord2f(0.0, 1.0); 
+	   		glVertex3f(-15.0f, -4.2f, -15.0f);
+	   		glTexCoord2f(0.0, 0.0); 
+	   		glVertex3f(-15.0f, -4.2f, 0.0f);
+	   		glTexCoord2f(1.0, 0.0);
+	   		glVertex3f(15.0f, -4.2f, 0.0f);
+    	glEnd();
+    glPopMatrix();
+    
+    glPushMatrix();
+        glColor4f(242.0f/255.0f, 240.0f/255.0f ,223.0f/255,1.0f);
+    	glBegin(GL_QUADS);
+			glTexCoord2f(1.0, 1.0); 	   		
+			glVertex3f(15.0f, 4.2f, -15.0f);
+	   		glTexCoord2f(0.0, 1.0); 
+	   		glVertex3f(-15.0f, 4.2f, -15.0f);
+	   		glTexCoord2f(0.0, 0.0); 
+	   		glVertex3f(-15.0f, 4.2f, 0.0f);
+	   		glTexCoord2f(1.0, 0.0);
+	   		glVertex3f(15.0f, 4.2f, 0.0f);
+    	glEnd();
     glPopMatrix();
 
     // draw girl
     glPushMatrix();
-		glTranslatef(2.0f, -2.0f, -6.2f);
+		glTranslatef(2.0f, -1.85f, -6.2f);
         glScalef(0.4f, 0.5f, 1.0f);
         glTranslatef(0.0f, girl_walk_y, girl_walk_z);
         if(animateEye == TRUE)
-            drawGirl(TRUE);
+            drawGirl(TRUE, TRUE);
         else 
-            drawGirl(FALSE);
+            drawGirl(FALSE, FALSE);
     glPopMatrix();
 
     glPopMatrix();
@@ -342,9 +460,9 @@ void drawScene3()
         glTranslatef(0.2f, -1.0f, -2.0f);
         glScalef(0.05f, 0.05f, 1.0f);
         if(animateEye == TRUE)
-            drawGirl(TRUE);
+            drawGirl(TRUE, FALSE);
         else 
-            drawGirl(FALSE);
+            drawGirl(FALSE, FALSE);
     glPopMatrix();
     
     glPushMatrix();
@@ -358,6 +476,8 @@ void drawScene3()
     {
        fadeInScene(&fadeInScene3); 
     }
+    else
+        fadeOutOfScene(&fadeOutScene3);
 }
 
 void fadeOutOfScene(GLfloat* fadeOutAlpha)
@@ -400,5 +520,86 @@ void fadeInScene(GLfloat* fadeInAlpha)
     {
 		*fadeInAlpha = *fadeInAlpha - 0.003f;
     }
+
+}
+
+void drawIntro()
+{
+    static int waitCounter = 0;
+    static BOOL astrotitleFinish = FALSE;
+
+    glPushMatrix();
+        // astromedicomp
+        if(astrotitleFinish == FALSE)
+        {
+            glTranslatef(0.0f, 0.0f, -2.0f);
+		    glBindTexture(GL_TEXTURE_2D, texture_astro_titile);
+                glBegin(GL_QUADS);
+                    glTexCoord2f(1.0, 1.0); // right-right
+	                glVertex3f(0.5f, 0.25f, 0.0f);
+	                glTexCoord2f(0.0, 1.0); // right-right
+	                glVertex3f(-0.5f, 0.25f, 0.0f);
+	                glTexCoord2f(0.0, 0.0); // right-right
+	                glVertex3f(-0.5f, -0.25f, 0.0f);
+	                glTexCoord2f(1.0, 0.0); // right-right
+	                glVertex3f(0.5f, -0.25f, 0.0f);
+            glEnd();
+            glBindTexture(GL_TEXTURE_2D, 0);
+
+        }
+        else
+        {
+            glTranslatef(0.0f, 0.0f, -2.0f);
+		    glBindTexture(GL_TEXTURE_2D, texture_demo_title);
+                glBegin(GL_QUADS);
+                    glTexCoord2f(1.0, 1.0); // right-right
+	                glVertex3f(0.4f, 0.1f, 0.0f);
+	                glTexCoord2f(0.0, 1.0); // right-right
+	                glVertex3f(-0.4f, 0.1f, 0.0f);
+	                glTexCoord2f(0.0, 0.0); // right-right
+	                glVertex3f(-0.4f, -0.1f, 0.0f);
+	                glTexCoord2f(1.0, 0.0); // right-right
+	                glVertex3f(0.4f, -0.1f, 0.0f);
+            glEnd();
+            glBindTexture(GL_TEXTURE_2D, 0);
+
+        }
+    glPopMatrix();
+    
+    if(waitCounter <= 250)
+        waitCounter = waitCounter + 1.0f;
+    else if(astrotitleFinish == FALSE)
+    {
+        astrotitleFinish = TRUE;
+        waitCounter = 0;
+
+    }
+    else
+    {
+            isDrawIntro = FALSE;
+            waitCounter = 0;
+    }
+
+}
+
+void drawOutro()
+{
+    static int waitCount = 0;
+    glPushMatrix();
+        glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        glTranslatef(0.0f, 0.0f, -2.0f);
+		glBindTexture(GL_TEXTURE_2D, texture_outro_specialThanks);
+            glBegin(GL_QUADS);
+                glTexCoord2f(1.0, 1.0); // right-right
+	            glVertex3f(0.5f, 0.25f, 0.0f);
+	            glTexCoord2f(0.0, 1.0); // right-right
+	            glVertex3f(-0.5f, 0.25f, 0.0f);
+	            glTexCoord2f(0.0, 0.0); // right-right
+	            glVertex3f(-0.5f, -0.25f, 0.0f);
+	            glTexCoord2f(1.0, 0.0); // right-right
+	            glVertex3f(0.5f, -0.25f, 0.0f);
+            glEnd();
+
+    glPopMatrix();
 
 }

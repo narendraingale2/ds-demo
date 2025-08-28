@@ -409,7 +409,7 @@ void drawHouseUpper()
 				glTranslatef(0.0f + xLookAt, -0.45000f+ yLookAt, 3.03f + zLookAt);
 				fprintf(gpFile, "xLookAt = %f, yLookAt = %f, zLookAt = %f", xLookAt, yLookAt, zLookAt);
 				glScalef(0.03f,0.14f, 1.0f);
-				drawGirl(TRUE);
+				drawGirl(TRUE, FALSE);
 		glPopMatrix();
 
 		glPushMatrix();
@@ -646,15 +646,18 @@ void drawBackgroundMountain()
 	glBindTexture(GL_TEXTURE_2D, texture_background_mountain);
 
     glBegin(GL_QUADS);
-		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		glColor4f(0.0f, 0.25f, 0.0f, 1.0f);
         glTexCoord2f(1.0, 1.0); // right-right
 	    glVertex3f(1.0f, 1.0f, 0.0f);
-		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+		glColor4f(0.0f, 0.25f, 0.0f, 1.0f);
 	    glTexCoord2f(0.0, 1.0); // right-right
 	    glVertex3f(-1.0f, 1.0f, 0.0f);
+
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	    glTexCoord2f(0.0, 0.0); // right-right
 	    glVertex3f(-1.0f, -1.0f, 0.0f);
+
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	    glTexCoord2f(1.0, 0.0); // right-right
 	    glVertex3f(1.0f, -1.0f, 0.0f);

@@ -4,6 +4,7 @@
 #include "utility.h"
 #include "shape.h"
 
+extern FILE *gpFile;
 extern GLuint texture_eye;
 extern GLuint texture_mouth;
 extern GLuint texture_head;
@@ -15,6 +16,7 @@ extern GLuint texture_girl_shirt;
 extern GLuint texture_girl_leg;
 extern GLuint texture_girl_left_hand;
 extern GLuint texture_eye_closing;
+extern GLuint texture_single_leg;
 
 void drawBoyModel(void)
 {
@@ -288,10 +290,13 @@ void drawBoyModel(void)
 
 }
 
-void drawGirl(BOOL isEyOpen)
+void drawGirl(BOOL isEyOpen, BOOL animateLeg)
 {
     static BOOL animateEye = TRUE;
     static int animateEyeCnt = 0;
+    static float legAngle = -30.0f;
+    static float zCordinateCounter = 0.0f;
+    static BOOL legRotateIncrement = TRUE;
 
     if(animateEye == TRUE)
 	{
@@ -344,9 +349,9 @@ void drawGirl(BOOL isEyOpen)
 
     // hands
     glPushMatrix();
-    glTranslatef(-1.2f, 0.0f, -2.00f);
-    glScalef(1.0f, 0.5f, 1.0f);
-    glRotatef(-60, 0.0f, 0.0f, 1.0f);
+    glTranslatef(-1.4f, -0.3f, -2.00f);
+    glRotatef(-28, 0.0f, 0.0f, 1.0f);
+    glScalef(0.2f, 0.5f, 1.0f);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glBindTexture(GL_TEXTURE_2D, texture_girl_left_hand);
     glBegin(GL_QUADS);
@@ -368,9 +373,10 @@ void drawGirl(BOOL isEyOpen)
 
     // hands
     glPushMatrix();
-    glTranslatef(1.3f, 0.2f, -2.00f);
-    glScalef(1.0f, 0.5f, 1.0f);
-    glRotatef(-20, 0.0f, 0.0f, 1.0f);
+    glTranslatef(1.4f, -0.3f, -2.00f);
+    glRotatef(28, 0.0f, 0.0f, 1.0f);
+    glScalef(-1.0f, 1.0f, 1.0f);
+    glScalef(0.2f, 0.5f, 1.0f);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	glBindTexture(GL_TEXTURE_2D, texture_girl_left_hand);
     glBegin(GL_QUADS);
@@ -391,31 +397,91 @@ void drawGirl(BOOL isEyOpen)
     glPopMatrix();
 
 
-    // legs
-    glPushMatrix();
-    glTranslatef(0.0f, -2.0f, -2.0f);
-	glBindTexture(GL_TEXTURE_2D, texture_girl_leg);
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-    glBegin(GL_QUADS);
+    if(animateLeg == TRUE)
+    {
+        // legs
+        glPushMatrix();
+        glTranslatef(0.0f, -2.5f, -2.2f);
+        glScalef(0.5f, 0.8f, 1.0f);
+	    glBindTexture(GL_TEXTURE_2D, texture_single_leg);
+	    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-		glTexCoord2f(1.0f, 1.0f);
-		glVertex3f(1.5f, 1.5f, 0.0f);
+        glBegin(GL_QUADS);
+		    glTexCoord2f(1.0f, 1.0f);
+		    glVertex3f(1.8f, 1.7f, 0.0f);
 
-		glTexCoord2f(0.0f, 1.0f);
-		glVertex3f(-1.5f, 1.5f, 0.0f);
+		    glTexCoord2f(0.0f, 1.0f);
+		    glVertex3f(0.3f, 1.7f, 0.0f);
 		
-		glTexCoord2f(0.0f, 0.0f);
-		glVertex3f(-1.5f, -1.5f, 0.0f);
+		    glTexCoord2f(0.0f, 0.0f);
+		    glVertex3f(0.3f, -1.5f, 0.0f - zCordinateCounter);
 		
-		glTexCoord2f(1.0f, 0.0f);
-		glVertex3f(1.5f, -1.5f, 0.0f);
-    glEnd();
-	glBindTexture(GL_TEXTURE_2D, 0);
-    glPopMatrix();
+		    glTexCoord2f(1.0f, 0.0f);
+		    glVertex3f(1.8f, -1.5f, 0.0f - zCordinateCounter);
+        glEnd();
+        
+        glBegin(GL_QUADS);
+		    glTexCoord2f(1.0f, 1.0f);
+		    glVertex3f(-1.8f, 1.7f, 0.0f);
+
+		    glTexCoord2f(0.0f, 1.0f);
+		    glVertex3f(-0.3f, 1.7f, 0.0f);
+		
+		    glTexCoord2f(0.0f, 0.0f);
+		    glVertex3f(-0.3f, -1.5f, 0.0f + zCordinateCounter);
+		
+		    glTexCoord2f(1.0f, 0.0f);
+		    glVertex3f(-1.8f, -1.5f, 0.0f + zCordinateCounter);
+        glEnd();
+	    glBindTexture(GL_TEXTURE_2D, 0);
+        glPopMatrix();
+
+    }
+    else
+    {
+        glPushMatrix();
+        glTranslatef(0.0f, -2.3f, -2.0f);
+        glScalef(0.5f, 0.8f, 1.0f);
+	    glBindTexture(GL_TEXTURE_2D, texture_single_leg);
+	    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        glBegin(GL_QUADS);
+
+		    glTexCoord2f(1.0f, 1.0f);
+		    glVertex3f(2.0f, 1.5f, 0.0f);
+
+		    glTexCoord2f(0.0f, 1.0f);
+		    glVertex3f(0.5f, 1.5f, 0.0f);
+		
+		    glTexCoord2f(0.0f, 0.0f);
+		    glVertex3f(0.5f, -1.5f, 0.0f);
+		
+		    glTexCoord2f(1.0f, 0.0f);
+		    glVertex3f(2.0f, -1.5f, 0.0f);
+        glEnd();
+        
+        glBegin(GL_QUADS);
+
+		    glTexCoord2f(1.0f, 1.0f);
+		    glVertex3f(-2.0f, 1.5f, 0.0f);
+
+		    glTexCoord2f(0.0f, 1.0f);
+		    glVertex3f(-0.5f, 1.5f, 0.0f);
+		
+		    glTexCoord2f(0.0f, 0.0f);
+		    glVertex3f(-0.5f, -1.5f, 0.0f);
+		
+		    glTexCoord2f(1.0f, 0.0f);
+		    glVertex3f(-2.0f, -1.5f, 0.0f);
+        glEnd();
+	    glBindTexture(GL_TEXTURE_2D, 0);
+        glPopMatrix();
+
+    }
 
     glPushMatrix();
     glTranslatef(0.0f, 0.0f, -2.001f);
-	glBindTexture(GL_TEXTURE_2D, texture_girl_shirt);
+	
+    glBindTexture(GL_TEXTURE_2D, texture_girl_shirt);
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
     glBegin(GL_QUADS);
 
@@ -454,6 +520,34 @@ void drawGirl(BOOL isEyOpen)
     glEnd();
 	glBindTexture(GL_TEXTURE_2D, 0);
     glPopMatrix();
+
+    if(legRotateIncrement == TRUE)
+    {
+        legAngle = legAngle + 1.0f;
+        zCordinateCounter = zCordinateCounter + 0.01f;
+    }
+    else
+    {
+        legAngle = legAngle - 1.0f;
+        zCordinateCounter = zCordinateCounter - 0.01f;
+    }
+
+    /*if(legAngle>= 20.0f)
+        legRotateIncrement = FALSE;
+    
+    if(legAngle<= -20.0f)
+    {
+        legRotateIncrement = TRUE;
+    }*/
+    if(zCordinateCounter >= 0.5f)
+        legRotateIncrement = FALSE;
+    
+    if(zCordinateCounter <= -0.5f)
+    {
+        legRotateIncrement = TRUE;
+    }
+    fprintf(gpFile, "Printing angle %f\n", legAngle);
+
 
 
 }

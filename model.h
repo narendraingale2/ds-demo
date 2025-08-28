@@ -17,6 +17,6 @@ void drawRoof();
 void drawHouse();
 void drawAnimatedButterfly();
 void drawBackgroundMountain();
-void drawGirl(BOOL);
+void drawGirl(BOOL, BOOL);
 void drawBoyModel();
 void drawBigGrass();

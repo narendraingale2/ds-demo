@@ -85,6 +85,11 @@ GLuint texture_grass;
 GLuint texture_big_grass;
 GLuint texture_big_tree;
 GLuint texture_single_house;
+GLuint texture_astro_titile;
+GLuint texture_demo_title;
+GLuint texture_outro_specialThanks;
+GLuint texture_single_leg;
+GLuint texture_inner_window; 
 
 GLUquadric *quadric = NULL;
 
@@ -134,6 +139,7 @@ GLfloat girl_walk_y = -1.1f;
 BOOL startMovingLooAt = FALSE;
 BOOL animateEye = TRUE;
 BOOL rotate_left = TRUE;
+BOOL isDrawIntro = TRUE;
 int rotate_leg = 0;
 BOOL renderScene3 = FALSE;
 int wait_camera = 0;
@@ -788,6 +794,10 @@ int loadAllTextures()
 	if(status !=0 )
 		return status;
 
+	status = loadIntroTexture();
+	if(status != 0)
+		return status;
+
 	/*status = loadWaterTextures();
 	if(status !=0 )
 		return status;
@@ -859,6 +869,12 @@ int loadHouseTextures()
 	}
 
 	if(loadPNGTexture(&texture_single_house, "texture-images\\single_door.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed load grill texture");
+		return(-10);
+	}
+	
+	if(loadPNGTexture(&texture_inner_window, "texture-images\\InnerWindow.png") == FALSE)
 	{
 		fprintf(gpFile, "Failed load grill texture");
 		return(-10);
@@ -941,6 +957,12 @@ int loadGirlTextures()
 		fprintf(gpFile, "Failed load inner wall");
 		return(-10);
 	}
+	
+	if(loadPNGTexture(&texture_single_leg, "texture-images\\single_leg.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed load inner wall");
+		return(-10);
+	}
 
 	return 0;
 	
@@ -967,6 +989,31 @@ int loadWaterTextures()
 	}
 
 	return 0;
+}
+
+int loadIntroTexture()
+{
+	if(loadPNGTexture(&texture_astro_titile, "texture-images\\astromedicomp.png") == FALSE)
+	{
+		fprintf(gpFile, "Intro texture has been failed for mouth texture\n");
+		return(-7);
+	}
+	
+	if(loadPNGTexture(&texture_outro_specialThanks, "texture-images\\outroImage.png") == FALSE)
+	{
+		fprintf(gpFile, "Outro texture has been failed for mouth texture\n");
+		return(-7);
+	}
+
+	if(loadPNGTexture(&texture_demo_title, "texture-images\\lapandaw.png") == FALSE)
+	{
+		fprintf(gpFile, "Intro texture has been failed for mouth texture\n");
+		return(-7);
+	}
+
+	return 0;
+
+
 }
 
 int loadModelTextures()
@@ -1075,13 +1122,23 @@ void display_dev(void)
 	// set identity metrics
 	glLoadIdentity();
 	
-	if(fadeOutScene1 <= 1.0f)
+	/*if(isDrawIntro == TRUE)
+	{
+		drawIntro();
+	}
+	else if(fadeOutScene1 <= 1.0f)
 		drawScene1();
 	else if(fadeOutScene2 <= 1.0f)
 		drawScene2();
 	else if(fadeOutScene3 <= 1.0f)
 		drawScene3();
+	else if(fadeOutScene3 >= 1.0)
+		drawOutro();
+	*/
+	drawScene2();
 	
+	//glTranslatef(0.0f, 0.0f, -8.0f);
+	//drawGirl(TRUE, TRUE);	
 	
 	//drawHouse();
 	// swap the buffers
