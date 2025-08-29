@@ -25,8 +25,9 @@
 #define WIN_WIDTH 800
 #define WIN_HEIGHT 600
 #define DEV_MODE 
-#define NO_SOUND
+//#define NO_SOUND
 #define ZOOM_SCALE 0.01f
+// PRATHAMESH SUDHIR INDOLIKAR
 
 // global function declarations
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -90,6 +91,17 @@ GLuint texture_demo_title;
 GLuint texture_outro_specialThanks;
 GLuint texture_single_leg;
 GLuint texture_inner_window; 
+GLuint texture_light1;
+GLuint texture_light2;
+GLuint texture_cupboard;
+GLuint texture_bed;
+GLuint texture_horse_toy;
+GLuint texture_teddies;
+GLuint texture_credits;
+GLuint texture_developed_by;
+GLuint texture_tech_used;
+GLuint texture_gl_sp_contr;
+GLuint texture_ignited_by;
 
 GLUquadric *quadric = NULL;
 
@@ -879,6 +891,44 @@ int loadHouseTextures()
 		fprintf(gpFile, "Failed load grill texture");
 		return(-10);
 	}
+
+	if(loadPNGTexture(&texture_cupboard, "texture-images\\cup_board.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed cup_board texture");
+		return(-10);
+	}
+	
+	if(loadPNGTexture(&texture_light1, "texture-images\\light_1.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed load light1 texture");
+		return(-10);
+	}
+	
+	if(loadPNGTexture(&texture_light2, "texture-images\\light_2.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed load light2 texture");
+		return(-10);
+	}
+	
+	if(loadPNGTexture(&texture_bed, "texture-images\\bed.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed load bed texture");
+		return(-10);
+	}
+	
+	if(loadPNGTexture(&texture_horse_toy, "texture-images\\horse_toy.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed horse_tot texture");
+
+		return(-10);
+	}
+	
+	if(loadPNGTexture(&texture_teddies, "texture-images\\teddies.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed teddies texture");
+
+		return(-10);
+	}
 	return 0;
 	
 
@@ -1010,6 +1060,36 @@ int loadIntroTexture()
 		fprintf(gpFile, "Intro texture has been failed for mouth texture\n");
 		return(-7);
 	}
+	
+	if(loadPNGTexture(&texture_credits, "texture-images\\Credits.png") == FALSE)
+	{
+		fprintf(gpFile, "Credits texture has been failed for mouth texture\n");
+		return(-7);
+	}
+	
+	if(loadPNGTexture(&texture_developed_by, "texture-images\\developed_by.png") == FALSE)
+	{
+		fprintf(gpFile, "Credits texture has been failed for mouth texture\n");
+		return(-7);
+	}
+	
+	if(loadPNGTexture(&texture_gl_sp_contr, "texture-images\\Contributions_and_group_leader.png") == FALSE)
+	{
+		fprintf(gpFile, "Credits texture has been failed for mouth texture\n");
+		return(-7);
+	}
+	
+	if(loadPNGTexture(&texture_tech_used, "texture-images\\tech_used.png") == FALSE)
+	{
+		fprintf(gpFile, "Credits texture has been failed for mouth texture\n");
+		return(-7);
+	}
+	
+	if(loadPNGTexture(&texture_ignited_by, "texture-images\\ignited_by.png") == FALSE)
+	{
+		fprintf(gpFile, "Credits texture has been failed for mouth texture\n");
+		return(-7);
+	}
 
 	return 0;
 
@@ -1122,7 +1202,7 @@ void display_dev(void)
 	// set identity metrics
 	glLoadIdentity();
 	
-	/*if(isDrawIntro == TRUE)
+	if(isDrawIntro == TRUE)
 	{
 		drawIntro();
 	}
@@ -1134,8 +1214,8 @@ void display_dev(void)
 		drawScene3();
 	else if(fadeOutScene3 >= 1.0)
 		drawOutro();
-	*/
-	drawScene2();
+		
+	//drawScene3();
 	
 	//glTranslatef(0.0f, 0.0f, -8.0f);
 	//drawGirl(TRUE, TRUE);	

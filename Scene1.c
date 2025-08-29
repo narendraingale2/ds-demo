@@ -28,6 +28,18 @@ extern GLuint texture_astro_titile;
 extern GLuint texture_demo_title;
 extern GLuint texture_outro_specialThanks;
 extern GLuint texture_inner_window; 
+extern GLuint texture_light1;
+extern GLuint texture_light2;
+extern GLuint texture_cupboard;
+extern GLuint texture_bed;
+extern GLuint texture_horse_toy;
+extern GLuint texture_teddies;
+extern GLuint texture_credits;
+extern GLuint texture_developed_by;
+extern GLuint texture_tech_used;
+extern GLuint texture_gl_sp_contr;
+extern GLuint texture_ignited_by;
+
 extern point_t* tree_cordinates;
 extern int numTrees;
 GLfloat camX=5.0f, camY=4.5f, camZ=-8.0f;
@@ -155,7 +167,7 @@ void drawScene1()
         }
         
     }
-    else if(startMovingInside == TRUE && camZ > -5.7f)
+    else if(startMovingInside == TRUE && camZ > -6.7f)
     {
         camZ -= 8.0f * 0.001f;
         camY -= 0.5f * 0.001f;
@@ -225,7 +237,6 @@ void drawScene2()
     glPushMatrix();
 		glTranslatef(0.0f, 0.0f, -16.0f);
         glScalef(20.0f, 10.0f, 1.0f);
-        //glColor4f(0.7f, 0.7f, 0.7f, 1.0f);
         glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         glBindTexture(GL_TEXTURE_2D, texture_inner_wall);
         drawQuad();
@@ -245,6 +256,7 @@ void drawScene2()
 	   		glTexCoord2f(1.0, 0.0);
 	   		glVertex3f(1.0, -1.0f, -16.0f);
     	glEnd();
+
         glColor3f(1.0f, 1.0f, 1.0f);
         glBindTexture(GL_TEXTURE_2D, texture_inner_window);
     	glBegin(GL_QUADS);
@@ -273,6 +285,7 @@ void drawScene2()
 	   		glTexCoord2f(1.0, 0.0);
 	   		glVertex3f(1.0, -1.0f, -16.0f);
     	glEnd();
+        
         glColor3f(1.0f, 1.0f, 1.0f);
         glBindTexture(GL_TEXTURE_2D, texture_inner_window);
     	glBegin(GL_QUADS);
@@ -284,6 +297,124 @@ void drawScene2()
 	   		glVertex3f(-1.0f, -1.0f, -15.999f);
 	   		glTexCoord2f(1.0, 0.0);
 	   		glVertex3f(1.0, -1.0f, -15.999f);
+    	glEnd();
+        glBindTexture(GL_TEXTURE_2D, 0);
+    
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(-7.5f, -3.5f, 0.0f);
+        glBindTexture(GL_TEXTURE_2D, texture_cupboard);
+    	glBegin(GL_QUADS);
+			glTexCoord2f(1.0, 1.0); 	   		
+			glVertex3f(1.0f, 1.0f, -15.999f);
+	   		glTexCoord2f(0.0, 1.0); 
+	   		glVertex3f(-1.0f, 1.0f, -15.999f);
+	   		glTexCoord2f(0.0, 0.0); 
+	   		glVertex3f(-1.0f, -1.0f, -15.999f);
+	   		glTexCoord2f(1.0, 0.0);
+	   		glVertex3f(1.0, -1.0f, -15.999f);
+    	glEnd();
+        glBindTexture(GL_TEXTURE_2D, 0);
+    glPopMatrix();
+    
+    glPushMatrix();
+        glTranslatef(6.0f, 2.5f, 0.0f);
+        glBindTexture(GL_TEXTURE_2D, texture_light2);
+    	glBegin(GL_QUADS);
+			glTexCoord2f(1.0, 1.0); 	   		
+			glVertex3f(0.5f, 0.7f, -16.0f);
+	   		glTexCoord2f(0.0, 1.0); 
+	   		glVertex3f(-0.5f, 0.7f, -16.0f);
+	   		glTexCoord2f(0.0, 0.0); 
+	   		glVertex3f(-0.5f, -0.7f, -16.0f);
+	   		glTexCoord2f(1.0, 0.0);
+	   		glVertex3f(0.5, -0.7f, -16.0f);
+    	glEnd();
+        glBindTexture(GL_TEXTURE_2D, 0);
+    glPopMatrix();
+    
+    glPushMatrix();
+        glTranslatef(-6.0f, 2.5f, 0.0f);
+        glBindTexture(GL_TEXTURE_2D, texture_light2);
+    	glBegin(GL_QUADS);
+			glTexCoord2f(1.0, 1.0); 	   		
+			glVertex3f(0.5f, 0.7f, -16.0f);
+	   		glTexCoord2f(0.0, 1.0); 
+	   		glVertex3f(-0.5f, 0.7f, -16.0f);
+	   		glTexCoord2f(0.0, 0.0); 
+	   		glVertex3f(-0.5f, -0.7f, -16.0f);
+	   		glTexCoord2f(1.0, 0.0);
+	   		glVertex3f(0.5, -0.7f, -16.0f);
+    	glEnd();
+        glBindTexture(GL_TEXTURE_2D, 0);
+    glPopMatrix();
+    
+    // floor
+    glPushMatrix();
+        glColor4f(150.0f/255.0f, 75.0f/255.0f, 0.0f, 1.0f);
+    	glBegin(GL_QUADS);
+			glTexCoord2f(1.0, 1.0); 	   		
+			glVertex3f(15.0f, -4.2f, -15.0f);
+	   		glTexCoord2f(0.0, 1.0); 
+	   		glVertex3f(-15.0f, -4.2f, -15.0f);
+	   		glTexCoord2f(0.0, 0.0); 
+	   		glVertex3f(-15.0f, -4.2f, 0.0f);
+	   		glTexCoord2f(1.0, 0.0);
+	   		glVertex3f(15.0f, -4.2f, 0.0f);
+    	glEnd();
+    glPopMatrix();
+    
+    glPushMatrix();
+        glTranslatef(0.0f, -2.68f, 0.0f);
+        //glRotatef(-20, 0.0f, 1.0f, 0.0f);
+        glColor3f(1.0f, 1.0f, 1.0f);
+        glBindTexture(GL_TEXTURE_2D, texture_bed);
+    	glBegin(GL_QUADS);
+			glTexCoord2f(1.0, 1.0); 	   		
+			glVertex3f(3.0f, 2.0f, -14.0f);
+	   		glTexCoord2f(0.0, 1.0); 
+	   		glVertex3f(-3.0f, 2.0f, -14.0f);
+	   		glTexCoord2f(0.0, 0.0); 
+	   		glVertex3f(-3.0f, -2.0f, -14.0f);
+	   		glTexCoord2f(1.0, 0.0);
+	   		glVertex3f(3.0, -2.0f, -14.0f);
+    	glEnd();
+        glBindTexture(GL_TEXTURE_2D, 0);
+    glPopMatrix();
+    
+    glPushMatrix();
+        glTranslatef(-3.0f, -2.68f, 0.0f);
+        //glRotatef(-20, 0.0f, 1.0f, 0.0f);
+        glColor3f(0.5f, 0.5f, 0.5f);
+        glBindTexture(GL_TEXTURE_2D, texture_horse_toy);
+    	glBegin(GL_QUADS);
+			glTexCoord2f(1.0, 1.0); 	   		
+			glVertex3f(1.0f, 1.0f, -4.0f);
+	   		glTexCoord2f(0.0, 1.0); 
+	   		glVertex3f(-1.0f, 1.0f, -4.0f);
+	   		glTexCoord2f(0.0, 0.0); 
+	   		glVertex3f(-1.0f, -1.0f, -4.0f);
+	   		glTexCoord2f(1.0, 0.0);
+	   		glVertex3f(1.0, -1.0f, -4.0f);
+    	glEnd();
+        glBindTexture(GL_TEXTURE_2D, 0);
+    glPopMatrix();
+    
+    glPushMatrix();
+        glTranslatef(4.0f, -2.68f, 0.0f);
+        //glRotatef(-20, 0.0f, 1.0f, 0.0f);
+        glColor3f(1.0f, 1.0f, 1.0f);
+        glBindTexture(GL_TEXTURE_2D, texture_teddies);
+    	glBegin(GL_QUADS);
+			glTexCoord2f(1.0, 1.0); 	   		
+			glVertex3f(0.5f, 1.0f, -4.0f);
+	   		glTexCoord2f(0.0, 1.0); 
+	   		glVertex3f(-0.5f, 1.0f, -4.0f);
+	   		glTexCoord2f(0.0, 0.0); 
+	   		glVertex3f(-0.5f, -1.0f, -4.0f);
+	   		glTexCoord2f(1.0, 0.0);
+	   		glVertex3f(0.5f, -1.0f, -4.0f);
     	glEnd();
         glBindTexture(GL_TEXTURE_2D, 0);
     glPopMatrix();
@@ -318,20 +449,6 @@ void drawScene2()
     glPopMatrix();
 
 
-    // floor
-    glPushMatrix();
-        glColor4f(150.0f/255.0f, 75.0f/255.0f, 0.0f, 1.0f);
-    	glBegin(GL_QUADS);
-			glTexCoord2f(1.0, 1.0); 	   		
-			glVertex3f(15.0f, -4.2f, -15.0f);
-	   		glTexCoord2f(0.0, 1.0); 
-	   		glVertex3f(-15.0f, -4.2f, -15.0f);
-	   		glTexCoord2f(0.0, 0.0); 
-	   		glVertex3f(-15.0f, -4.2f, 0.0f);
-	   		glTexCoord2f(1.0, 0.0);
-	   		glVertex3f(15.0f, -4.2f, 0.0f);
-    	glEnd();
-    glPopMatrix();
     
     glPushMatrix();
         glColor4f(242.0f/255.0f, 240.0f/255.0f ,223.0f/255,1.0f);
@@ -347,15 +464,18 @@ void drawScene2()
     	glEnd();
     glPopMatrix();
 
+
     // draw girl
     glPushMatrix();
 		glTranslatef(2.0f, -1.85f, -6.2f);
         glScalef(0.4f, 0.5f, 1.0f);
         glTranslatef(0.0f, girl_walk_y, girl_walk_z);
-        if(animateEye == TRUE)
+        
+        if(fadeInScene2 <=0)
             drawGirl(TRUE, TRUE);
         else 
-            drawGirl(FALSE, FALSE);
+            drawGirl(TRUE, FALSE);
+
     glPopMatrix();
 
     glPopMatrix();
@@ -468,7 +588,7 @@ void drawScene3()
     glPushMatrix();
         glTranslatef(-1.0f, -1.0f + yLookAt, -4.0f + zLookAt);
         glScalef(0.2f, 0.2f, 1.0f);
-        fprintf(gpFile, "Girl position yLookAt = %f", yLookAt);
+        glRotatef(-30.0f, 1.0f, 0.0f, 0.0f);
         drawAnimatedButterfly();
     glPopMatrix();
 
@@ -588,18 +708,106 @@ void drawOutro()
     glPushMatrix();
         glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         glTranslatef(0.0f, 0.0f, -2.0f);
-		glBindTexture(GL_TEXTURE_2D, texture_outro_specialThanks);
+	
+        if(waitCount <= 200)
+        {
+            glBindTexture(GL_TEXTURE_2D, texture_credits);
             glBegin(GL_QUADS);
                 glTexCoord2f(1.0, 1.0); // right-right
-	            glVertex3f(0.5f, 0.25f, 0.0f);
+	            glVertex3f(0.2f, 0.15f, 0.0f);
 	            glTexCoord2f(0.0, 1.0); // right-right
-	            glVertex3f(-0.5f, 0.25f, 0.0f);
+	            glVertex3f(-0.2f, 0.15f, 0.0f);
 	            glTexCoord2f(0.0, 0.0); // right-right
-	            glVertex3f(-0.5f, -0.25f, 0.0f);
+	            glVertex3f(-0.2f, -0.15f, 0.0f);
 	            glTexCoord2f(1.0, 0.0); // right-right
-	            glVertex3f(0.5f, -0.25f, 0.0f);
+	            glVertex3f(0.2f, -0.15f, 0.0f);
             glEnd();
+            glPopMatrix();
 
+        }
+        
+        if(waitCount>= 240 && waitCount<= 400)
+        {
+		    glBindTexture(GL_TEXTURE_2D, texture_developed_by);
+                glBegin(GL_QUADS);
+                    glTexCoord2f(1.0, 1.0); // right-right
+	                glVertex3f(0.3f, 0.15f, 0.0f);
+	                glTexCoord2f(0.0, 1.0); // right-right
+	                glVertex3f(-0.3f, 0.15f, 0.0f);
+	                glTexCoord2f(0.0, 0.0); // right-right
+	                glVertex3f(-0.3f, -0.15f, 0.0f);
+	                glTexCoord2f(1.0, 0.0); // right-right
+	                glVertex3f(0.3f, -0.15f, 0.0f);
+                glEnd();
+            glPopMatrix();
+        }
+        
+        if(waitCount>= 440 && waitCount<= 600)
+        {
+		    glBindTexture(GL_TEXTURE_2D, texture_gl_sp_contr);
+                glBegin(GL_QUADS);
+                    glTexCoord2f(1.0, 1.0); // right-right
+	                glVertex3f(0.3f, 0.15f, 0.0f);
+	                glTexCoord2f(0.0, 1.0); // right-right
+	                glVertex3f(-0.3f, 0.15f, 0.0f);
+	                glTexCoord2f(0.0, 0.0); // right-right
+	                glVertex3f(-0.3f, -0.15f, 0.0f);
+	                glTexCoord2f(1.0, 0.0); // right-right
+	                glVertex3f(0.3f, -0.15f, 0.0f);
+                glEnd();
+            glPopMatrix();
+        }
+        
+        if(waitCount>= 640 && waitCount<= 800)
+        {
+		    glBindTexture(GL_TEXTURE_2D, texture_tech_used);
+                glBegin(GL_QUADS);
+                    glTexCoord2f(1.0, 1.0); // right-right
+	                glVertex3f(0.3f, 0.15f, 0.0f);
+	                glTexCoord2f(0.0, 1.0); // right-right
+	                glVertex3f(-0.3f, 0.15f, 0.0f);
+	                glTexCoord2f(0.0, 0.0); // right-right
+	                glVertex3f(-0.3f, -0.15f, 0.0f);
+	                glTexCoord2f(1.0, 0.0); // right-right
+	                glVertex3f(0.3f, -0.15f, 0.0f);
+                glEnd();
+            glPopMatrix();
+        }
+
+        if(waitCount>= 840 && waitCount<= 1000)
+        {
+		    glBindTexture(GL_TEXTURE_2D, texture_outro_specialThanks);
+                glBegin(GL_QUADS);
+                    glTexCoord2f(1.0, 1.0); // right-right
+	                glVertex3f(0.5f, 0.25f, 0.0f);
+	                glTexCoord2f(0.0, 1.0); // right-right
+	                glVertex3f(-0.5f, 0.25f, 0.0f);
+	                glTexCoord2f(0.0, 0.0); // right-right
+	                glVertex3f(-0.5f, -0.25f, 0.0f);
+	                glTexCoord2f(1.0, 0.0); // right-right
+	                glVertex3f(0.5f, -0.25f, 0.0f);
+                glEnd();
+            glPopMatrix();
+        }
+        
+        if(waitCount>= 1040 && waitCount<= 1200)
+        {
+		    glBindTexture(GL_TEXTURE_2D, texture_ignited_by);
+                glBegin(GL_QUADS);
+                    glTexCoord2f(1.0, 1.0); // right-right
+	                glVertex3f(0.3f, 0.15f, 0.0f);
+	                glTexCoord2f(0.0, 1.0); // right-right
+	                glVertex3f(-0.3f, 0.15f, 0.0f);
+	                glTexCoord2f(0.0, 0.0); // right-right
+	                glVertex3f(-0.3f, -0.15f, 0.0f);
+	                glTexCoord2f(1.0, 0.0); // right-right
+	                glVertex3f(0.3f, -0.15f, 0.0f);
+                glEnd();
+            glPopMatrix();
+        }
+        
     glPopMatrix();
+
+    waitCount = waitCount + 1;
 
 }
