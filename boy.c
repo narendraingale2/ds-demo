@@ -546,7 +546,6 @@ void drawGirl(BOOL isEyOpen, BOOL animateLeg)
     {
         legRotateIncrement = TRUE;
     }
-    fprintf(gpFile, "Printing angle %f\n", legAngle);
 
 
 

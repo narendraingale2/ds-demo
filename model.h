@@ -10,6 +10,7 @@ void drawMoon();
 void drawBoy(void);
 void drawMoon();
 void drawColoredTree(GLfloat, GLfloat, GLfloat, GLuint);
+void drawPlant(GLfloat, GLfloat, GLfloat, GLuint);
 void drawCocoTree();
 void drawWater();
 void drawGround();

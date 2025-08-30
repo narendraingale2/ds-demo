@@ -107,6 +107,52 @@ void drawColoredTree(GLfloat x, GLfloat y, GLfloat z, GLuint texture)
 
 }
 
+void drawPlant(GLfloat x, GLfloat y, GLfloat z, GLuint texture)
+{
+	    
+    // face
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+    glPushMatrix();
+		glTranslatef(x, y, z);
+		glBegin(GL_QUADS);
+
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex3f(0.1f, 0.1f, 0.0f);
+
+			glTexCoord2f(0.0f, 1.0f);
+			glVertex3f(-0.1f, 0.1f, 0.0f);
+
+			glTexCoord2f(0.0f, 0.0f);
+			glVertex3f(-0.1f, -0.1f, 0.0f);
+
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex3f(0.1f, -0.1f, 0.0f);
+
+		glEnd();
+		
+		glBegin(GL_QUADS);
+
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex3f(0.0f, 0.1f, 0.1f);
+
+			glTexCoord2f(0.0f, 1.0f);
+			glVertex3f(0.0f, 0.1f, -0.1f);
+
+			glTexCoord2f(0.0f, 0.0f);
+			glVertex3f(0.0f, -0.1f, -0.1f);
+
+			glTexCoord2f(1.0f, 0.0f);
+			glVertex3f(0.0f, -0.1f, 0.1f);
+
+		glEnd();
+
+	glPopMatrix();
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+}
+
+
 void drawCocoTree()
 {
     glPushMatrix();
@@ -595,21 +641,21 @@ void drawAnimatedButterfly()
 	glBindTexture(GL_TEXTURE_2D, texture_butter_fly);
 
 	//glRotatef(-60, 1.0f, 0.0f, 0.0f);
-	glScalef(2.0f, 2.0f, 1.0f);
 
-	glTranslatef(0.1f, 0.0f, 0.0f);
+	glScalef(2.0f, 2.0f, 1.0f);
 	glPushMatrix();
+		glTranslatef(0.1f, 0.0f, 0.0f);
 		glTranslatef(-1.0f, 0.0f, 0.0f);
-		glRotatef(-butterflyAngle, 0.0f, 1.0f, 0.0f);
 		glTranslatef(1.0f, 0.0f, 0.0f);
+		glRotatef(-butterflyAngle, 0.0f, 0.0f, 1.0f);
 			drawButterFlyQuad();
 	glPopMatrix();
 
-	glTranslatef(-0.1f, 0.0f, 0.0f);
 	glPushMatrix();
+		glTranslatef(-0.1f, 0.0f, 0.0f);
 		glTranslatef(1.0f, 0.0f, 0.0f);
-		glRotatef(butterflyAngle, 0.0f, 1.0f, 0.0f);
 		glTranslatef(-1.0f, 0.0f, 0.0f);
+		glRotatef(butterflyAngle, 0.0f, 0.0f, 1.0f);
 		glScalef(-1.0f, 1.0f, 1.0f);
 			drawButterFlyQuad();
 	glPopMatrix();

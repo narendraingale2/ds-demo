@@ -39,6 +39,7 @@ extern GLuint texture_developed_by;
 extern GLuint texture_tech_used;
 extern GLuint texture_gl_sp_contr;
 extern GLuint texture_ignited_by;
+extern GLuint texture_flower_plant;
 
 extern point_t* tree_cordinates;
 extern int numTrees;
@@ -501,11 +502,15 @@ void drawScene2()
 
 void drawScene3()
 {
+    void fadeInSceneThree(GLfloat*);
     camX = 0;
-    camY = 0;
+    camY = -0.5;
     camZ = 0;
-    gluLookAt(camX + xLook, camY + yLook, camZ + zLook, 
-            camX + xLook, camY + yLook, camZ-1 + zLook, 
+    static int waitCounter = 0;
+    static GLfloat girl_walk_z = -4.8f;
+
+    gluLookAt(camX + xLook, camY + yLook, girl_walk_z - 2.0f, 
+            camX + xLook, camY + yLook, girl_walk_z - 3.0f, 
             0.0f, 1.0f, 0.0f);
     // Drawing stars
     // x = 12 - -12
@@ -555,9 +560,9 @@ void drawScene3()
         drawHouseMain(FALSE);
     glPopMatrix();
     
-    drawGrass();
+    //drawGrass();
 
-    drawBigGrass();
+    //drawBigGrass();
 
 	drawColoredTree(2.0f, -0.7f, -7.0f, texture_colured_tree);
 
@@ -576,25 +581,64 @@ void drawScene3()
     // Big tree
     drawColoredTree(4.0f, -0.62f, -8.0f, texture_big_tree);
     
-    glPushMatrix();
-        glTranslatef(0.2f, -1.0f, -2.0f);
-        glScalef(0.05f, 0.05f, 1.0f);
-        if(animateEye == TRUE)
-            drawGirl(TRUE, FALSE);
-        else 
-            drawGirl(FALSE, FALSE);
-    glPopMatrix();
+    drawPlant(-0.3f,-1.1, 0.0f, texture_flower_plant);
+    drawPlant(0.3f,-1.1, 0.0f, texture_flower_plant);
+    
+    drawPlant(-0.3f,-1.1, -1.0f, texture_flower_plant);
+    drawPlant(0.3f,-1.1, -1.0f, texture_flower_plant);
+    
+    drawPlant(-0.3f,-1.1, -2.0f, texture_flower_plant);
+    drawPlant(0.3f,-1.1, -2.0f, texture_flower_plant);
+
+    drawPlant(-0.3f,-1.1, -3.0f, texture_flower_plant);
+    drawPlant(0.3f,-1.1, -3.0f, texture_flower_plant);
+
+    drawPlant(-0.3f,-1.1, -4.0f, texture_flower_plant);
+    drawPlant(0.3f,-1.1, -4.0f, texture_flower_plant);
+    
+    drawPlant(-0.3f,-1.1, -5.0f, texture_flower_plant);
+    drawPlant(0.3f,-1.1, -5.0f, texture_flower_plant);
+    
+    drawPlant(-0.3f,-1.1, -6.0f, texture_flower_plant);
+    drawPlant(0.3f,-1.1, -6.0f, texture_flower_plant);
+    
+    drawPlant(-0.3f,-1.1, -7.0f, texture_flower_plant);
+    drawPlant(0.3f,-1.1, -7.0f, texture_flower_plant);
+    
+    drawPlant(-0.3f,-1.1, -8.0f, texture_flower_plant);
+    drawPlant(0.3f,-1.1, -8.0f, texture_flower_plant);
+    
+    drawPlant(-0.3f,-1.1, -9.0f, texture_flower_plant);
+    drawPlant(0.3f,-1.1, -9.0f, texture_flower_plant);
     
     glPushMatrix();
-        glTranslatef(-1.0f, -1.0f + yLookAt, -4.0f + zLookAt);
-        glScalef(0.2f, 0.2f, 1.0f);
-        glRotatef(-30.0f, 1.0f, 0.0f, 0.0f);
-        drawAnimatedButterfly();
+        glTranslatef(0.0f, -1.03f, girl_walk_z - 3.0f);
+        glScalef(0.05f, 0.05f, 1.0f);
+        if(fadeInScene3 <= 0.0f && fadeOutScene3 <= 0.0f)
+            drawGirl(TRUE, TRUE);
+        else 
+            drawGirl(TRUE, FALSE);
     glPopMatrix();
+
+    if(fadeInScene3 <= 0.0f && fadeOutScene3 <= 0.0f)
+    {
+        glPushMatrix();
+            glTranslatef(-0.05, -0.8f, girl_walk_z - 3.0f + 0.1f);
+            glScalef(0.01f, 0.01f, 1.0f);
+            //glRotatef(30.0f, 1.0f, 0.0f, 0.0f);
+        drawAnimatedButterfly();
+        glPopMatrix();
+    }
 
     if(fadeInScene3 > 0.0f)
     {
-       fadeInScene(&fadeInScene3); 
+       fadeInSceneThree(&fadeInScene3); 
+    }
+    else if(girl_walk_z <= 3.0f)
+    {
+        girl_walk_z = girl_walk_z + 0.005f;
+        waitCounter = waitCounter + 1;
+        fprintf(gpFile, "Girl walkz = %f\n", girl_walk_z);
     }
     else
         fadeOutOfScene(&fadeOutScene3);
@@ -627,13 +671,29 @@ void fadeOutOfScene(GLfloat* fadeOutAlpha)
 
 void fadeInScene(GLfloat* fadeInAlpha)
 {
-    fprintf(gpFile, "Alphs = %f Camaer positions camX = %f, camy = %f, camz = %f\n", *fadeInAlpha, camX, camY, camZ);
 	glColor4f(0.0f, 0.0f, 0.0f, *fadeInAlpha);
 	glBegin(GL_QUADS);
 		glVertex3f(camX + 1.0f, camY + 1.0f, camZ -0.1f);
 		glVertex3f(camX -1.0f,  camY + 1.0f, camZ -0.1f);
 		glVertex3f(camX -1.0f, 	camY  - 1.0f, camZ -0.1f);
 		glVertex3f(camX + 1.0f, camY - 1.0f, camZ -0.1f);
+	glEnd();
+
+	if(*fadeInAlpha >= 0.0f)
+    {
+		*fadeInAlpha = *fadeInAlpha - 0.003f;
+    }
+
+}
+
+void fadeInSceneThree(GLfloat* fadeInAlpha)
+{
+	glColor4f(0.0f, 0.0f, 0.0f, *fadeInAlpha);
+	glBegin(GL_QUADS);
+		glVertex3f(camX + 1.0f, camY + 1.0f, -8.0f);
+		glVertex3f(camX -1.0f,  camY + 1.0f, -8.0f);
+		glVertex3f(camX -1.0f, 	camY  - 1.0f, -8.0f);
+		glVertex3f(camX + 1.0f, camY - 1.0f, -8.0f);
 	glEnd();
 
 	if(*fadeInAlpha >= 0.0f)

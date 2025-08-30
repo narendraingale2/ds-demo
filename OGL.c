@@ -102,6 +102,7 @@ GLuint texture_developed_by;
 GLuint texture_tech_used;
 GLuint texture_gl_sp_contr;
 GLuint texture_ignited_by;
+GLuint texture_flower_plant;
 
 GLUquadric *quadric = NULL;
 
@@ -355,27 +356,21 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				break;
 			case VK_UP:
 				yLookAt = yLookAt + ZOOM_SCALE;
-				fprintf(gpFile, "yLookAt = %f\n", yLookAt);
 				break;
 			case VK_DOWN:
 				yLookAt = yLookAt - ZOOM_SCALE;
-				fprintf(gpFile, "yLookAt = %f\n", yLookAt);
 				break;
 			case VK_LEFT:
 				xLookAt = xLookAt - ZOOM_SCALE;
-				fprintf(gpFile, "xLookAt = %f\n", xLookAt);
 				break;
 			case VK_RIGHT:
 				xLookAt = xLookAt + ZOOM_SCALE;
-				fprintf(gpFile, "xLookAt = %f\n", xLookAt);
 				break;
 			case VK_OEM_PLUS:
 				zLookAt = zLookAt + ZOOM_SCALE;
-				fprintf(gpFile, "zLookAt = %f\n", zLookAt);
 				break;
 			case VK_OEM_MINUS:
 				zLookAt = zLookAt - ZOOM_SCALE;
-				fprintf(gpFile, "zLookAt = %f\n", zLookAt);
 				break;
 			default:
 				break;
@@ -967,6 +962,11 @@ int loadTreeTextures()
 		return(-9);
 	}
 
+	if(loadPNGTexture(&texture_flower_plant, "texture-images\\flower_plant.png") == FALSE)
+	{
+		fprintf(gpFile, "Failed to flower plant");
+		return(-9);
+	}
 	return 0;
 }
 
@@ -1201,7 +1201,7 @@ void display_dev(void)
 
 	// set identity metrics
 	glLoadIdentity();
-	
+
 	if(isDrawIntro == TRUE)
 	{
 		drawIntro();
@@ -1214,7 +1214,8 @@ void display_dev(void)
 		drawScene3();
 	else if(fadeOutScene3 >= 1.0)
 		drawOutro();
-		
+	
+
 	//drawScene3();
 	
 	//glTranslatef(0.0f, 0.0f, -8.0f);
