@@ -27,7 +27,6 @@
 #define DEV_MODE 
 //#define NO_SOUND
 #define ZOOM_SCALE 0.01f
-// PRATHAMESH SUDHIR INDOLIKAR
 
 // global function declarations
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
